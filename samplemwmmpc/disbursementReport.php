@@ -1,5 +1,5 @@
 <?php  
-
+//COMMENT
 require_once 'session.php';
 
 $idNumber [] = "";
