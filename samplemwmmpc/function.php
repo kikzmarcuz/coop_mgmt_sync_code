@@ -721,6 +721,54 @@ function getCDInfo($sdate, $edate, $conn){
       $arr[13] = $row['td'];
       $arr[14] = $row['fd'];
 
+      //$arr[15] = $row['bl'];
+      //$arr[16] = $row['cll'];
+      //$arr[17] = $row['cml'];
+      //$arr[18] = $row['edl'];
+      //$arr[19] = $row['rl'];
+      //$arr[20] = $row['pl'];
+      //$arr[21] = $row['cl'];
+      //$arr[22] = $row['ckl'];
+      //$arr[23] = $row['eml'];
+      //$arr[24] = $row['sl'];
+
+      $arr[25] = $row['rcln_value'];
+
+      array_push($arrcontainer, $arr);
+    }
+    return($arrcontainer);
+  }else{
+    return($arrcontainer);
+  }
+}
+
+function getCDInfo2($transactionid){
+  $arr=[];
+  $arrcontainer=[];
+
+  $sqlNameD = "SELECT * FROM  disbursement_table WHERE transaction_number = '$transactionid'  asc";
+  $resultNameD = $conn->query($sqlNameD);
+  $numRow = mysqli_num_rows($resultNameD);
+
+  if($resultNameD->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultNameD)) {
+      $arr[0] = $row['transaction_number'];
+      $arr[1] = $row['reference_number'];
+      $arr[2] = $row['id_number'];
+      $arr[3] = $row['date_transaction'];
+      $arr[4] = $row['encoded_by'];
+
+      $arr[5] = $row['ac'];
+      $arr[6] = $row['cl'];
+      $arr[7] = $row['lb'];
+      $arr[8] = $row['pnl'];
+      $arr[9] = $row['pnr'];
+      $arr[10] = $row['rcln'];
+      $arr[11] = $row['sc'];
+      $arr[12] = $row['sd'];
+      $arr[13] = $row['td'];
+      $arr[14] = $row['fd'];
+
       $arr[15] = $row['bl'];
       $arr[16] = $row['cll'];
       $arr[17] = $row['cml'];
@@ -790,8 +838,6 @@ function geJEInfo($sdate, $edate, $conn){
   }
 }
 
-
-
 function getJEInfoD($jnumber, $idnumber, $conn){
   $arr=[];
   $arrcontainer=[];
@@ -840,7 +886,8 @@ function getJEInfoD($jnumber, $idnumber, $conn){
   }
 }
 
-function getRepID($table,$jnumber, $conn){
+//REMOVE for JE
+function getRepID($table, $jnumber, $conn){
   $data="";
 
   $sqlNameD = "SELECT * FROM ";
@@ -858,6 +905,45 @@ function getRepID($table,$jnumber, $conn){
     return($data);
   }else{
     return($data);
+  }
+}
+
+//REMOVE for all
+function getID($table, $transactionid, $conn){
+  $id="";
+
+  $sqlNameD = "SELECT * FROM ";
+  $sqlNameD .= "$table";
+  $sqlNameD .= " WHERE transaction_number = '$transactionid' ";
+  $resultNameD = $conn->query($sqlNameD);
+  $numRow = mysqli_num_rows($resultNameD);
+
+  if($resultNameD->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultNameD)) {
+      $id = $row['id_number'];
+    }
+    return($id);
+  }else{
+    return($id);
+  }
+}
+
+function getRN($table, $transactionid, $conn){
+  $rn="";
+
+  $sqlNameD = "SELECT * FROM ";
+  $sqlNameD .= "$table";
+  $sqlNameD .= " WHERE transaction_number = '$transactionid' ";
+  $resultNameD = $conn->query($sqlNameD);
+  $numRow = mysqli_num_rows($resultNameD);
+
+  if($resultNameD->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultNameD)) {
+      $rn = $row['reference_number'];
+    }
+    return($rn);
+  }else{
+    return($rn);
   }
 }
 
@@ -945,6 +1031,11 @@ function getCAInfo($table, $id, $referencenumber, $seaarhobj ,$conn){
         return($data);
       }
     }
+}
+
+//
+function getTransaction($jnumber, $idnumber, $conn){
+  $tn= "";
 }
 
 function test_input($data){

@@ -1,6 +1,7 @@
 <?php  
 //COMMENT
 //TRIAL
+//TRIAL2
 require_once 'session.php';
 require ("function.php");
 
@@ -360,218 +361,153 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }*/
 
-    if($clearOR == "clearOR"){
+    if($clearOR != ""){
+
+        echo "$clearOR";
+        
         $cdlist=[];
         $cdinfo=[];
         $rtable=getTableName("CD");
-        $delid=getRepID($rtable,$clearOR,$conn);
-        $cdlist=getJEInfoD($clearOR, $delid, $conn);
+        $delid=getID($rtable,$clearOR,$conn);
+        $refid=getRN($rtable,$clearOR,$conn);
+        $cdlist=getCDInfo($refid, $delid, $conn);
         $cdcount=count($cdlist);
         $cdcounter=0;
 
+        echo "$delid";
+        echo "$refid";
+
         while($cdcounter<$cdcount){
-            $cdinfo=$jelist[$cdcounter];
+            $cdinfo=$cdlist[$cdcounter];
             if($cdinfo[5]==1){
                 $actable=getTableName("AC");
-                deleteOtherPayment($actable, $clearOR, $delid, $conn);
-                
+                deleteOtherPayment($actable, $refid, $delid, $conn);
             }
-
 
             if($cdinfo[6]==1){
-                $deptable=getDepositTable("SD");
-                deleteOtherPayment($deptable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[7]==1){
-                $sctable=getTableName("SC");
-                deleteOtherPayment($sctable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[8]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[9]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[10]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[11]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $clearOR,  $delid, $conn);
-            }
-
-            if($cdinfo[13]==1){
-                $ltable = getLoanTableName("BL");
-                $ptable = getLoanPrincipalTableName("BL");
-                $itable = getLoanInterestTableName("BL");
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[14]==1){
                 $code="BL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[15]==1){
                 $code="CLL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[15]==1){
                 $code="CML";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[16]==1){
-                $code="EDL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[17]==1){
                 $code="RL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[18]==1){
-                $code="PL";
+                $code="EDL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[19]==1){
                 $code="CL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
-                deleteLoanPaymentF($ptable, $clearOR, $delid ,$conn);
-            }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-            if($cdinfo[20]==1){
-                $code="CKL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteLoanPaymentF($ptable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[21]==1){
-                $code="EML";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteLoanPaymentF($ptable, $clearOR, $delid ,$conn);
-            }
-
-            if($cdinfo[21]==1){
                 $code="SL";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
-                deleteLoanPaymentF($ptable, $clearOR, $delid ,$conn);
-            }
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
 
-            if($cdinfo[22]==1){
-                $code="RCL";
+                $code="EML";
                 $ltable = getLoanTableName($code);
                 $ptable = getLoanPrincipalTableName($code);
                 $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
-                
+                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
                 if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
                     updateLoanStatus($apnumber, $ltable , $conn);
                 }
-                deleteLoanPaymentD($ptable, $itable, $clearOR, $delid ,$conn);    
+                deleteOtherPayment($itable, $refid, $delid ,$conn);
             }
 
-            $jetable=getTableName("JE");
-            deleteOtherPayment($jetable, $clearOR,  $delid, $conn);
+            //Loan Balance
+            if($cdinfo[7]==1){
+
+            }
+
+            if($cdinfo[8]==1){
+                $oitable=getTableName("OI");
+                deleteOtherPayment($oitable, $refid,  $delid, $conn);
+            }
+
+            if($cdinfo[9]==1){
+                $oitable=getTableName("OI");
+                deleteOtherPayment($oitable, $refid,  $delid, $conn);
+            }
+
+            //Rice Balance
+            if($cdinfo[10]==1){
+
+            }
+
+            if($cdinfo[11]==1){
+                $sctable=getTableName("SC");
+                deleteOtherPayment($sctable, $refid,  $delid, $conn);
+            }
+
+            if($cdinfo[12]==1){
+                $deptable=getDepositTable("SD");
+                deleteOtherPayment($deptable, $refid,  $delid, $conn);
+            }
+
+            if($cdinfo[13]==1){
+                $deptable=getDepositTable("TD");
+                deleteOtherPayment($deptable, $refid,  $delid, $conn);
+            }
+
+            if($cdinfo[14]==1){
+                $deptable=getDepositTable("FD");
+                deleteOtherPayment($deptable, $refid,  $delid, $conn);
+            }
+
+            $cdtable=getTableName("CD");
+            deleteOtherPayment($cdtable, $refid,  $delid, $conn);
             $cdcounter++;
         }
     }
@@ -1836,8 +1772,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $counterh = 0;
                     while($counterh < $numRow) {
                         echo "<tr>";
-                            echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$voucherNumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
-                            echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$voucherNumber[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
+                            echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
+                            echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
 
                             //echo "<td>" . $transactionnumber[$counterh] . "</td>";
                             echo "<td>" . $idNumber[$counterh] . "</td>";
