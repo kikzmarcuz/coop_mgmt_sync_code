@@ -22,6 +22,8 @@ function getTableName($typepayment){
     $tablename = "journal_report_table";
   }else if($typepayment == "AC"){
     $tablename = "chart_account_entry_table";
+  }else if($typepayment == "LS"){
+    $tablename = "loan_services_table";
   }
   return($tablename);
 }
@@ -32,7 +34,9 @@ function getLoanTableName($typeloan){
 	if($typeloan == "BL"){
         $loantable = "bl_loan_table";
     }else if($typeloan == "CLL"){
-        $loantable = "cll_loan__table";
+        $loantable = "cll_loan_table";
+    }else if($typeloan == "CML"){
+        $loantable = "cml_loan_table";
     }else if($typeloan == "RL"){
         $loantable = "rl_loan_table";
     }else if($typeloan == "EDL"){
@@ -206,6 +210,24 @@ function getColumnReportFlag($code, $conn){
   }
 
   return($col);
+}
+
+function checkLoanTransaction($string){
+  $fs="";
+  $ss="";
+
+  $fs = substr($string, 0,2);
+  $ss = substr($string, 2,1);
+  $code = "";
+
+  if(is_numeric($ss)){
+    $code = $fs;
+  }else{
+    $code = $fs . $ss;
+  }
+
+  return($code);
+
 }
 
 //DB FUNCTION
@@ -511,34 +533,10 @@ function getApplicationNumberP($ornumber, $ploantable ,$conn){
     return($loanan);
 }
 
-function getDepositID($table, $id, $seaarhobj, $ts, $conn){
-  $arr=[];
-  $arrcontainer=[];
-  $retarr=[];
-  
-
-  $sqlbi = "SELECT * FROM "; 
-  $sqlbi .= $table;
-  $sqlbi .= " WHERE id_number = '$id' and withdraw_td = 0 ";
-    $resultbi = $conn->query($sqlbi);
-    $numRowTD = mysqli_num_rows($resultbi);
-    
-    if($resultbi->num_rows > 0){
-      while ($row = mysqli_fetch_array($resultbi)) {
-          $arr[0] = $row['type_savings'];
-          $arr[1] = $row['amount']; 
-
-          if($ts == 0){
-            $retarr = $arr;
-          }else if($ts == 1){
-            array_push($arrcontainer, $arr);
-            $retarr = $arrcontainer;
-          }
-      }
-      return($retarr);
-    }else{
-      return($retarr);
-    }
+function listLoan(){
+  //$arr=["BL", "CML", "EDL", "RL"];
+  $arr=["BL", "CML", "EDL", "RL", "PL", "CL", "CKL", "EML", "SL", "RCL"];
+  return($arr);
 }
 
 function invoiceNotExist($invoice, $conn){
@@ -554,7 +552,149 @@ function invoiceNotExist($invoice, $conn){
     }
 }
 
-//TBL INFO
+
+//OBJ INFO
+function getLI($table, $idnumber,  $apnumber, $seaarhobj, $conn){
+  $arr=[];
+  $retarr=[];
+  
+  $sqlbi = "SELECT * FROM "; 
+  $sqlbi .= $table;
+  if($apnumber == ""){
+    $sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
+  }else{
+    $sqlbi .= " WHERE loan_application_number = '$apnumber' ";
+  }
+  
+  $resultbi = $conn->query($sqlbi);
+  $numRowTD = mysqli_num_rows($resultbi);
+  
+  if($resultbi->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultbi)) {
+        //$arr[0] = $row['transaction_number'];
+        $arr[0] = "";
+        $arr[1] = $row['id_number'];
+        $arr[2] = $row['loan_application_number'];
+        $arr[3] = $row['loan_service_id']; 
+        $arr[4] = $row['loan_amount'];
+        $arr[5] = $row['loan_term'];
+        $arr[6] = $row['loan_interest'];
+        $arr[7] = $row['payment_term'];
+        $arr[8] = $row['loan_status'];
+        $arr[9] = $row['date_released'];
+        $arr[10] = $row['date_paid'];
+        //$arr[11] = $row['reloan_p'];
+        //$arr[12] = $row['reloan_i'];
+        //$arr[13] = $row['last_payment'];
+        if($table == "rice_loan_table"){
+          $arr[11] = $row['invoice_number'];
+        }
+
+        array_push($retarr, $arr);
+
+    }
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }else{
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }
+}
+
+function getLS($table, $lsid, $conn){
+  $arr=[];
+  $retarr=[];
+  
+  $sqlbi = "SELECT * FROM "; 
+  $sqlbi .= $table;
+  $sqlbi .= " WHERE loan_service_id = '$lsid' ";
+  
+  $resultbi = $conn->query($sqlbi);
+  $numRowTD = mysqli_num_rows($resultbi);
+  
+  if($resultbi->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultbi)) {
+        //$arr[0] = $row['transaction_number'];
+        $arr[0] = "";
+        $arr[1] = $row['loan_service_id'];
+        $arr[2] = $row['loan_service_type'];
+        $arr[3] = $row['loan_service_name']; 
+        $arr[4] = $row['loan_service_entitlement'];
+        $arr[5] = $row['loan_reference_number'];
+        $arr[6] = $row['loanable_amount_min'];
+        $arr[7] = $row['loanable_amount_max'];
+        $arr[8] = $row['loan_term_count'];
+        $arr[9] = $row['loan_terms_suffix'];
+        $arr[10] = $row['loan_interest'];
+        $arr[11] = $row['type_interest'];
+        $arr[12] = $row['service_fee'];
+        $arr[13] = $row['filing_fee'];
+        $arr[14] = $row['cbu_loan_retention'];
+        $arr[15] = $row['savings_loan_retention'];
+        $arr[16] = $row['notarial_fee'];
+        $arr[17] = $row['insurance_fee'];
+        $arr[18] = $row['remarks'];
+        $arr[19] = $row['encoded_by'];
+
+        array_push($retarr, $arr);
+
+    }
+    if($seaarhobj == 5){
+      return($arr);
+    }else{
+      return($retarr);
+    }
+  }else{
+    if($seaarhobj == 5){
+      return($arr);
+    }else{
+      return($retarr);
+    }
+  }
+}
+
+
+function getDepositID($table, $id, $seaarhobj, $ts, $conn){
+  $arr=[];
+  $arrcontainer=[];
+  $retarr=[];
+  
+
+  $sqlbi = "SELECT * FROM "; 
+  $sqlbi .= $table;
+  $sqlbi .= " WHERE id_number = '$id' and withdraw_td = 0 ";
+  $resultbi = $conn->query($sqlbi);
+  $numRowTD = mysqli_num_rows($resultbi);
+  
+  if($resultbi->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultbi)) {
+        $arr[0] = $row['type_savings'];
+        $arr[1] = $row['amount']; 
+
+        if($ts == 0){
+          $retarr = $arr;
+        }else if($ts == 1){
+          array_push($arrcontainer, $arr);
+          $retarr = $arrcontainer;
+        }
+    }
+    return($retarr);
+  }else{
+    return($retarr);
+  }
+}
+
+
 function getChartAccountInfo($table, $code, $seaarhobj, $conn){
   $arr = [];
   $data="";
@@ -908,7 +1048,7 @@ function getRepID($table, $jnumber, $conn){
   }
 }
 
-//REMOVE for all
+//UNIVERSAL 
 function getID($table, $transactionid, $conn){
   $id="";
 
@@ -947,12 +1087,56 @@ function getRN($table, $transactionid, $conn){
   }
 }
 
-function getLoanInfoP($table, $referencenumber, $id, $conn){
-}
-
-function getLoanInfoI($table, $referencenumber, $id, $conn){
+function getLoanInfoP($table, $referencenumber, $id, $apnumber, $seaarhobj, $conn){
   $arr=[];
   $arrcontainer=[];
+  $retarr=[];
+
+  $sqlName = "SELECT * FROM ";
+  $sqlName .= $table;
+  if($apnumber == ""){
+    $sqlName .= " WHERE reference_number ='referencenumber' and id_number = 'id' ";
+  }else{
+    $sqlName .= " WHERE loan_application_number = '$apnumber ";
+  }
+  
+  $resultName = $conn->query($sqlName);
+
+  if($resultName->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultName)) {
+      $arr[0] = $row['transaction_number'];
+      $arr[1] = $row['id_number'];
+      $arr[2] = $row['loan_application_number'];
+      $arr[3] = $row['reference_number'];
+      $arr[4] = $row['date_payment'];
+      $arr[5] = $row['encoded_by'];
+
+      $arr[6] = $row['amount'];
+      $arr[7] = $row['payment_count'];
+
+      array_push($retarr, $arr);
+    }
+
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }else{
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }
+}
+
+function getLoanInfoI($table, $referencenumber, $id, $apnumber, $seaarhobj, $conn){
+  $arr=[];
   $retarr=[];
 
   $sqlName = "SELECT * FROM ";
@@ -984,8 +1168,24 @@ function getLoanInfoI($table, $referencenumber, $id, $conn){
       $arr[16] = $row['loanb_v'];
 
       $arr[17] = $row['payment_count'];
+
+      array_push($retarr, $arr);
     }
-    return($arr);
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }else{
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
   }
 }
 

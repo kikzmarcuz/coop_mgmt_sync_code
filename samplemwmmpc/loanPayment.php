@@ -181,447 +181,7 @@ if($resultOR->num_rows > 0){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
     
-    if($idNumberS == ""){
-        if (!empty($_POST["searchMember"])) {
-            $searchMember = test_input($_POST["searchMember"]);
-        }
-
-        if (!empty($_POST["myButton"])) {
-            $loanApplicationNumberId = test_input($_POST["myButton"]);
-        }
-
-        if (!empty($_POST["paidLoan"])) {
-            $paidLoan = test_input($_POST["paidLoan"]);
-        }
-
-        if (!empty($_POST["postPayment"])) {
-            $postPayment = test_input($_POST["postPayment"]);
-        }
-
-        if (!empty($_POST["typePayment"])) {
-            $typePayment = test_input($_POST["typePayment"]);
-        }
-
-        if (!empty($_POST["exitB"])) {
-            $exitB = test_input($_POST["exitB"]);
-        }
-
-    	if (empty($_POST["idNumber"])) {
-    	  	$countErr++;
-    	}else {
-        	$idNumber = test_input($_POST["idNumber"]);
-      	}
-
-        if (empty($_POST["referencenumber"])) {
-            $countErr++;
-        }else {
-            $referencenumber = test_input($_POST["referencenumber"]);
-        }
-
-        if (!empty($_POST["loanApplicationNumberP"])) {
-            $loanApplicationNumberP = test_input($_POST["loanApplicationNumberP"]);
-        }
-
-        if (empty($_POST["typePaymentCCHK"]) && !is_numeric($_POST["typePaymentCCHK"])) {
-            $countErr++;
-        }else {
-            $typePaymentCCHK = test_input($_POST["typePaymentCCHK"]);
-        }
-
-        if (empty($_POST["datePayment"])) {
-            $countErr++;
-        }else {
-            $datePayment = test_input($_POST["datePayment"]);
-        }
-
-        if (!empty($_POST["loanInterestP"])) {
-            $loanInterestP = test_input($_POST["loanInterestP"]);
-        }
-
-        if (!empty($_POST["typeInterestP"])) {
-            $typeInterestP = test_input($_POST["typeInterestP"]);
-        }
-
-        if (!empty($_POST["paymentTermP"])) {
-            $paymentTermP = test_input($_POST["paymentTermP"]);
-        }
-
-        if (!empty($_POST["loanAmountP"]) ) {
-            $loanAmountP = test_input($_POST["loanAmountP"]);
-        }
-
-        if (empty($_POST["savingsDeposit"]) && !is_numeric($_POST["savingsDeposit"])) {
-            $countErr++;
-        }else {
-            $savingsDeposit = test_input($_POST["savingsDeposit"]);
-        }
-
-        if (empty($_POST["timeDeposit"]) && !is_numeric($_POST["timeDeposit"])) {
-            $countErr++;
-        }else {
-            $timeDeposit = test_input($_POST["timeDeposit"]);
-
-            if($timeDeposit > 0){
-                if (empty($_POST["depositReference"]) && !is_numeric($_POST["depositReference"])) {
-                    $countErr++;
-                }else {
-                    $depositReference = test_input($_POST["depositReference"]);
-                }
-
-                if (empty($_POST["depositInterest"]) && !is_numeric($_POST["depositInterest"])) {
-                    $countErr++;
-                }else {
-                    $depositInterest = test_input($_POST["depositInterest"]);
-                }
-
-                if (empty($_POST["depositTerm"]) && !is_numeric($_POST["depositTerm"])) {
-                    $countErr++;
-                }else {
-                    $depositTerm = test_input($_POST["depositTerm"]);
-                }
-            }
-        }
-
-        if (empty($_POST["fixedDeposit"]) && !is_numeric($_POST["fixedDeposit"])) {
-            $countErr++;
-        }else {
-            $fixedDeposit = test_input($_POST["fixedDeposit"]);
-            if($fixedDeposit > 0){
-                if (empty($_POST["depositReference"]) && !is_numeric($_POST["depositReference"])) {
-                    $countErr++;
-                }else {
-                    $depositReference = test_input($_POST["depositReference"]);
-                }
-
-                if (empty($_POST["depositInterest"]) && !is_numeric($_POST["depositInterest"])) {
-                    $countErr++;
-                }else {
-                    $depositInterest = test_input($_POST["depositInterest"]);
-                }
-
-                if (empty($_POST["depositTerm"]) && !is_numeric($_POST["depositTerm"])) {
-                    $countErr++;
-                }else {
-                    $depositTerm = test_input($_POST["depositTerm"]);
-                }
-            }
-        }
-
-        if (empty($_POST["cbuDeposit"]) && !is_numeric($_POST["cbuDeposit"])) {
-            $countErr++;
-        }else {
-            $cbuDeposit = test_input($_POST["cbuDeposit"]);
-        }
-
-        if (empty($_POST["rcfPayment"]) && !is_numeric($_POST["rcfPayment"])) {
-            $countErr++;
-        }else {
-            $rcfPayment = test_input($_POST["rcfPayment"]);
-
-            if($rcfPayment > 0){
-                if (empty($_POST["invoiceNumber"])) {
-                    $countErr++;
-                }else {
-                    $invoiceNumber = test_input($_POST["invoiceNumber"]);
-                }
-
-                if (empty($_POST["quantityCash"])) {
-                    $countErr++;
-                }else {
-                    $quantityCash = test_input($_POST["quantityCash"]);
-                }
-            }
-        }
-
-        if (empty($_POST["rcfPaymentI"]) && !is_numeric($_POST["rcfPaymentI"])) {
-            $countErr++;
-        }else {
-            $rcfPaymentI = test_input($_POST["rcfPaymentI"]);
-        }
-
-        if (!empty($_POST["withdrawSavings"]) ) {
-            $withdrawSavings = test_input($_POST["withdrawSavings"]);
-        }
-
-        if (!empty($_POST["withdrawShareCapital"]) ) {
-            $withdrawShareCapital = test_input($_POST["withdrawShareCapital"]);
-        }
-
-        if (!empty($_POST["CBURecruit"]) ) {
-            $CBURecruit = test_input($_POST["CBURecruit"]);
-        }
-
-        if (!empty($_POST["withdrawTimeDeposit"]) ) {
-            $withdrawTimeDeposit = test_input($_POST["withdrawTimeDeposit"]);
-        }
-
-        if (!empty($_POST["withdrawFixedDeposit"]) ) {
-            $withdrawFixedDeposit = test_input($_POST["withdrawFixedDeposit"]);
-        }
-
-        if (!empty($_POST["idNumberSearch"]) ) {
-            $idNumberSearch = test_input($_POST["idNumberSearch"]);
-        }
-
-        if (empty($_POST["mbfPayment"]) && !is_numeric($_POST["mbfPayment"])) {
-            $countErr++;
-        }else {
-            $mbfPayment = test_input($_POST["mbfPayment"]);
-        }
-
-        if (empty($_POST["scfPayment"]) && !is_numeric($_POST["scfPayment"])) {
-            $countErr++;
-        }else {
-            $scfPayment = test_input($_POST["scfPayment"]);
-        }
-
-        if (empty($_POST["plfPayment"]) && !is_numeric($_POST["plfPayment"])) {
-            $countErr++;
-        }else {
-            $plfPayment = test_input($_POST["plfPayment"]);
-        }
-
-        if (empty($_POST["pnfPayment"]) && !is_numeric($_POST["pnfPayment"])) {
-            $countErr++;
-        }else {
-            $pnfPayment = test_input($_POST["pnfPayment"]);
-        }
-
-        if (empty($_POST["msfPayment"]) && !is_numeric($_POST["msfPayment"])) {
-            $countErr++;
-        }else {
-            $msfPayment = test_input($_POST["msfPayment"]);
-        }
-
-        if (empty($_POST["ptfPayment"]) && !is_numeric($_POST["ptfPayment"])) {
-            $countErr++;
-        }else {
-            $ptfPayment = test_input($_POST["ptfPayment"]);
-        }
-
-        if (empty($_POST["rifPayment"]) && !is_numeric($_POST["rifPayment"])) {
-            $countErr++;
-        }else {
-            $rifPayment = test_input($_POST["rifPayment"]);
-        }
-
-        if (empty($_POST["rrfPayment"]) && !is_numeric($_POST["rrfPayment"])) {
-            $countErr++;
-        }else {
-            $rrfPayment = test_input($_POST["rrfPayment"]);
-        }
-
-        if (empty($_POST["tffPayement"]) && !is_numeric($_POST["tffPayement"])) {
-            $countErr++;
-        }else {
-            $tffPayement = test_input($_POST["tffPayement"]);
-        }
-
-        if (empty($_POST["blLA"]) && !is_numeric($_POST["blLA"])) {
-            $countErr++;
-        }else {
-            $blLA = test_input($_POST["blLA"]);
-        }
-
-        if (empty($_POST["blPayment"]) && !is_numeric($_POST["blPayment"])) {
-            $countErr++;
-        }else {
-            $blPayment = test_input($_POST["blPayment"]);
-        }
-
-        if (empty($_POST["chklLA"]) && !is_numeric($_POST["chklLA"])) {
-            $countErr++;
-        }else {
-            $chklLA = test_input($_POST["chklLA"]);
-        }
-
-        if (empty($_POST["chklPayment"]) && !is_numeric($_POST["chklPayment"])) {
-            $countErr++;
-        }else {
-            $chklPayment = test_input($_POST["chklPayment"]);
-        }
-
-        if (empty($_POST["cllLA"]) && !is_numeric($_POST["cllLA"])) {
-            $countErr++;
-        }else {
-            $cllLA = test_input($_POST["cllLA"]);
-        }
-
-        if (empty($_POST["cllPayment"]) && !is_numeric($_POST["cllPayment"])) {
-            $countErr++;
-        }else {
-            $cllPayment = test_input($_POST["cllPayment"]);
-        }
-
-        if (empty($_POST["clLA"]) && !is_numeric($_POST["clLA"])) {
-            $countErr++;
-        }else {
-            $clLA = test_input($_POST["clLA"]);
-        }
-
-        if (empty($_POST["clPayment"]) && !is_numeric($_POST["clPayment"])) {
-            $countErr++;
-        }else {
-            $clPayment = test_input($_POST["clPayment"]);
-        }
-
-        if (empty($_POST["cmlLA"]) && !is_numeric($_POST["cmlLA"])) {
-            $countErr++;
-        }else {
-            $cmlLA = test_input($_POST["cmlLA"]);
-        }
-
-        if (empty($_POST["cmlPayment"]) && !is_numeric($_POST["cmlPayment"])) {
-            $countErr++;
-        }else {
-            $cmlPayment = test_input($_POST["cmlPayment"]);
-        }
-
-        if (empty($_POST["edlLA"]) && !is_numeric($_POST["edlLA"])) {
-            $countErr++;
-        }else {
-            $edlLA = test_input($_POST["edlLA"]);
-        }
-
-        if (empty($_POST["edlPayment"]) && !is_numeric($_POST["edlPayment"])) {
-            $countErr++;
-        }else {
-            $edlPayment = test_input($_POST["edlPayment"]);
-        }
-
-        if (empty($_POST["emlLA"]) && !is_numeric($_POST["emlLA"])) {
-            $countErr++;
-        }else {
-            $emlLA = test_input($_POST["emlLA"]);
-        }
-
-        if (empty($_POST["emlPayment"]) && !is_numeric($_POST["emlPayment"])) {
-            $countErr++;
-        }else {
-            $emlPayment = test_input($_POST["emlPayment"]);
-        }
-
-        if (empty($_POST["rlLA"]) && !is_numeric($_POST["rlLA"])) {
-            $countErr++;
-        }else {
-            $rlLA = test_input($_POST["rlLA"]);
-        }
-
-        if (empty($_POST["rlPayment"]) && !is_numeric($_POST["rlPayment"])) {
-            $countErr++;
-        }else {
-            $rlPayment = test_input($_POST["rlPayment"]);
-        }
-
-        if (empty($_POST["slLA"]) && !is_numeric($_POST["slLA"])) {
-            $countErr++;
-        }else {
-            $slLA = test_input($_POST["slLA"]);
-        }
-
-        if (empty($_POST["slPayment"]) && !is_numeric($_POST["slPayment"])) {
-            $countErr++;
-        }else {
-            $slPayment = test_input($_POST["slPayment"]);
-        }
-
-        if (empty($_POST["plLA"]) && !is_numeric($_POST["plLA"])) {
-            $countErr++;
-        }else {
-            $plLA = test_input($_POST["plLA"]);
-        }
-
-        if (empty($_POST["plPayment"]) && !is_numeric($_POST["plPayment"])) {
-            $countErr++;
-        }else {
-            $plPayment = test_input($_POST["plPayment"]);
-        }
-
-        if (empty($_POST["pliPayment"]) && !is_numeric($_POST["pliPayment"])) {
-            $countErr++;
-        }else {
-            $pliPayment = test_input($_POST["pliPayment"]);
-        }
-
-        if (!empty($_POST["paymentCount"])) {
-            $paymentCount = test_input($_POST["paymentCount"]);
-        }else {
-            //$paymentCount = test_input($_POST["paymentCount"]);
-        }
-
-        if (empty($_POST["rclLA"]) && !is_numeric($_POST["rclLA"])) {
-            $countErr++;
-        }else {
-            $rclLA = test_input($_POST["rclLA"]);
-        }
-
-        if (empty($_POST["rclPayment"]) && !is_numeric($_POST["rclPayment"])) {
-            $countErr++;
-        }else {
-            $rclPayment = test_input($_POST["rclPayment"]);
-
-            if($rclPayment > 0){
-                if (empty($_POST["quantity"]) && !is_numeric($_POST["quantity"])) {
-                    $countErr++;
-                }else {
-                    $quantity = test_input($_POST["quantity"]);
-                }
-
-                if (empty($_POST["invoiceNumberP"]) && !is_numeric($_POST["invoiceNumberP"])) {
-                    $countErr++;
-                }else {
-                    $invoiceNumberP = test_input($_POST["invoiceNumberP"]);
-                }
-            }
-        }
-
-        if (empty($_POST["rclPPayment"]) && !is_numeric($_POST["rclPPayment"])) {
-            $countErr++;
-        }else {
-            $rclPPayment = test_input($_POST["rclPPayment"]);
-        }
-
-        if (empty($_POST["infPayment"]) && !is_numeric($_POST["infPayment"])) {
-            $countErr++;
-        }else {
-            $infPayment = test_input($_POST["infPayment"]);
-        }
-
-        if (empty($_POST["rbfPayment"]) && !is_numeric($_POST["rbfPayment"])) {
-            $countErr++;
-        }else {
-            $rbfPayment = test_input($_POST["rbfPayment"]);
-        }
-
-        if (empty($_POST["totalPayment"]) && !is_numeric($_POST["totalPayment"])) {
-            $countErr++;
-        }else {
-            $totalPayment = test_input($_POST["totalPayment"]);
-        }
-
-        if (!empty($_POST["cashRegister"]) ) {
-            $cashRegister = test_input($_POST["cashRegister"]);
-        }
-
-
-        if($exitB == "exitB"){
-            session_destroy();
-            header("Location: http://localhost/projectkikz/samplemwmmpc/application/views/home/login.php");
-        }
-
-        if($cashRegister == "cashRegister"){
-            header("Location: http://system.local/cashierDailyReport.php");
-        }
-
-        if($postPayment == "postPayment"){
-            $totalPayment = $mbfPayment + $scfPayment + $cbuDeposit + $savingsDeposit + $timeDeposit + $plfPayment + $pnfPayment + $msfPayment + $rcfPayment + $rcfPaymentI + $ptfPayment + $rifPayment + $rrfPayment + $tffPayement + $blPayment + $chklPayment + $cllPayment + $clPayment + $cmlPayment + $edlPayment + $emlPayment + $rlPayment + $slPayment + $plPayment + $pliPayment + $rclPayment + $rclPPayment + $infPayment + $rbfPayment + $fixedDeposit;
-        }
-    }
-
-    if($idNumberS != ""){
-        $idNumberSearch = $idNumberS;
-        $typePaymentCCHK = 0;
-    }
+    include 'loanPaymentValidation.php';
     
     if ($searchMember == "searchMember" or $loanApplicationNumberId != "" or $typePayment != "" or $idNumberSearch != "") {
         # search member..
@@ -630,228 +190,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
         $idNumber = $memberinfo[0];
         $accountNumber = $memberinfo[1];
         $firstName = $memberinfo[2];
-        $middleName = $memberinfo[3];
+        $middleName = $memberinfo[3];   
         $lastName = $memberinfo[4];
-
-        /*$sqlSearchName = "SELECT * FROM name_table WHERE (CONCAT(first_name, ' ', last_name) LIKE '%$idNumberSearch%' OR last_name LIKE '%$idNumberSearch%' or  id_number = '$idNumberSearch') and  (member_status != 'Resigned' and member_status != 'Diseased' ) ";
-
-        $resultSearchName = $conn->query($sqlSearchName);
-
-        if($resultSearchName->num_rows > 0){
-            while($row = mysqli_fetch_array($resultSearchName)){
-              $idNumber = $row['id_number'];
-              $accountNumber = $row['account_number'];
-              $firstName = $row['first_name'];
-              $middleName = $row['middle_name'];
-              $lastName = $row['last_name'];
-              //$totalPayment = 0;
-            }
-        }else{
-            $idNumber = "";
-            $firstName = "";
-            $middleName = "";
-            $lastName = "";
-            $totalPayment = 0;
-
-        }*/
-
         $_SESSION["idSession"] = "";
 
-        $sqlbi = "SELECT * FROM  bl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-        $counter = 0;
+        $code = "";
 
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
+        $listloan = listLoan();
+        $llcount = count($listloan);
+        $llcounter = 0;
+        $loaninfo=[];
+        $llpcount=0;
+        $llpcounter=0;
+        $listcounter=0;
 
-                $counter++;
-            }
-        }
+        while($llcounter < $llcount){
+            $code=$listloan[$llcounter];
 
-        $sqlbi = "SELECT * FROM  ckl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
+            $ltable = getLoanTableName($code);
+            $llploan = getLI($ltable, $idNumber, "", "l", $conn);
+            $llpcount = count($llploan);
+            $numRow = $numRow + $llpcount;
+            while ($llpcounter < $numRow) {
+                $loaninfo = $llploan[$listcounter];
+                $loanServiceId[$llpcounter] = $loaninfo[3];
+                $loanAmount[$llpcounter] = $loaninfo[4];
+                $loanTerm[$llpcounter] = $loaninfo[5];
+                  
+                if($code == "RCL"){
+                    $loanApplicationNumber[$llpcounter] =  $loaninfo[2] . " " . "(" . $loaninfo[11] . ")";
+                }else if( $code == "PL"){
+                    $loanServiceTag = $loanServiceId[$llpcounter];
 
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  cml_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  cl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  cll_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  edl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  eml_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  rl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  sl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
-            }
-        }
-
-        $sqlbi = "SELECT * FROM  pl_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-
-                $loanServiceTag = $row['loan_service_id'];
-
-                $sqlLSN = "SELECT * FROM  loan_services_table WHERE loan_service_id = '$loanServiceTag'";
+                    //SELECT TAG NAME
+                    $sqlLSN = "SELECT * FROM  loan_services_table WHERE loan_service_id = '$loanServiceTag'";
                     $resultLSN = $conn->query($sqlLSN);
 
-                if($resultLSN->num_rows > 0){
-                    while ($rowSN = mysqli_fetch_array($resultLSN)){
-                        $loanServiceTag = $rowSN['loan_service_name'];
+                    if($resultLSN->num_rows > 0){
+                        while ($rowSN = mysqli_fetch_array($resultLSN)){
+                            $loanServiceTag = $rowSN['loan_service_name'];
+                        }
                     }
+
+                    if($loanServiceTag == "First Loan" or $loanServiceTag == "Second Loan"){
+                        $loanServiceTag = "Regular Loan";
+                    }
+
+                    $loanApplicationNumber[$llpcounter] = $loaninfo[2] . " " . "(" . $loanServiceTag . ")";
+                }
+                else{
+                    $loanApplicationNumber[$llpcounter] = $loaninfo[2];
                 }
 
-                if($loanServiceTag == "First Loan" or $loanServiceTag == "Second Loan"){
-                    $loanServiceTag = "Regular Loan";
-                }
-
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'] . " " . "(" . $loanServiceTag . ")";
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-
-                $counter++;
+                $llpcounter++;
+                $listcounter++;
             }
-
-            $loanServiceTag = "";
+            $listcounter=0;
+            $llcounter++;
         }
 
-        $sqlbi = "SELECT * FROM  rice_loan_table WHERE id_number = '$idNumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-        $resultbi = $conn->query($sqlbi);
-        $numRow = $numRow + mysqli_num_rows($resultbi);
-
-        if($resultbi->num_rows > 0){
-            while ($row = mysqli_fetch_array($resultbi)) {
-                # code...
-                $loanApplicationNumber[$counter] = $row['loan_application_number'] . " " . "(" . $row['invoice_number'] . ")";
-                $loanServiceId[$counter] = $row['loan_service_id'];
-                $loanAmount[$counter] = $row['loan_amount'];
-                $loanTerm[$counter] = $row['loan_term'];
-                //$loanInterest[$counter] = $row['loan_interest'];
-
-                $counter++;
-            }
-        }
+        $counter = $llpcounter;
 
         $sqltd = "SELECT * FROM  time_deposit_table WHERE withdraw_td != '1'";
         $resulttd = $conn->query($sqltd);
@@ -875,20 +273,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
 
         $depositReferenceF = "FD" . $numRowTD;
 
-        /*
-        $sqltd = "SELECT * FROM  fixed_deposit_table WHERE id_number = '$idNumber' and withdraw_td != '1'";
-        $resulttd = $conn->query($sqltd);
-        $numRowTD = mysqli_num_rows($resulttd);
-        $counterTD = 0;
-
-        if($resulttd->num_rows > 0){
-            while ($row = mysqli_fetch_array($resulttd)) {
-                # code...
-                $TDDeposit[$counterTD] = $row['loan_application_number'] . " " . "(" . $row['invoice_number'] . ")";
-                $counterTD++;
-            }
-        }*/
-
 
         if($counter > 0){
             $displayProperty = "inline";
@@ -901,6 +285,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             if($typePayment != ""){
                 $loanApplicationNumberId = $typePayment;
             }
+
+            /*
+            if(substr($loanApplicationNumberId, 0,2) == "BL"){
+                $selcode="BL";
+                $arr=[];
+                $ltable = getLoanTableName($selcode);
+                $arr = getLI($ltable, "", $loanApplicationNumberId, 5, $conn);
+
+                $idNumber = $arr[1];
+                $loanApplicationNumberP = $arr[2];
+                $loanServiceIdP = $arr[3];
+                $loanAmountP = $arr[4];
+                $loanTermP= $arr[5];
+                $loanInterestP = $arr[6];
+                $paymentTermP = $arr[7];
+
+                $lstable = getTableName($selcode);
+                $lsarr = getLS($lstable, $loanServiceIdP, 5, $conn);
+                $typeInterestP = $lsarr[11];
+
+                $ptable = getLoanPrincipalTableName($selcode);
+                $parr = getLoanInfoP($table, "", "", $loanApplicationNumberP, "l", $conn);
+                $pcount = count($parr);
+                $pcounter=0;
+                $parrinfo=[];
+
+                while($pcounter<$pcount){
+                    $pcounter++;
+                }
+
+
+                $amountPaymentP[$pcount] = $row['amount'];
+                $datePaymentP[$pcount] = $row['date_payment'];
+                $orNumber[$pcount] = $row['reference_number'];
+                $pcount++;
+
+                $ptable = getLoanInterestTableName($selcode);
+                $larr = getLoanInfoI($table, "", "", $loanApplicationNumberP, 5, $conn);
+                $lcount = count($larr);
+
+                $amountPI[$lcount] = $row['interest_revenue'];
+                $orNumber[$lcount] = $row['reference_number'];
+                $lcount++;
+            }*/
+
             if(substr($loanApplicationNumberId, 0,2) == "BL"){
 
                 $sqlP = "SELECT * FROM  bl_loan_table WHERE loan_application_number = '$loanApplicationNumberId' ";
@@ -1889,6 +1318,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
 
             
             //BL
+
+            $code = "";
+            $code = checkLoanTransaction($blLA);
+            
+            
+
+            /*
+                
+
+            */
             if(substr("$blLA",0,2) == "BL" and $blPayment != 0){
                 $bl = 1;
 
@@ -2823,11 +2262,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                     }
 
                     $paymentCounter++;
-
                 }
             }
 
-            //CKL
+            //CKL 
             if(substr("$chklLA",0,3) == "CKL" and $chklPayment != 0){
                 $ckl = 1;
                 $sqlLP = "SELECT * FROM  ckl_loan_table WHERE loan_application_number = '$chklLA' ";
@@ -3665,8 +3103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $totalPayment = $totalPayment/$paymentCount;
                         $paymentCounterContainer = 1;
                         while($paymentCount >= 1){
-                            $sql5 = "INSERT INTO cashier_report_table( id_number ,reference_number, invoice_number,total_amount, bl, cll, cml, edl, rl, pl, cl, ckl, eml, sl, rcl, rcc, oi, sc, sd, td, fd ,date_transaction, encoded_by, or_status, payment_type) 
-                                VALUES ('$idNumber', '$referencenumber', '$paymentCounterContainer' ,'$totalPayment', '$bl', '$cll','$cml','$edl','$rl','$pl','$cl','$ckl','$eml','$sl','$rcl','$rcc','$oi','$sc','$sd','$td','$fd','$datePayment','$encodedBy', '1', '$typePaymentCCHK')";
+                            $sql5 = "INSERT INTO cashier_report_table( id_number ,reference_number, invoice_number,total_amount, bl, cll, cml, edl, rl, pl, cl, ckl, eml, sl ,date_transaction, encoded_by, or_status, payment_type) 
+                                VALUES ('$idNumber', '$referencenumber', '$paymentCounterContainer' ,'$totalPayment', '$bl', '$cll','$cml','$edl','$rl','$pl','$cl','$ckl','$eml','$sl', '$datePayment', '$encodedBy', '1', '$typePaymentCCHK')";
 
                             if ($conn->query($sql5) === TRUE) {
 
@@ -3705,6 +3143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                             $paymentCount--;
                             $paymentCounterContainer++;
                         }
+
                     }
                 }else{
                     $sql5 = "INSERT INTO cashier_withdraw_table( id_number ,reference_number, total_amount, sdw, tdw, fdw, cbuw,date_transaction, encoded_by, or_status,payment_type) 

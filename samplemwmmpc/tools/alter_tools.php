@@ -1,5 +1,5 @@
 <?php
-require_once 'dbconnection.php';
+require_once '../dbconnection.php';
 
 /*ALTER TABLE journal_report_table
 ADD COLUMN lb INT NOT NULL,
@@ -21,12 +21,16 @@ ADD COLUMN pnl INT NOT NULL,
 ADD COLUMN msl INT NOT NULL,
 ADD COLUMN msb INT NOT NULL;*/
 
-mysql_query("ALTER TABLE journal_report_table
+$sql = "ALTER TABLE address_table
 ADD street CHAR(30),
 Add city CHAR(30) ,
 ADD state CHAR(4) ,
 ADD zipcode CHAR(20) ,
-ADD phone CHAR(20) ");
+ADD phone CHAR(20) ";
+
+$result = $conn->query($sql);
+
+echo "$result";
 
 
 ?>
