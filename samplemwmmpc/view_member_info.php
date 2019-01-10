@@ -516,6 +516,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $displayPropertyLoan = "none";
   }
 
+
+  //DELETE OR
+  if($deleteOR == "deleteOR"){
+    $lcode = checkLoanTransaction($loanApplicationNumberP);
+    $ptable=getLoanPrincipalTableName($lcode);
+    $itable=getLoanInterestTableName($lcode);
+    deleteLoanPaymentD($ptable, $itable, $orNumberPL, $idNumber ,$conn);
+  }
+
+
   //CBU SAVINGS
   if($searchTR == "searchTR"){
     if($categoryCS == "Savings"){
