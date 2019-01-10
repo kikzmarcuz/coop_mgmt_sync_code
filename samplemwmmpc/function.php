@@ -389,10 +389,12 @@ function updateTransactionReport($table, $codenumber, $referencenumber, $col ,$c
   }
 }
 
-function updateLoanStatus($applicationnumber, $loantable ,$conn){
+function updateLoanStatus($applicationnumber, $loantable, $status, $conn){
   $sql = "UPDATE ";
   $sql.= $loantable; 
-  $sql.= " SET loan_status = 'Released' WHERE loan_application_number =  '$applicationnumber' ";
+  $sql.= " SET loan_status = ";
+  $sql.= '$status';
+  $sql.= " WHERE loan_application_number =  '$applicationnumber' ";
 
     if ($conn->query($sql) === TRUE) {
        $infomessage = "Record updated successfully";
@@ -554,62 +556,6 @@ function invoiceNotExist($invoice, $conn){
 
 
 //OBJ INFO
-function getLI($table, $idnumber,  $apnumber, $seaarhobj, $conn){
-  $arr=[];
-  $retarr=[];
-  
-  $sqlbi = "SELECT * FROM "; 
-  $sqlbi .= $table;
-  if($apnumber == ""){
-    $sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-  }else{
-    $sqlbi .= " WHERE loan_application_number = '$apnumber' ";
-  }
-  
-  $resultbi = $conn->query($sqlbi);
-  $numRowTD = mysqli_num_rows($resultbi);
-  
-  if($resultbi->num_rows > 0){
-    while ($row = mysqli_fetch_array($resultbi)) {
-        //$arr[0] = $row['transaction_number'];
-        $arr[0] = "";
-        $arr[1] = $row['id_number'];
-        $arr[2] = $row['loan_application_number'];
-        $arr[3] = $row['loan_service_id']; 
-        $arr[4] = $row['loan_amount'];
-        $arr[5] = $row['loan_term'];
-        $arr[6] = $row['loan_interest'];
-        $arr[7] = $row['payment_term'];
-        $arr[8] = $row['loan_status'];
-        $arr[9] = $row['date_released'];
-        $arr[10] = $row['date_paid'];
-        //$arr[11] = $row['reloan_p'];
-        //$arr[12] = $row['reloan_i'];
-        //$arr[13] = $row['last_payment'];
-        if($table == "rice_loan_table"){
-          $arr[11] = $row['invoice_number'];
-        }
-
-        array_push($retarr, $arr);
-
-    }
-    if($seaarhobj == "l"){
-      return($retarr);
-    }else if($seaarhobj == "i"){
-      return($arr);
-    }else{
-      return($arr[$seaarhobj]);
-    }
-  }else{
-    if($seaarhobj == "l"){
-      return($retarr);
-    }else if($seaarhobj == "i"){
-      return($arr);
-    }else{
-      return($arr[$seaarhobj]);
-    }
-  }
-}
 
 function getLS($table, $lsid, $conn){
   $arr=[];
@@ -1087,6 +1033,63 @@ function getRN($table, $transactionid, $conn){
   }
 }
 
+function getLI($table, $referencenumber, $idnumber,  $apnumber, $seaarhobj, $conn){
+  $arr=[];
+  $retarr=[];
+  
+  $sqlbi = "SELECT * FROM "; 
+  $sqlbi .= $table;
+  if($apnumber == ""){
+    $sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
+  }else{
+    $sqlbi .= " WHERE loan_application_number = '$apnumber' ";
+  }
+  
+  $resultbi = $conn->query($sqlbi);
+  $numRowTD = mysqli_num_rows($resultbi);
+  
+  if($resultbi->num_rows > 0){
+    while ($row = mysqli_fetch_array($resultbi)) {
+        //$arr[0] = $row['transaction_number'];
+        $arr[0] = "";
+        $arr[1] = $row['id_number'];
+        $arr[2] = $row['loan_application_number'];
+        $arr[3] = $row['loan_service_id']; 
+        $arr[4] = $row['loan_amount'];
+        $arr[5] = $row['loan_term'];
+        $arr[6] = $row['loan_interest'];
+        $arr[7] = $row['payment_term'];
+        $arr[8] = $row['loan_status'];
+        $arr[9] = $row['date_released'];
+        $arr[10] = $row['date_paid'];
+        //$arr[11] = $row['reloan_p'];
+        //$arr[12] = $row['reloan_i'];
+        //$arr[13] = $row['last_payment'];
+        if($table == "rice_loan_table"){
+          $arr[11] = $row['invoice_number'];
+        }
+
+        array_push($retarr, $arr);
+
+    }
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }else{
+    if($seaarhobj == "l"){
+      return($retarr);
+    }else if($seaarhobj == "i"){
+      return($arr);
+    }else{
+      return($arr[$seaarhobj]);
+    }
+  }
+}
+
 function getLoanInfoP($table, $referencenumber, $id, $apnumber, $seaarhobj, $conn){
   $arr=[];
   $arrcontainer=[];
@@ -1097,7 +1100,7 @@ function getLoanInfoP($table, $referencenumber, $id, $apnumber, $seaarhobj, $con
   if($apnumber == ""){
     $sqlName .= " WHERE reference_number ='referencenumber' and id_number = 'id' ";
   }else{
-    $sqlName .= " WHERE loan_application_number = '$apnumber ";
+    $sqlName .= " WHERE loan_application_number = '$apnumber' ";
   }
   
   $resultName = $conn->query($sqlName);
@@ -1141,7 +1144,13 @@ function getLoanInfoI($table, $referencenumber, $id, $apnumber, $seaarhobj, $con
 
   $sqlName = "SELECT * FROM ";
   $sqlName .= $table;
-  $sqlName .= " WHERE voucher_number ='referencenumber' and id_number = 'id' ";
+
+  if($apnumber == ""){
+    $sqlName .= " WHERE voucher_number ='referencenumber' and id_number = 'id' ";
+  }else{
+    $sqlName .= " WHERE loan_application_number = '$apnumber' ";
+  }
+
   $resultName = $conn->query($sqlName);
 
   if($resultName->num_rows > 0){

@@ -730,7 +730,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -743,7 +743,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -756,7 +756,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -769,7 +769,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -782,7 +782,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -795,7 +795,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);
@@ -808,7 +808,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentF($ptable, $clearOR, $idNumberCOR ,$conn);
@@ -821,7 +821,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentF($ptable, $clearOR, $idNumberCOR ,$conn);
@@ -834,7 +834,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentF($ptable, $clearOR, $idNumberCOR ,$conn);
@@ -847,7 +847,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentF($ptable, $clearOR, $idNumberCOR ,$conn);
@@ -860,7 +860,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $apnumber = getApplicationNumberP($clearOR, $ptable, $conn);
                     
                     if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                        updateLoanStatus($apnumber, $ltable , $conn);
+                        updateLoanStatus($apnumber, $ltable , "Released", $conn);
                     }
 
                     deleteLoanPaymentD($ptable, $itable, $clearOR, $idNumberCOR ,$conn);               

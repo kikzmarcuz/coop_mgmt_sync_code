@@ -4,6 +4,8 @@
 <?php  
 require_once 'session.php';
 require ("function.php");
+require ("loanPaymentFunction.php");
+
 //session_start();
 /*session_cache_expire( 20 );
 require_once 'session.php';
@@ -208,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $code=$listloan[$llcounter];
 
             $ltable = getLoanTableName($code);
-            $llploan = getLI($ltable, $idNumber, "", "l", $conn);
+            $llploan = getLI($ltable, "", $idNumber, "", "l", $conn);
             $llpcount = count($llploan);
             $numRow = $numRow + $llpcount;
             while ($llpcounter < $numRow) {
@@ -219,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                   
                 if($code == "RCL"){
                     $loanApplicationNumber[$llpcounter] =  $loaninfo[2] . " " . "(" . $loaninfo[11] . ")";
-                }else if( $code == "PL"){
+                }else if($code == "PL"){
                     $loanServiceTag = $loanServiceId[$llpcounter];
 
                     //SELECT TAG NAME
@@ -237,8 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                     }
 
                     $loanApplicationNumber[$llpcounter] = $loaninfo[2] . " " . "(" . $loanServiceTag . ")";
-                }
-                else{
+                }else{
                     $loanApplicationNumber[$llpcounter] = $loaninfo[2];
                 }
 
@@ -291,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                 $selcode="BL";
                 $arr=[];
                 $ltable = getLoanTableName($selcode);
-                $arr = getLI($ltable, "", $loanApplicationNumberId, 5, $conn);
+                $arr = getLI($ltable, "" ,"", $loanApplicationNumberId, l, $conn);
 
                 $idNumber = $arr[1];
                 $loanApplicationNumberP = $arr[2];
@@ -1318,16 +1319,134 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
 
             
             //BL
+            if(substr("$blLA",0,2) == "BL" and $blPayment != 0){
+                $bl=1;
+                $lcode = "";
+                $lcode = checkLoanTransaction($blLA);
+                $ltable=getLoanTableName($lcode);
+                $ptable=getLoanPrincipalTableName($lcode);
+                $itable=getLoanInterestTableName($lcode);
 
-            $code = "";
-            $code = checkLoanTransaction($blLA);
-            
+                $parr=[];
+                $parrl=[];
+                $parrlcount=0;
+                $iarr=[];
+                $iarrl=[];
+                $iarrlcount=0;
+                $larr=[];
+
+                $tpayment=$blPayment;
+                $apnumber=$blLA;
+
+                $info=[];
+                $info= paymentCount($paymentCount, $tpayment);
+                $tpayment = $info[0];
+                $paymentCounter = $info[1];
+                 
+
+                while($paymentCount>=$paymentCounter){
+                    //GET LP
+                    $parrlcounter=0;
+                    $parrl= getLoanInfoP($ptable, "", "", $apnumber, "l", $conn);
+                    $parrlcount=count($parrl);
+                    $currentBalance  = 0;
+                    
+                    while($parrlcounter<$parrlcount){
+                        $parr=$parrl[$parrlcounter];
+                        $totalPrincipalPayment = $parr[6];
+                        $currentBalance = $currentBalance + $totalPrincipalPayment;
+                        $parrlcounter++;
+                    }
+
+                    //GET LI
+                    $iarrlcounter=0;
+                    $iarrl= getLoanInfoI($itable, "", "", $apnumber, "l", $conn);
+                    $iarrlcount=count($iarrl);
+                    
+                    if($iarrlcount>0){
+                        while($iarrlcounter<$iarrlcount){
+                            $iarr=$iarrl[$iarrlcounter];
+                            if($iarr[12] != 0){
+                                $lastInterest[$iarrlcounter] = $iarr[12];
+                                $iarrlcounter++;
+                            }else{
+                                $lastInterest[$iarrlcounter] = 0;
+                                $iarrlcounter++;
+                            }
+                        }
+                    }else{
+                        $lastInterest[$iarrlcounter] = 0;
+                    }
+                    
+                    //GET LINFO
+                    $larr= getLI($ltable, "", "", $apnumber, "i", $conn);
+                    //$lcount= count($larr);
+                    $loanAmountP = $larr[4];
+                    $loanTermP = $larr[5];
+                    $loanInterestP = $larr[6];
+                    $paymentTermP =  $larr[7];
+
+                    
+
+                    $loanInterestP = actualinterest($loanInterestP);
+                    $currentPrincipal = 0;
+                    $currentInterest = 0;
+
+
+
+                    $aiarr=[];
+                    $aiarr=actualpterm($loanTermP, $paymentTermP);
+                    $loanTermP = $aiarr[0];
+                    $paymentTerm = $aiarr[1];
+                    $currentBalance = $loanAmountP - $currentBalance;
+                    
+                    
+                    //Compute Interest
+                    $currentInterest = interestpaid($iarrlcounter, $lastInterest[$iarrlcounter-1], $currentBalance, $loanInterestP, $paymentTerm);
+                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
+
+                    //Compute Principal
+                    $currentPrincipal = $tpayment - $currentInterest;
+                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
+
+                    //Update Loan Status
+                    $currentBalanceTemp = $currentBalance;
+                    if($currentBalanceTemp <= $tpayment){
+                        updateLoanStatus($apnumber, $ltable , "Paid", $conn);
+                        updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
+                        updateLoanPaid($apnumber, $ltable , $datePayment, $conn);
+                    }else{
+                        updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
+                    }
+
+                    //Post Payment
+                    $ppayment=[];
+                    $ipayment=[];
+
+                    $ppayment[0]=$idNumber;
+                    $ppayment[1]=$referencenumber;
+                    $ppayment[2]=$apnumber;
+                    $ppayment[3]=$currentPrincipal;
+                    $ppayment[4]=$datePayment;
+                    $ppayment[5]=$encodedBy;
+                    $ppayment[6]=$paymentCounter;
+
+                    $ipayment[0]=$idNumber;
+                    $ipayment[1]=$referencenumber;
+                    $ipayment[2]=$apnumber;
+                    $ipayment[3]=$currentInterest;
+                    $ipayment[4]=$datePayment;
+                    $ipayment[5]=$encodedBy;
+                    $ipayment[6]=$paymentCounter;
+
+                    postLoanPayment($ptable, $itable, $ppayment , $ipayment ,$conn);
+
+                    $paymentCounter++;
+                }
+            }
             
 
             /*
-                
-
-            */
             if(substr("$blLA",0,2) == "BL" and $blPayment != 0){
                 $bl = 1;
 
@@ -1481,6 +1600,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                     $paymentCounter++;
                 }
             }
+            */
 
             //CLL
             if(substr("$cllLA",0,3) == "CLL" and $cllPayment != 0){
@@ -3142,6 +3262,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                             }
                             $paymentCount--;
                             $paymentCounterContainer++;
+
+                            if($paymentCount < 0){
+                                $paymentCount = "";
+                                $paymentCounterContainer = "";
+                            }
                         }
 
                     }
