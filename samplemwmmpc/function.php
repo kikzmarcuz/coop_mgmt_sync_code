@@ -392,8 +392,8 @@ function updateTransactionReport($table, $codenumber, $referencenumber, $col ,$c
 function updateLoanStatus($applicationnumber, $loantable, $status, $conn){
   $sql = "UPDATE ";
   $sql.= $loantable; 
-  $sql.= " SET loan_status = ";
-  $sql.= '$status';
+  $sql.= " SET loan_status";
+  $sql.= "= '$status'";
   $sql.= " WHERE loan_application_number =  '$applicationnumber' ";
 
     if ($conn->query($sql) === TRUE) {

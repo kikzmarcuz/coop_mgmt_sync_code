@@ -1,27 +1,8 @@
 <?php
 require_once '../dbconnection.php';
 
-/*ALTER TABLE journal_report_table
-ADD COLUMN lb INT NOT NULL,
-ADD COLUMN lb_value INT NOT NULL,
-ADD COLUMN bl INT NOT NULL,
-ADD COLUMN cll INT NOT NULL,
-ADD COLUMN cml INT NOT NULL,
-ADD COLUMN edl INT NOT NULL,
-ADD COLUMN rl INT NOT NULL,
-ADD COLUMN pl INT NOT NULL,
-ADD COLUMN ckl INT NOT NULL,
-ADD COLUMN eml INT NOT NULL,
-ADD COLUMN sl INT NOT NULL,
-ADD COLUMN rcl INT NOT NULL,
-ADD COLUMN rcln_value INT NOT NULL,
-ADD COLUMN ckl INT NOT NULL,
-ADD COLUMN pnr INT NOT NULL,
-ADD COLUMN pnl INT NOT NULL,
-ADD COLUMN msl INT NOT NULL,
-ADD COLUMN msb INT NOT NULL;*/
 
-$sql = "ALTER TABLE address_table
+/*$sql = "ALTER TABLE address_table
 ADD street CHAR(30),
 Add city CHAR(30) ,
 ADD state CHAR(4) ,
@@ -31,6 +12,7 @@ ADD phone CHAR(20) ";
 $result = $conn->query($sql);
 
 echo "$result";
+*/
 
 
 ?>
