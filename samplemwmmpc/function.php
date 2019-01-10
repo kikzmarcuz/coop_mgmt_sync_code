@@ -132,34 +132,48 @@ function getDepositTable($type){
 
 //TRANSACTION
 function getLoanTransactionCode($arr){
-  $tc="";
-  if($arr[0] == 1){
-    $tc = "BL";
-  }else if($arr[1] == 1){
-    $tc = "CLL";
-  }else if($arr[2] == 1){
-    $tc = "CML";
-  }else if($arr[3] == 1){
-    $tc = "EDL";
-  }else if($arr[4] == 1){
-    $tc = "RL";
-  }else if($arr[5] == 1){
-    $tc = "PL";
-  }else if($arr[6] == 1){
-    $tc = "CL";
-  }else if($arr[7] == 1){
-    $tc = "CKL";
-  }else if($arr[8] == 1){
-    $tc = "EML";
-  }else if($arr[9] == 1){
-    $tc = "SL";
-  }else if($arr[10] == 1){
-    $tc = "RCL";
+  $tc=[];
+
+  if($arr[0] != 0){
+    $tc[0] = "BL";
   }else{
-    $tc = "PD";
+    $tc[0] = "";
   }
+
+  if($arr[1] != 0){
+    $tc[1] = "CLL";
+  }else{
+    $tc[1] = "";
+  }
+
+  if($arr[2] != 0){
+    $tc[2] = "CML";
+  }else{
+    $tc[2] = "";
+  }
+
+  if($arr[3] != 0){
+    $tc[3] = "EDL";
+  }else{
+    $tc[3] = "";
+  }
+
+  if($arr[4] != 0){
+    $tc[4] = "RL";
+  }else{
+    $tc[4] = "";
+  }
+
+  if($arr[5] != 0){
+    $tc[5] = "PL";
+  }else{
+    $tc[5] = "";
+  }
+  
   return($tc);
 }
+
+
 
 function getDepositTransactionCode($arr){
   $tc="";
@@ -335,6 +349,12 @@ function seaarchMember($id, $seaarhobj, $conn){
           $arr[3] = $row['middle_name'];
           $arr[4] = $row['last_name'];
          }
+    }else{
+      $arr[0] = "";
+      $arr[1] = "";
+      $arr[2] = "";
+      $arr[3] = "";
+      $arr[4] = "";
     }
 
     if($seaarhobj == 0){

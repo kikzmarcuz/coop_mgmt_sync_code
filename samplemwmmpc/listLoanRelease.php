@@ -1222,6 +1222,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    if($typePayment != ""){
         $displayPropertyReloan = "inline";
         $displayPropertyLoan = "inline";
+        $displayPropertyRelease = "inline";
+
 
         if($typePayment == "plti" or $typePayment == "pnti" or $typePayment == "rcrl"){
             $displayPropertyOthers = "inline";

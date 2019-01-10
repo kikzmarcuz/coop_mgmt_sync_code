@@ -188,6 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
     if ($searchMember == "searchMember" or $loanApplicationNumberId != "" or $typePayment != "" or $idNumberSearch != "") {
         # search member..
 
+        $memberinfo=[];
         $memberinfo = seaarchMember($idNumberSearch ,5 ,$conn);
         $idNumber = $memberinfo[0];
         $accountNumber = $memberinfo[1];
@@ -1317,1072 +1318,147 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                 //$paymentCount = "";
             }
 
-            
-            //BL
-            if(substr("$blLA",0,2) == "BL" and $blPayment != 0){
-                $bl=1;
-                $lcode = "";
-                $lcode = checkLoanTransaction($blLA);
-                $ltable=getLoanTableName($lcode);
-                $ptable=getLoanPrincipalTableName($lcode);
-                $itable=getLoanInterestTableName($lcode);
+            $tarr=[];
+            $tanarr=[];
+            $bl=0;$cll=0;$cml=0;$edl=0;$rl=0;$pl=0;
+            if(substr("$blLA",0,2) == "BL" and $blPayment != 0){$bl=1;array_push($tarr, $blPayment);array_push($tanarr, $blLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
+            if(substr("$cllLA",0,3) == "CLL" and $cllPayment != 0){$cll=1;array_push($tarr, $cllPayment);array_push($tanarr, $cllLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
+            if(substr("$cmlLA",0,3) == "CML" and $cmlPayment != 0){$cml=1;array_push($tarr, $cmlPayment);array_push($tanarr, $cmlLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
+            if(substr("$edlLA",0,3) == "EDL" and $edlPayment != 0){$edl=1;array_push($tarr, $edlPayment);array_push($tanarr, $edlLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
+            if(substr("$rlLA",0,2) == "RL" and $rlPayment != 0){$rl=1;array_push($tarr, $rlPayment);array_push($tanarr, $rlLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
+            if(substr("$plLA",0,2) == "PL" and ($plPayment != 0 or $pliPayment !=0)){$pl=1;array_push($tarr, $plPayment);array_push($tanarr, $plLA);}else{array_push($tarr, 0);array_push($tanarr, "");}
 
-                $parr=[];
-                $parrl=[];
-                $parrlcount=0;
-                $iarr=[];
-                $iarrl=[];
-                $iarrlcount=0;
-                $larr=[];
+            $ldcounter=0;
+            $lcode="";
+            $lcodestr=[];
+            $lcodestrcounter=0;
 
-                $tpayment=$blPayment;
-                $apnumber=$blLA;
+            $lcodestr = getLoanTransactionCode($tarr);
+            while($ldcounter<count($lcodestr)){
+                $lcode=$lcodestr[$ldcounter];
+                if($lcode!=""){
+                    $ltable=getLoanTableName($lcode);
+                    $ptable=getLoanPrincipalTableName($lcode);
+                    $itable=getLoanInterestTableName($lcode);
 
-                $info=[];
-                $info= paymentCount($paymentCount, $tpayment);
-                $tpayment = $info[0];
-                $paymentCounter = $info[1];
-                 
+                    $parr=[];
+                    $parrl=[];
+                    $parrlcount=0;
+                    $iarr=[];
+                    $iarrl=[];
+                    $iarrlcount=0;
+                    $larr=[];
 
-                while($paymentCount>=$paymentCounter){
-                    //GET LP
-                    $parrlcounter=0;
-                    $parrl= getLoanInfoP($ptable, "", "", $apnumber, "l", $conn);
-                    $parrlcount=count($parrl);
-                    $currentBalance  = 0;
-                    
-                    while($parrlcounter<$parrlcount){
-                        $parr=$parrl[$parrlcounter];
-                        $totalPrincipalPayment = $parr[6];
-                        $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        $parrlcounter++;
-                    }
+                    $tpayment=$tarr[$ldcounter];
+                    $apnumber=$tanarr[$ldcounter];
 
-                    //GET LI
-                    $iarrlcounter=0;
-                    $iarrl= getLoanInfoI($itable, "", "", $apnumber, "l", $conn);
-                    $iarrlcount=count($iarrl);
-                    
-                    if($iarrlcount>0){
-                        while($iarrlcounter<$iarrlcount){
-                            $iarr=$iarrl[$iarrlcounter];
-                            if($iarr[12] != 0){
-                                $lastInterest[$iarrlcounter] = $iarr[12];
-                                $iarrlcounter++;
-                            }else{
-                                $lastInterest[$iarrlcounter] = 0;
-                                $iarrlcounter++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$iarrlcounter] = 0;
-                    }
-                    
-                    //GET LINFO
-                    $larr= getLI($ltable, "", "", $apnumber, "i", $conn);
-                    //$lcount= count($larr);
-                    $loanAmountP = $larr[4];
-                    $loanTermP = $larr[5];
-                    $loanInterestP = $larr[6];
-                    $paymentTermP =  $larr[7];
+                    $info=[];
+                    $info= paymentCount($paymentCount, $tpayment);
+                    $tpayment = $info[0];
+                    $paymentCounter = $info[1];
+                     
 
-                    
-
-                    $loanInterestP = actualinterest($loanInterestP);
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-
-
-                    $aiarr=[];
-                    $aiarr=actualpterm($loanTermP, $paymentTermP);
-                    $loanTermP = $aiarr[0];
-                    $paymentTerm = $aiarr[1];
-                    $currentBalance = $loanAmountP - $currentBalance;
-                    
-                    
-                    //Compute Interest
-                    $currentInterest = interestpaid($iarrlcounter, $lastInterest[$iarrlcounter-1], $currentBalance, $loanInterestP, $paymentTerm);
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $tpayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    //Update Loan Status
-                    $currentBalanceTemp = $currentBalance;
-                    if($currentBalanceTemp <= $tpayment){
-                        updateLoanStatus($apnumber, $ltable , "Paid", $conn);
-                        updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
-                        updateLoanPaid($apnumber, $ltable , $datePayment, $conn);
-                    }else{
-                        updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
-                    }
-
-                    //Post Payment
-                    $ppayment=[];
-                    $ipayment=[];
-
-                    $ppayment[0]=$idNumber;
-                    $ppayment[1]=$referencenumber;
-                    $ppayment[2]=$apnumber;
-                    $ppayment[3]=$currentPrincipal;
-                    $ppayment[4]=$datePayment;
-                    $ppayment[5]=$encodedBy;
-                    $ppayment[6]=$paymentCounter;
-
-                    $ipayment[0]=$idNumber;
-                    $ipayment[1]=$referencenumber;
-                    $ipayment[2]=$apnumber;
-                    $ipayment[3]=$currentInterest;
-                    $ipayment[4]=$datePayment;
-                    $ipayment[5]=$encodedBy;
-                    $ipayment[6]=$paymentCounter;
-
-                    postLoanPayment($ptable, $itable, $ppayment , $ipayment ,$conn);
-
-                    $paymentCounter++;
-                }
-            }
-            
-
-            /*
-            if(substr("$blLA",0,2) == "BL" and $blPayment != 0){
-                $bl = 1;
-
-                if($paymentCount > 0){
-                    $blPayment = $blPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-                    $sqlLP = "SELECT * FROM  bl_loan_payment_table WHERE loan_application_number = '$blLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  bl_credit_revenue_table WHERE loan_application_number = '$blLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  bl_loan_table WHERE loan_application_number = '$blLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
+                    while($paymentCount>=$paymentCounter){
+                        //GET LP
+                        $parrlcounter=0;
+                        $parrl= getLoanInfoP($ptable, "", "", $apnumber, "l", $conn);
+                        $parrlcount=count($parrl);
+                        $currentBalance  = 0;
+                        
+                        while($parrlcounter<$parrlcount){
+                            $parr=$parrl[$parrlcounter];
+                            $totalPrincipalPayment = $parr[6];
                             $currentBalance = $currentBalance + $totalPrincipalPayment;
+                            $parrlcounter++;
                         }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
+
+                        //GET LI
+                        $iarrlcounter=0;
+                        $iarrl= getLoanInfoI($itable, "", "", $apnumber, "l", $conn);
+                        $iarrlcount=count($iarrl);
+                        
+                        if($iarrlcount>0){
+                            while($iarrlcounter<$iarrlcount){
+                                $iarr=$iarrl[$iarrlcounter];
+                                if($iarr[12] != 0){
+                                    $lastInterest[$iarrlcounter] = $iarr[12];
+                                    $iarrlcounter++;
+                                }else{
+                                    $lastInterest[$iarrlcounter] = 0;
+                                    $iarrlcounter++;
+                                }
                             }
+                        }else{
+                            $lastInterest[$iarrlcounter] = 0;
                         }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                        }
-                    }
+                        
+                        //GET LINFO
+                        $larr= getLI($ltable, "", "", $apnumber, "i", $conn);
+                        //$lcount= count($larr);
+                        $loanAmountP = $larr[4];
+                        $loanTermP = $larr[5];
+                        $loanInterestP = $larr[6];
+                        $paymentTermP =  $larr[7];
 
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
+                        
 
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI != 1 and $counterI!=0 and $paymentTerm == 30) ){
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $blPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    //echo "$currentBalanceTemp";
-
-                    if($currentBalanceTemp <= $blPayment){
-                        $sql = "UPDATE bl_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$blLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE bl_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$blLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-
-                    $sql = "INSERT INTO bl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by, payment_count) 
-                        VALUES ('$idNumber','$referencenumber','$blLA','$currentPrincipal','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    $sql1 = "INSERT INTO bl_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by, payment_count) 
-                        VALUES ('$idNumber','$blLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-                        if($paymentCount == $paymentCounter){
-                            $blPayment = 0;
-                            $blLA = "Business Loan:";
-                        }
-
+                        $loanInterestP = actualinterest($loanInterestP);
                         $currentPrincipal = 0;
                         $currentInterest = 0;
 
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
 
-                    $paymentCounter++;
+
+                        $aiarr=[];
+                        $aiarr=actualpterm($loanTermP, $paymentTermP);
+                        $loanTermP = $aiarr[0];
+                        $paymentTerm = $aiarr[1];
+                        $currentBalance = $loanAmountP - $currentBalance;
+                        
+                        
+                        //Compute Interest
+                        $currentInterest = interestpaid($iarrlcounter, $lastInterest[$iarrlcounter-1], $currentBalance, $loanInterestP, $paymentTerm);
+                        $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
+
+                        //Compute Principal
+                        $currentPrincipal = $tpayment - $currentInterest;
+                        $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
+
+                        //Update Loan Status
+                        $currentBalanceTemp = $currentBalance;
+                        if($currentBalanceTemp <= $tpayment){
+                            updateLoanStatus($apnumber, $ltable , "Paid", $conn);
+                            updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
+                            updateLoanPaid($apnumber, $ltable , $datePayment, $conn);
+                        }else{
+                            updateLoanLastPayment($apnumber, $ltable , $datePayment, $conn);
+                        }
+
+                        //Post Payment
+                        $ppayment=[];
+                        $ipayment=[];
+
+                        $ppayment[0]=$idNumber;
+                        $ppayment[1]=$referencenumber;
+                        $ppayment[2]=$apnumber;
+                        $ppayment[3]=$currentPrincipal;
+                        $ppayment[4]=$datePayment;
+                        $ppayment[5]=$encodedBy;
+                        $ppayment[6]=$paymentCounter;
+
+                        $ipayment[0]=$idNumber;
+                        $ipayment[1]=$referencenumber;
+                        $ipayment[2]=$apnumber;
+                        $ipayment[3]=$currentInterest;
+                        $ipayment[4]=$datePayment;
+                        $ipayment[5]=$encodedBy;
+                        $ipayment[6]=$paymentCounter;
+
+                        postLoanPayment($ptable, $itable, $ppayment , $ipayment ,$conn);
+
+                        $paymentCounter++;
+                    }
                 }
-            }
-            */
-
-            //CLL
-            if(substr("$cllLA",0,3) == "CLL" and $cllPayment != 0){
-                $cll = 1;
-
-                if($paymentCount > 0){
-                    $cllPayment = $cllPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-                    $sqlLP = "SELECT * FROM  cll_loan_payment_table WHERE loan_application_number = '$cllLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  cll_credit_revenue_table WHERE loan_application_number = '$cllLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  cll_loan_table WHERE loan_application_number = '$cllLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
-                            $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                        }
-                    }
-
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI != 1 and $counterI!=0 and $paymentTerm == 30) ){
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $cllPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    if($currentBalanceTemp <= $cllPayment){
-                        $sql = "UPDATE cll_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$cllLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE cll_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$cllLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-
-                    $sql = "INSERT INTO cll_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by) 
-                        VALUES ('$idNumber','$referencenumber','$cllLA','$currentPrincipal','$datePayment', '$encodedBy')";
-
-                    $sql1 = "INSERT INTO cll_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by) 
-                        VALUES ('$idNumber','$cllLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-
-                        if($paymentCount == $paymentCounter){
-                            $cllPayment = 0;
-                            $cllLA = "Calamity Loan:";
-                        }
-
-                        $currentPrincipal = 0;
-                        $currentInterest = 0;
-
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
-
-                    $paymentCounter++;
-                }
-            }
-
-            //CML
-            if(substr("$cmlLA",0,3) == "CML" and $cmlPayment != 0){
-                $cml = 1;
-
-                if($paymentCount > 0){
-                    $cmlPayment = $cmlPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-                    $sqlLP = "SELECT * FROM  cml_loan_payment_table WHERE loan_application_number = '$cmlLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  cml_credit_revenue_table WHERE loan_application_number = '$cmlLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  cml_loan_table WHERE loan_application_number = '$cmlLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
-                            $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                        }
-                    }
-
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI == 0 and $paymentTerm == 30) ){
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $cmlPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    if($currentBalanceTemp <= $cmlPayment){
-                        $sql = "UPDATE cml_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$cmlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE cml_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$cmlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-
-                    $sql = "INSERT INTO cml_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by, payment_count) 
-                        VALUES ('$idNumber','$referencenumber','$cmlLA','$currentPrincipal','$datePayment', '$encodedBy','$paymentCounter')";
-
-                    $sql1 = "INSERT INTO cml_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by, payment_count) 
-                        VALUES ('$idNumber','$cmlLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-
-                        if($paymentCount == $paymentCounter){
-                            $cmlPayment = 0;
-                            $cmlLA = "Chattel Loan:";
-                        }
-
-                        $currentPrincipal = 0;
-                        $currentInterest = 0;
-
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
-
-                    $paymentCounter++;
-                }
-            }
-
-            //EDL
-            if(substr("$edlLA",0,3) == "EDL" and $edlPayment != 0){
-                $edl = 1;
-
-                if($paymentCount > 0){
-                    $rlPayment = $rlPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-                    $sqlLP = "SELECT * FROM  edl_loan_payment_table WHERE loan_application_number = '$edlLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  edl_credit_revenue_table WHERE loan_application_number = '$edlLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  edl_loan_table WHERE loan_application_number = '$edlLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
-                            $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                        }
-                    }
-
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI != 1 and $counterI!=0 and $paymentTerm == 30) ){
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $edlPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    if($currentBalanceTemp <= $edlPayment){
-                        $sql = "UPDATE edl_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$edlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE edl_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$edlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-
-                    $sql = "INSERT INTO edl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by, payment_count) 
-                        VALUES ('$idNumber','$referencenumber','$edlLA','$currentPrincipal','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    $sql1 = "INSERT INTO edl_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by,payment_count) 
-                        VALUES ('$idNumber','$edlLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy','$paymentCounter')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-                        //$loanApplicationNumberP = "";
-                        //$typeInterestP = "";
-                        //$loanInterestP = "";
-                        //$loanAmountP = "";
-                        if($paymentCount == $paymentCounter){
-                            $edlPayment = 0;
-                            $edlLA = "Regular Loan:";
-                        }
-
-                        $currentPrincipal = 0;
-                        $currentPrincipal = 0;
-
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
-
-                    $paymentCounter++;
-                }
-            }
-
-            //RL
-            if(substr("$rlLA",0,2) == "RL" and $rlPayment != 0){
-                $rl = 1;
-
-                if($paymentCount > 0){
-                    $rlPayment = $rlPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-                    $sqlLP = "SELECT * FROM  rl_loan_payment_table WHERE loan_application_number = '$rlLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  rl_credit_revenue_table WHERE loan_application_number = '$rlLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  rl_loan_table WHERE loan_application_number = '$rlLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
-                            $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                        }
-                    }
-
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI != 1 and $counterI!=0 and $paymentTerm == 30) ){
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $rlPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    if($currentBalanceTemp <= $rlPayment){
-                        $sql = "UPDATE rl_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$rlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE rl_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$rlLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-
-                    $sql = "INSERT INTO rl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by, payment_count) 
-                        VALUES ('$idNumber','$referencenumber','$rlLA','$currentPrincipal','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    $sql1 = "INSERT INTO rl_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by,payment_count) 
-                        VALUES ('$idNumber','$rlLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy','$paymentCounter')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-                        //$loanApplicationNumberP = "";
-                        //$typeInterestP = "";
-                        //$loanInterestP = "";
-                        //$loanAmountP = "";
-                        if($paymentCount == $paymentCounter){
-                            $rlPayment = 0;
-                            $rlLA = "Regular Loan:";
-                        }
-
-                        $currentPrincipal = 0;
-                        $currentPrincipal = 0;
-
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
-
-                    $paymentCounter++;
-                }
-            }
-
-            //PL
-            if(substr("$plLA",0,2) == "PL" and ($plPayment != 0 or $pliPayment !=0)){
-                $pl = 1;
-
-                if($paymentCount > 0){
-                    $plPayment = $plPayment/$paymentCount;
-                    $paymentCounter = 1;
-                }else{
-                    $paymentCounter = 0;
-                }
-
-                while($paymentCount >= $paymentCounter){
-
-                    $sqlLP = "SELECT * FROM  pl_loan_payment_table WHERE loan_application_number = '$plLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                    $sqlLP1 = "SELECT * FROM  pl_credit_revenue_table WHERE loan_application_number = '$plLA' ";
-                    $resultLP1 = $conn->query($sqlLP1);
-
-                    $sqlLP2 = "SELECT * FROM  pl_loan_table WHERE loan_application_number = '$plLA' ";
-                    $resultLP2 = $conn->query($sqlLP2);
-
-                    $currentBalance  = 0;
-                    //TotalPayment
-                    if($resultLP->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP)) {
-                            # code...
-                            $totalPrincipalPayment = $row['amount'];
-                            $currentBalance = $currentBalance + $totalPrincipalPayment;
-                        }
-                    }
-                    //Get Next Interest
-                    $counterI = 0;
-                    if($resultLP1->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP1)) {
-                            if($row['interest_revenue'] != 0){
-                                $lastInterest[$counterI] = $row['interest_revenue'];
-                                $counterI++;
-                            }
-                        }
-                    }else{
-                        $lastInterest[$counterI] = 0;
-                    }
-                    //Get loan info
-                    if($resultLP2->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultLP2)) {
-                            $loanInterestP = $row['loan_interest'];
-                            $paymentTermP =  $row['payment_term'];
-                            $loanAmountP = $row['loan_amount'];
-                            $loanCounter = $row['counter_payment'];
-                        }
-                    }
-
-                    //Connert int
-                    $loanInterestP = $loanInterestP/100;
-                    $currentPrincipal = 0;
-                    $currentInterest = 0;
-
-                    //check term of payment
-                    if ($paymentTermP == "Daily") {
-                        $loanTermP = $loanTermP * 30;
-                        $paymentTerm = 30;
-                    }elseif ($paymentTermP == "Semi Monthly") {
-                        $loanTermP = $loanTermP * 2;
-                        $paymentTerm = 2;
-                    }
-                    elseif ($paymentTermP == "Monthly") {
-                        $loanTermP = $loanTermP * 1;  
-                        $paymentTerm = 1;
-                    }
-
-                    $currentBalance = $loanAmountP - $currentBalance;
-
-                    $counterI = $loanCounter + $counterI;
-                    //Current Interest Semi . Daily. Monthly
-                    $checkInterestP = ($counterI + 1)%2;
-                    $checkInterestPI = ($counterI + 1)%30;
-
-                    //Comute Interest
-                    if( ($checkInterestP == 0 and $paymentTerm == 2) or ($checkInterestPI != 1 and $counterI!=0 and $paymentTerm == 30) ){
-                        $counterI = $counterI - $loanCounter;
-                        $currentInterest = $lastInterest[$counterI-1];
-                    }else{
-                        $currentInterest = ($currentBalance * $loanInterestP)/$paymentTerm;
-                    }
-
-                    $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
-
-                    //Compute Principal
-                    $currentPrincipal = $plPayment - $currentInterest;
-                    $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
-
-                    $currentBalanceTemp = $currentBalance;
-
-                    //Update Status if Paid
-                    if($currentBalanceTemp <= $plPayment){
-                        $sql = "UPDATE pl_loan_table SET
-                        loan_status = 'Paid',
-                        last_payment = '$datePayment',
-                        date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$plLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-
-                            $sqlDP = "UPDATE loan_date_table SET
-                            date_paid = '$datePayment'
-                            WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                            if ($conn->query($sqlDP) === TRUE) {
-                               $infomessage = "Loan Paid";
-                            } 
-                            else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                            }
-
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }else{
-                        $sql = "UPDATE pl_loan_table SET
-                        last_payment = '$datePayment' 
-                        WHERE id_number = '$idNumber' and loan_application_number = '$plLA' ";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $infomessage = "Record updated successfully";
-                        } 
-                        else { 
-                              echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-                    
-                    //For revision if balance updated
-                    $sql = "INSERT INTO pl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by, payment_count) 
-                        VALUES ('$idNumber','$referencenumber','$plLA','$currentPrincipal','$datePayment', '$encodedBy', '$paymentCounter')";
-
-                    $sql1 = "INSERT INTO pl_credit_revenue_table(id_number,loan_application_number, reference_number,interest_revenue, date_transaction,encoded_by,payment_count) 
-                        VALUES ('$idNumber','$plLA','$referencenumber','$currentInterest','$datePayment', '$encodedBy','$paymentCounter')";
-
-                    if ($conn->query($sql) === TRUE and $conn->query($sql1) === TRUE){
-                        $informessage = "New record created successfully";
-                        //$loanApplicationNumberP = "";
-                        //$typeInterestP = "";
-                        //$loanInterestP = "";
-                        //$loanAmountP = "";
-                        if($paymentCount == $paymentCounter){
-                            $plPayment = 0;
-                            $pliPayment = 0;
-                            $plLA = "Previous Loan:";
-                        }
-
-                        $currentPrincipal = 0;
-                        $currentInterest = 0;
-
-                    }else{
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                        echo "Error: " . $sql1 . "<br>" . $conn->error;
-                    }
-
-                    $paymentCounter++;
-                }
+                $ldcounter++;
             }
 
             //CKL 

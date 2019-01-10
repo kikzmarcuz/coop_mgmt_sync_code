@@ -3807,645 +3807,651 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="table table-bordered table-striped table-hover table-dark">
-                    <?php
-                        echo "<table>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>ID #__________</th>
-                            <th>MEMBER NAME_______________________________</th>
-                            <th>OR #</th>
-                            <th>Invoice # | Payment Count</th>
-                            <th></th>
-                            <th>Grand Total</th>
-                            <th>Trading Total</th>
-                            <th>Lending Total</th>
-                            <th>Interest</th>
-                            <th>BL</th>
-                            <th>CLL</th>
-                            <th>CML</th>
-                            <th>EDL</th>
-                            <th>RL</th>
-                            <th>PL</th>
-                            <th>CL</th>
-                            <th>CKL</th>
-                            <th>EML</th>
-                            <th>SL</th>
-                            <th>Penalty</th>
-                            <th>RR</th>
-                            <th>MBF</th>
-                            <th>MSC</th>
-                            <th>TF</th>
-                            <th>INS</th>
-                            <th>OI</th>
-                            <th>CBU</th>
-                            <th>FD</th>
-                            <th>RLR</th>
-                            <th>IR</th>
-                            <th>AR</th>
-                            <th>IR</th>
-                            <th>Penalty</th>
-                            <th>SD</th>
-                            <th>TD</th>
-                            <th>Date_______</th>
-                            <th>Encoder</th>
-                        </tr>";
-                        
-                        $counterh = 0;
-                        $checkCounter = 0;
-                        $chequeIDNumber[] = "";
-                        $chequelastName[] = "";
-                        $chequefirstName[] = "";
-                        $chequemiddleName[] = "";
-                        $chequeAmount[] = "";
-                        $chequeReferenceN[] = "";
+                    <div>
+                        <?php
+                            echo "<table>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>ID #__________</th>
+                                    <th>MEMBER NAME_______________________________</th>
+                                    <th>OR #</th>
+                                    <th>Invoice # | Payment Count</th>
+                                    <th></th>
+                                    <th>Grand Total</th>
+                                    <th>Trading Total</th>
+                                    <th>Lending Total</th>
+                                    <th>Interest</th>
+                                    <th>BL</th>
+                                    <th>CLL</th>
+                                    <th>CML</th>
+                                    <th>EDL</th>
+                                    <th>RL</th>
+                                    <th>PL</th>
+                                    <th>CL</th>
+                                    <th>CKL</th>
+                                    <th>EML</th>
+                                    <th>SL</th>
+                                    <th>Penalty</th>
+                                    <th>RR</th>
+                                    <th>MBF</th>
+                                    <th>MSC</th>
+                                    <th>TF</th>
+                                    <th>INS</th>
+                                    <th>OI</th>
+                                    <th>CBU</th>
+                                    <th>FD</th>
+                                    <th>RLR</th>
+                                    <th>IR</th>
+                                    <th>AR</th>
+                                    <th>IR</th>
+                                    <th>Penalty</th>
+                                    <th>SD</th>
+                                    <th>TD</th>
+                                    <th>Date_______</th>
+                                    <th>Encoder</th>
+                                </tr>";
+                            ?>  
+                    </div>
+                    <div style="max-height: 500px;overflow: auto;">
+                        <?php
+                            $counterh = 0;
+                            $checkCounter = 0;
+                            $chequeIDNumber[] = "";
+                            $chequelastName[] = "";
+                            $chequefirstName[] = "";
+                            $chequemiddleName[] = "";
+                            $chequeAmount[] = "";
+                            $chequeReferenceN[] = "";
 
-                        while($counterh < $numRow) {
-                            echo "<tr>";
-                                echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$orNumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
-                                echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$orNumber[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
-                                
-                                echo "<td>" . $idNumber[$counterh] . "</td>";
+                            while($counterh < $numRow) {
+                                echo "<tr>";
+                                    echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$orNumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
+                                    echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$orNumber[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
+                                    
+                                    echo "<td>" . $idNumber[$counterh] . "</td>";
 
-                                if($idNumber[$counterh] == "CANCELLED"){
-                                    echo "<td>" . "Cancelled OR" . "</td>";
-                                }else{
-                                    echo "<td>" . $lastName[$counterh] . ", " . $firstName[$counterh] . " " . $middleName[$counterh] . "</td>";
-                                }
-                                
-                                echo "<td>" . $orNumber[$counterh] . "</td>";
-                                //$invoiceNumber[$counterh] = $invoiceNumberL[$counterh] . " " . $invoiceNumberC[$counterh];
-                                if($invoiceNumber[$counterh] == 0){
-                                    $invoiceNumber[$counterh] = "";
-                                }
-                                echo "<td>" . $invoiceNumber[$counterh] . "</td>";
-
-                                //GRAND TOTAL
-                                $totalAmountS = $totalAmountS + $totalAmount[$counterh];
-
-                                if($typePayment[$counterh] == 1){
-                                    $totalCheck =  $totalCheck + $totalAmount[$counterh];
-
-                                    $chequeIDNumber[$checkCounter] = $idNumber[$counterh];
-                                    $chequelastName[$checkCounter] = $firstName[$counterh];
-                                    $chequefirstName[$checkCounter] = $lastName[$counterh];
-                                    $chequemiddleName[$checkCounter] = $middleName[$counterh];
-                                    $chequeAmount[$checkCounter] = $totalAmount[$counterh];
-                                    $chequeReferenceN[$checkCounter] = $orNumber[$counterh];
-
-                                    $checkCounter++;
-                                }
-
-                                //TRADING
-                                $totalTrading[$counterh] = $rclValue[$counterh] + $rccValue[$counterh] + $sdValue[$counterh] + $tdValue[$counterh] + $rcliValue[$counterh] + $rcciValue[$counterh] + $penaltyRice[$counterh];
-
-                                //LENDING
-                                $totalLending[$counterh] = $blValue[$counterh] + $cllValue[$counterh] + $cmlValue[$counterh] + $edlValue[$counterh] + $rlValue[$counterh] + $plValue[$counterh] + $clValue[$counterh] + $cklValue[$counterh] + $emlValue[$counterh] + $slValue[$counterh] + $scValue[$counterh] + $oiValue[$counterh] + $fdValue[$counterh] + $bliValue[$counterh] + $clliValue[$counterh] + $cmliValue[$counterh] + $edliValue[$counterh] + $rliValue[$counterh] + $pliValue[$counterh] + $penaltyLoan[$counterh] + $RentalIncome[$counterh] + $membership[$counterh] + $miscellaneous[$counterh] + $transferFee[$counterh] + $insurance[$counterh];
-
-                                //CHECK ACCURACY
-                                $totalL = 0;
-                                $totalA = 0;
-                                $totalT = 0;
-                                if($totalLending[$counterh] != "" and $totalTrading[$counterh] == 0){
-                                    $totalL = number_format($totalLending[$counterh],'2','.','');
-                                    $totalA = number_format($totalAmount[$counterh],'2','.','');
-                                    $diff = $totalL - $totalA;
-                                    if($diff == "0"){
-                                        echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
+                                    if($idNumber[$counterh] == "CANCELLED"){
+                                        echo "<td>" . "Cancelled OR" . "</td>";
                                     }else{
-                                        echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
+                                        echo "<td>" . $lastName[$counterh] . ", " . $firstName[$counterh] . " " . $middleName[$counterh] . "</td>";
                                     }
-                                }elseif($totalTrading[$counterh] != "" and $totalLending[$counterh] == ""){
-                                    $totalT = number_format($totalTrading[$counterh],'2','.','');
-                                    $totalA = number_format($totalAmount[$counterh],'2','.','');
-                                    $diff = $totalT - $totalA;
-                                    if($diff == "0"){
-                                        echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
+                                    
+                                    echo "<td>" . $orNumber[$counterh] . "</td>";
+                                    //$invoiceNumber[$counterh] = $invoiceNumberL[$counterh] . " " . $invoiceNumberC[$counterh];
+                                    if($invoiceNumber[$counterh] == 0){
+                                        $invoiceNumber[$counterh] = "";
+                                    }
+                                    echo "<td>" . $invoiceNumber[$counterh] . "</td>";
+
+                                    //GRAND TOTAL
+                                    $totalAmountS = $totalAmountS + $totalAmount[$counterh];
+
+                                    if($typePayment[$counterh] == 1){
+                                        $totalCheck =  $totalCheck + $totalAmount[$counterh];
+
+                                        $chequeIDNumber[$checkCounter] = $idNumber[$counterh];
+                                        $chequelastName[$checkCounter] = $firstName[$counterh];
+                                        $chequefirstName[$checkCounter] = $lastName[$counterh];
+                                        $chequemiddleName[$checkCounter] = $middleName[$counterh];
+                                        $chequeAmount[$checkCounter] = $totalAmount[$counterh];
+                                        $chequeReferenceN[$checkCounter] = $orNumber[$counterh];
+
+                                        $checkCounter++;
+                                    }
+
+                                    //TRADING
+                                    $totalTrading[$counterh] = $rclValue[$counterh] + $rccValue[$counterh] + $sdValue[$counterh] + $tdValue[$counterh] + $rcliValue[$counterh] + $rcciValue[$counterh] + $penaltyRice[$counterh];
+
+                                    //LENDING
+                                    $totalLending[$counterh] = $blValue[$counterh] + $cllValue[$counterh] + $cmlValue[$counterh] + $edlValue[$counterh] + $rlValue[$counterh] + $plValue[$counterh] + $clValue[$counterh] + $cklValue[$counterh] + $emlValue[$counterh] + $slValue[$counterh] + $scValue[$counterh] + $oiValue[$counterh] + $fdValue[$counterh] + $bliValue[$counterh] + $clliValue[$counterh] + $cmliValue[$counterh] + $edliValue[$counterh] + $rliValue[$counterh] + $pliValue[$counterh] + $penaltyLoan[$counterh] + $RentalIncome[$counterh] + $membership[$counterh] + $miscellaneous[$counterh] + $transferFee[$counterh] + $insurance[$counterh];
+
+                                    //CHECK ACCURACY
+                                    $totalL = 0;
+                                    $totalA = 0;
+                                    $totalT = 0;
+                                    if($totalLending[$counterh] != "" and $totalTrading[$counterh] == 0){
+                                        $totalL = number_format($totalLending[$counterh],'2','.','');
+                                        $totalA = number_format($totalAmount[$counterh],'2','.','');
+                                        $diff = $totalL - $totalA;
+                                        if($diff == "0"){
+                                            echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
+                                        }else{
+                                            echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
+                                        }
+                                    }elseif($totalTrading[$counterh] != "" and $totalLending[$counterh] == ""){
+                                        $totalT = number_format($totalTrading[$counterh],'2','.','');
+                                        $totalA = number_format($totalAmount[$counterh],'2','.','');
+                                        $diff = $totalT - $totalA;
+                                        if($diff == "0"){
+                                            echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
+                                        }else{
+                                            echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
+                                        }
+                                    }elseif($totalTrading[$counterh] != "" and $totalLending[$counterh] != ""){
+                                        $totalLT = $totalTrading[$counterh] + $totalLending[$counterh];
+                                        $totalA = $totalAmount[$counterh];
+
+                                        $totalLT = number_format($totalLT,'2','.','');
+                                        $totalA = number_format($totalA,'2','.','');
+
+                                        $diff = $totalA - $totalLT;
+                                        if($diff == "0"){
+                                            echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
+                                        }else{
+                                            echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
+                                        }
+                                    }elseif($totalTrading[$counterh] == "0" and $totalLending[$counterh] == "0" and $idNumber[$counterh] != "CANCELLED"){
+                                        echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
                                     }else{
-                                        echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
-                                    }
-                                }elseif($totalTrading[$counterh] != "" and $totalLending[$counterh] != ""){
-                                    $totalLT = $totalTrading[$counterh] + $totalLending[$counterh];
-                                    $totalA = $totalAmount[$counterh];
-
-                                    $totalLT = number_format($totalLT,'2','.','');
-                                    $totalA = number_format($totalA,'2','.','');
-
-                                    $diff = $totalA - $totalLT;
-                                    if($diff == "0"){
                                         echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
-                                    }else{
-                                        echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
                                     }
-                                }elseif($totalTrading[$counterh] == "0" and $totalLending[$counterh] == "0" and $idNumber[$counterh] != "CANCELLED"){
-                                    echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
-                                }else{
-                                    echo "<td " . "style=" . "color:#42FF33" . ">" . "|" . "</td>";
-                                }
 
-                                if($totalAmount[$counterh] == 0){
-                                    $totalAmount[$counterh] = "";
-                                }else{
-                                    $totalAmount[$counterh] = number_format($totalAmount[$counterh],'2','.',',');
-                                }
-                                echo "<td " . "style=" . "color:orange" . ">" . $totalAmount[$counterh] . "</td>";
+                                    if($totalAmount[$counterh] == 0){
+                                        $totalAmount[$counterh] = "";
+                                    }else{
+                                        $totalAmount[$counterh] = number_format($totalAmount[$counterh],'2','.',',');
+                                    }
+                                    echo "<td " . "style=" . "color:orange" . ">" . $totalAmount[$counterh] . "</td>";
 
-                                $totalTradingF = $totalTradingF + $totalTrading[$counterh];
-                                if($totalTrading[$counterh] == 0){
-                                    $totalTrading[$counterh] = "";
-                                }else{
-                                    $totalTrading[$counterh] = number_format($totalTrading[$counterh],'2','.',',');
-                                }
-                                echo "<td " . "style=" . "color:#F0E68C" . ">" . $totalTrading[$counterh] . "</td>";
+                                    $totalTradingF = $totalTradingF + $totalTrading[$counterh];
+                                    if($totalTrading[$counterh] == 0){
+                                        $totalTrading[$counterh] = "";
+                                    }else{
+                                        $totalTrading[$counterh] = number_format($totalTrading[$counterh],'2','.',',');
+                                    }
+                                    echo "<td " . "style=" . "color:#F0E68C" . ">" . $totalTrading[$counterh] . "</td>";
 
-                                $totalLendingF = $totalLendingF + $totalLending[$counterh];
-                                if($totalLending[$counterh] == 0){
-                                    $totalLending[$counterh] = "";
-                                }else{
-                                    $totalLending[$counterh] = number_format($totalLending[$counterh],'2','.',',');
-                                }
-                                echo "<td " . "style=" . "color:#21e5d6" . ">" . $totalLending[$counterh] . "</td>";
+                                    $totalLendingF = $totalLendingF + $totalLending[$counterh];
+                                    if($totalLending[$counterh] == 0){
+                                        $totalLending[$counterh] = "";
+                                    }else{
+                                        $totalLending[$counterh] = number_format($totalLending[$counterh],'2','.',',');
+                                    }
+                                    echo "<td " . "style=" . "color:#21e5d6" . ">" . $totalLending[$counterh] . "</td>";
 
-                                
-                                //TRADING INTEREST
-                                $totalInterest[$counterh] = $bliValue[$counterh] + $clliValue[$counterh] + $cmliValue[$counterh] + $edliValue[$counterh] + $rliValue[$counterh] + $pliValue[$counterh];
-                                $totalInterestF = $totalInterestF +  $totalInterest[$counterh];
+                                    
+                                    //TRADING INTEREST
+                                    $totalInterest[$counterh] = $bliValue[$counterh] + $clliValue[$counterh] + $cmliValue[$counterh] + $edliValue[$counterh] + $rliValue[$counterh] + $pliValue[$counterh];
+                                    $totalInterestF = $totalInterestF +  $totalInterest[$counterh];
 
-                                if($totalInterest[$counterh] == 0){
-                                    $totalInterest[$counterh] = "";
-                                }else{
-                                    $totalInterest[$counterh] = number_format($totalInterest[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $totalInterest[$counterh] . "</td>";
+                                    if($totalInterest[$counterh] == 0){
+                                        $totalInterest[$counterh] = "";
+                                    }else{
+                                        $totalInterest[$counterh] = number_format($totalInterest[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $totalInterest[$counterh] . "</td>";
 
-                                $totalAmountBL = $totalAmountBL + $blValue[$counterh];
-                                if($blValue[$counterh] == 0){
-                                    $blValue[$counterh] = "";
-                                }else{
-                                    $blValue[$counterh] = number_format($blValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $blValue[$counterh] . "</td>";
+                                    $totalAmountBL = $totalAmountBL + $blValue[$counterh];
+                                    if($blValue[$counterh] == 0){
+                                        $blValue[$counterh] = "";
+                                    }else{
+                                        $blValue[$counterh] = number_format($blValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $blValue[$counterh] . "</td>";
 
-                                $totalAmountCLL= $totalAmountCLL + $cllValue[$counterh];
-                                if($cllValue[$counterh] == 0){
-                                    $cllValue[$counterh] = "";
-                                }else{
-                                    $cllValue[$counterh] = number_format($cllValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $cllValue[$counterh] . "</td>";
+                                    $totalAmountCLL= $totalAmountCLL + $cllValue[$counterh];
+                                    if($cllValue[$counterh] == 0){
+                                        $cllValue[$counterh] = "";
+                                    }else{
+                                        $cllValue[$counterh] = number_format($cllValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $cllValue[$counterh] . "</td>";
 
-                                $totalamountCML= $totalamountCML + $cmlValue[$counterh];
-                                if($cmlValue[$counterh] == 0){
-                                    $cmlValue[$counterh] = "";
-                                }else{
-                                    $cmlValue[$counterh] = number_format($cmlValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $cmlValue[$counterh] . "</td>";
+                                    $totalamountCML= $totalamountCML + $cmlValue[$counterh];
+                                    if($cmlValue[$counterh] == 0){
+                                        $cmlValue[$counterh] = "";
+                                    }else{
+                                        $cmlValue[$counterh] = number_format($cmlValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $cmlValue[$counterh] . "</td>";
 
-                                $totalAmountEDL= $totalAmountEDL + $edlValue[$counterh];
-                                if($edlValue[$counterh] == 0){
-                                    $edlValue[$counterh] = "";
-                                }else{
-                                    $edlValue[$counterh] = number_format($edlValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $edlValue[$counterh] . "</td>";
+                                    $totalAmountEDL= $totalAmountEDL + $edlValue[$counterh];
+                                    if($edlValue[$counterh] == 0){
+                                        $edlValue[$counterh] = "";
+                                    }else{
+                                        $edlValue[$counterh] = number_format($edlValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $edlValue[$counterh] . "</td>";
 
-                                $totalAmountRL= $totalAmountRL + $rlValue[$counterh];
-                                if($rlValue[$counterh] == 0){
-                                    $rlValue[$counterh] = "";
-                                }else{
-                                    $rlValue[$counterh] = number_format($rlValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $rlValue[$counterh] . "</td>";
+                                    $totalAmountRL= $totalAmountRL + $rlValue[$counterh];
+                                    if($rlValue[$counterh] == 0){
+                                        $rlValue[$counterh] = "";
+                                    }else{
+                                        $rlValue[$counterh] = number_format($rlValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $rlValue[$counterh] . "</td>";
 
-                                $totalAmountPL= $totalAmountPL + $plValue[$counterh];
-                                if($plValue[$counterh] == 0){
-                                    $plValue[$counterh] = "";
-                                }else{
-                                    $plValue[$counterh] = number_format($plValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $plValue[$counterh] . "</td>";
+                                    $totalAmountPL= $totalAmountPL + $plValue[$counterh];
+                                    if($plValue[$counterh] == 0){
+                                        $plValue[$counterh] = "";
+                                    }else{
+                                        $plValue[$counterh] = number_format($plValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $plValue[$counterh] . "</td>";
 
-                                $totalAmountCL= $totalAmountCL + $clValue[$counterh];
-                                if($clValue[$counterh] == 0){
-                                    $clValue[$counterh] = "";
-                                }else{
-                                    $clValue[$counterh] = number_format($clValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $clValue[$counterh] . "</td>";
+                                    $totalAmountCL= $totalAmountCL + $clValue[$counterh];
+                                    if($clValue[$counterh] == 0){
+                                        $clValue[$counterh] = "";
+                                    }else{
+                                        $clValue[$counterh] = number_format($clValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $clValue[$counterh] . "</td>";
 
-                                $totalAmountCKL= $totalAmountCKL + $cklValue[$counterh];
-                                if($cklValue[$counterh] == 0){
-                                    $cklValue[$counterh] = "";
-                                }else{
-                                    $cklValue[$counterh] = number_format($cklValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $cklValue[$counterh] . "</td>";
-                                
-                                $totalAmountEML= $totalAmountEML + $emlValue[$counterh];
-                                if($emlValue[$counterh] == 0){
-                                    $emlValue[$counterh] = "";
-                                }else{
-                                    $emlValue[$counterh] = number_format($emlValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $emlValue[$counterh] . "</td>";
-                                
-                                $totalAmountSL= $totalAmountSL + $slValue[$counterh];
-                                if($slValue[$counterh] == 0){
-                                    $slValue[$counterh] = "";
-                                }else{
-                                    $slValue[$counterh] = number_format($slValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $slValue[$counterh] . "</td>";
-                                
-                                //$totalAmountSL= $totalAmountSL + $slValue[$counterh];
-                                $totalPenaltyLoan = $totalPenaltyLoan + $penaltyLoan[$counterh];
-                                if($penaltyLoan[$counterh] == 0){
-                                    $penaltyLoan[$counterh] = "";
-                                }else{
-                                    $penaltyLoan[$counterh] = number_format($penaltyLoan[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $penaltyLoan[$counterh] . "</td>";
+                                    $totalAmountCKL= $totalAmountCKL + $cklValue[$counterh];
+                                    if($cklValue[$counterh] == 0){
+                                        $cklValue[$counterh] = "";
+                                    }else{
+                                        $cklValue[$counterh] = number_format($cklValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $cklValue[$counterh] . "</td>";
+                                    
+                                    $totalAmountEML= $totalAmountEML + $emlValue[$counterh];
+                                    if($emlValue[$counterh] == 0){
+                                        $emlValue[$counterh] = "";
+                                    }else{
+                                        $emlValue[$counterh] = number_format($emlValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $emlValue[$counterh] . "</td>";
+                                    
+                                    $totalAmountSL= $totalAmountSL + $slValue[$counterh];
+                                    if($slValue[$counterh] == 0){
+                                        $slValue[$counterh] = "";
+                                    }else{
+                                        $slValue[$counterh] = number_format($slValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $slValue[$counterh] . "</td>";
+                                    
+                                    //$totalAmountSL= $totalAmountSL + $slValue[$counterh];
+                                    $totalPenaltyLoan = $totalPenaltyLoan + $penaltyLoan[$counterh];
+                                    if($penaltyLoan[$counterh] == 0){
+                                        $penaltyLoan[$counterh] = "";
+                                    }else{
+                                        $penaltyLoan[$counterh] = number_format($penaltyLoan[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $penaltyLoan[$counterh] . "</td>";
 
-                                $totalRentalIncome = $totalRentalIncome + $RentalIncome[$counterh];
-                                if($RentalIncome[$counterh] == 0){
-                                    $RentalIncome[$counterh] = "";
-                                }else{
-                                    $RentalIncome[$counterh] = number_format($RentalIncome[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $RentalIncome[$counterh] . "</td>";
+                                    $totalRentalIncome = $totalRentalIncome + $RentalIncome[$counterh];
+                                    if($RentalIncome[$counterh] == 0){
+                                        $RentalIncome[$counterh] = "";
+                                    }else{
+                                        $RentalIncome[$counterh] = number_format($RentalIncome[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $RentalIncome[$counterh] . "</td>";
 
-                                $totalMembership = $totalMembership + $membership[$counterh];
-                                if($membership[$counterh] == 0){
-                                    $membership[$counterh] = "";
-                                }else{
-                                    $membership[$counterh] = number_format($membership[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $membership[$counterh] . "</td>";
+                                    $totalMembership = $totalMembership + $membership[$counterh];
+                                    if($membership[$counterh] == 0){
+                                        $membership[$counterh] = "";
+                                    }else{
+                                        $membership[$counterh] = number_format($membership[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $membership[$counterh] . "</td>";
 
-                                $totalMiscellaneous = $totalMiscellaneous + $miscellaneous[$counterh];
-                                if($miscellaneous[$counterh] == 0){
-                                    $miscellaneous[$counterh] = "";
-                                }else{
-                                    $miscellaneous[$counterh] = number_format($miscellaneous[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $miscellaneous[$counterh] . "</td>";
+                                    $totalMiscellaneous = $totalMiscellaneous + $miscellaneous[$counterh];
+                                    if($miscellaneous[$counterh] == 0){
+                                        $miscellaneous[$counterh] = "";
+                                    }else{
+                                        $miscellaneous[$counterh] = number_format($miscellaneous[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $miscellaneous[$counterh] . "</td>";
 
-                                $totalTransferFee = $totalTransferFee + $transferFee[$counterh];
-                                if($transferFee[$counterh] == 0){
-                                    $transferFee[$counterh] = "";
-                                }else{
-                                    $transferFee[$counterh] = number_format($transferFee[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $transferFee[$counterh] . "</td>";
+                                    $totalTransferFee = $totalTransferFee + $transferFee[$counterh];
+                                    if($transferFee[$counterh] == 0){
+                                        $transferFee[$counterh] = "";
+                                    }else{
+                                        $transferFee[$counterh] = number_format($transferFee[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $transferFee[$counterh] . "</td>";
 
-                                $totalInsurance = $totalInsurance + $insurance[$counterh];
-                                if($insurance[$counterh] == 0){
-                                    $insurance[$counterh] = "";
-                                }else{
-                                    $insurance[$counterh] = number_format($insurance[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $insurance[$counterh] . "</td>";
+                                    $totalInsurance = $totalInsurance + $insurance[$counterh];
+                                    if($insurance[$counterh] == 0){
+                                        $insurance[$counterh] = "";
+                                    }else{
+                                        $insurance[$counterh] = number_format($insurance[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $insurance[$counterh] . "</td>";
 
-                                $totalAmountOI= $totalAmountOI + $oiValue[$counterh];
-                                if($oiValue[$counterh] == 0){
-                                    $oiValue[$counterh] = "";
-                                }else{
-                                    $oiValue[$counterh] = number_format($oiValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $oiValue[$counterh] . "</td>";
+                                    $totalAmountOI= $totalAmountOI + $oiValue[$counterh];
+                                    if($oiValue[$counterh] == 0){
+                                        $oiValue[$counterh] = "";
+                                    }else{
+                                        $oiValue[$counterh] = number_format($oiValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $oiValue[$counterh] . "</td>";
 
-                                $totalAmountSC= $totalAmountSC + $scValue[$counterh];
-                                if($scValue[$counterh] == 0){
-                                    $scValue[$counterh] = "";
-                                }else{
-                                    $scValue[$counterh] = number_format($scValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $scValue[$counterh] . "</td>";
+                                    $totalAmountSC= $totalAmountSC + $scValue[$counterh];
+                                    if($scValue[$counterh] == 0){
+                                        $scValue[$counterh] = "";
+                                    }else{
+                                        $scValue[$counterh] = number_format($scValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $scValue[$counterh] . "</td>";
 
-                                $totalAmountFD= $totalAmountFD + $fdValue[$counterh];
-                                if($fdValue[$counterh] == 0){
-                                    $fdValue[$counterh] = "";
-                                }else{
-                                    $fdValue[$counterh] = number_format($fdValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $fdValue[$counterh] . "</td>";
+                                    $totalAmountFD= $totalAmountFD + $fdValue[$counterh];
+                                    if($fdValue[$counterh] == 0){
+                                        $fdValue[$counterh] = "";
+                                    }else{
+                                        $fdValue[$counterh] = number_format($fdValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $fdValue[$counterh] . "</td>";
 
-                                //TRADING
-                                $totalAmountRCL= $totalAmountRCL + $rclValue[$counterh];
-                                if($rclValue[$counterh] == 0){
-                                    $rclValue[$counterh] = "";
-                                }else{
-                                    $rclValue[$counterh] = number_format($rclValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $rclValue[$counterh] . "</td>";
+                                    //TRADING
+                                    $totalAmountRCL= $totalAmountRCL + $rclValue[$counterh];
+                                    if($rclValue[$counterh] == 0){
+                                        $rclValue[$counterh] = "";
+                                    }else{
+                                        $rclValue[$counterh] = number_format($rclValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $rclValue[$counterh] . "</td>";
 
-                                $totalRCLI= $totalRCLI + $rcliValue[$counterh];
-                                if($rcliValue[$counterh] == 0){
-                                    $rcliValue[$counterh] = "";
-                                }else{
-                                    $rcliValue[$counterh] = number_format($rcliValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $rcliValue[$counterh] . "</td>";
+                                    $totalRCLI= $totalRCLI + $rcliValue[$counterh];
+                                    if($rcliValue[$counterh] == 0){
+                                        $rcliValue[$counterh] = "";
+                                    }else{
+                                        $rcliValue[$counterh] = number_format($rcliValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $rcliValue[$counterh] . "</td>";
 
-                                $totalAmountRCC= $totalAmountRCC + $rccValue[$counterh];
-                                if($rccValue[$counterh] == 0){
-                                    $rccValue[$counterh] = "";
-                                }else{
-                                    $rccValue[$counterh] = number_format($rccValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $rccValue[$counterh] . "</td>";
+                                    $totalAmountRCC= $totalAmountRCC + $rccValue[$counterh];
+                                    if($rccValue[$counterh] == 0){
+                                        $rccValue[$counterh] = "";
+                                    }else{
+                                        $rccValue[$counterh] = number_format($rccValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $rccValue[$counterh] . "</td>";
 
-                                $totalRCCI= $totalRCCI + $rcciValue[$counterh];
-                                if($rcciValue[$counterh] == 0){
-                                    $rcciValue[$counterh] = "";
-                                }else{
-                                    $rcciValue[$counterh] = number_format($rcciValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $rcciValue[$counterh] . "</td>";
+                                    $totalRCCI= $totalRCCI + $rcciValue[$counterh];
+                                    if($rcciValue[$counterh] == 0){
+                                        $rcciValue[$counterh] = "";
+                                    }else{
+                                        $rcciValue[$counterh] = number_format($rcciValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $rcciValue[$counterh] . "</td>";
 
-                                $totalPenaltyRice = $totalPenaltyRice + $penaltyRice[$counterh];
-                                if($penaltyRice[$counterh] == 0){
-                                    $penaltyRice[$counterh] = "";
-                                }else{
-                                    $penaltyRice[$counterh] = number_format($penaltyRice[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $penaltyRice[$counterh] . "</td>";
+                                    $totalPenaltyRice = $totalPenaltyRice + $penaltyRice[$counterh];
+                                    if($penaltyRice[$counterh] == 0){
+                                        $penaltyRice[$counterh] = "";
+                                    }else{
+                                        $penaltyRice[$counterh] = number_format($penaltyRice[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $penaltyRice[$counterh] . "</td>";
 
-                                $totalAmountSD= $totalAmountSD + $sdValue[$counterh];
-                                if($sdValue[$counterh] == 0){
-                                    $sdValue[$counterh] = "";
-                                }else{
-                                    $sdValue[$counterh] = number_format($sdValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $sdValue[$counterh] . "</td>";
+                                    $totalAmountSD= $totalAmountSD + $sdValue[$counterh];
+                                    if($sdValue[$counterh] == 0){
+                                        $sdValue[$counterh] = "";
+                                    }else{
+                                        $sdValue[$counterh] = number_format($sdValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $sdValue[$counterh] . "</td>";
 
-                                $totalAmountTD= $totalAmountTD + $tdValue[$counterh];
-                                if($tdValue[$counterh] == 0){
-                                    $tdValue[$counterh] = "";
-                                }else{
-                                    $tdValue[$counterh] = number_format($tdValue[$counterh],'2','.',',');
-                                }
-                                echo "<td>" . $tdValue[$counterh] . "</td>";
+                                    $totalAmountTD= $totalAmountTD + $tdValue[$counterh];
+                                    if($tdValue[$counterh] == 0){
+                                        $tdValue[$counterh] = "";
+                                    }else{
+                                        $tdValue[$counterh] = number_format($tdValue[$counterh],'2','.',',');
+                                    }
+                                    echo "<td>" . $tdValue[$counterh] . "</td>";
 
-                                echo "<td>" . $dateTransaction[$counterh] . "</td>";
-                                echo "<td>" . $encodedBy[$counterh] . "</td>";
-                            echo "</tr>";
-                            $counterh ++;
-                        }
-
-                        echo "<tr>
-                            <th></th>
-                            <th></th>
-                            <th>ID #</th>
-                            <th>MEMBER NAME</th>
-                            <th>OR #</th>
-                            <th>Invoice #</th>
-                            <th></th>
-                            <th>Grand Total</th>
-                            <th>Trading Total</th>
-                            <th>Lending Total</th>
-                            <th>Interest</th>
-                            <th>BL</th>
-                            <th>CLL</th>
-                            <th>CML</th>
-                            <th>EDL</th>
-                            <th>RL</th>
-                            <th>PL</th>
-                            <th>CL</th>
-                            <th>CKL</th>
-                            <th>EML</th>
-                            <th>SL</th>
-                            <th>Penalty</th>
-                            <th>RR</th>
-                            <th>MBF</th>
-                            <th>MSC</th>
-                            <th>TF</th>
-                            <th>INS</th>
-                            <th>OI</th>
-                            <th>CBU</th>
-                            <th>FD</th>
-                            <th>RLR</th>
-                            <th>IR</th>
-                            <th>AR</th>
-                            <th>IR</th>
-                            <th>Penalty</th>
-                            <th>SD</th>
-                            <th>TD</th>
-                            <th>Date</th>
-                            <th>Encoder</th>
-                        </tr>";
-
-                        echo "<tr>";
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "". "</td>";
-                            echo "<td>" . "". "</td>";
-                            echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
-                            echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
-                            echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
-
-                            $totalLTGT = $totalTradingF + $totalLendingF;
-                            $totalGT = $totalAmountS;
-
-                            $totalLTGTF = number_format($totalLTGT,'2','.','');
-                            $totalGTF = number_format($totalGT,'2','.','');
-
-                            $diff = $totalGTF - $totalLTGTF;
-                            if($diff == "0"){
-                                echo "<td " . "style=" . "color:#42FF33" . ">" . "|||" . "</td>";
-                            }else{
-                                echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
+                                    echo "<td>" . $dateTransaction[$counterh] . "</td>";
+                                    echo "<td>" . $encodedBy[$counterh] . "</td>";
+                                echo "</tr>";
+                                $counterh ++;
                             }
 
+                            echo "<tr>
+                                <th></th>
+                                <th></th>
+                                <th>ID #</th>
+                                <th>MEMBER NAME</th>
+                                <th>OR #</th>
+                                <th>Invoice #</th>
+                                <th></th>
+                                <th>Grand Total</th>
+                                <th>Trading Total</th>
+                                <th>Lending Total</th>
+                                <th>Interest</th>
+                                <th>BL</th>
+                                <th>CLL</th>
+                                <th>CML</th>
+                                <th>EDL</th>
+                                <th>RL</th>
+                                <th>PL</th>
+                                <th>CL</th>
+                                <th>CKL</th>
+                                <th>EML</th>
+                                <th>SL</th>
+                                <th>Penalty</th>
+                                <th>RR</th>
+                                <th>MBF</th>
+                                <th>MSC</th>
+                                <th>TF</th>
+                                <th>INS</th>
+                                <th>OI</th>
+                                <th>CBU</th>
+                                <th>FD</th>
+                                <th>RLR</th>
+                                <th>IR</th>
+                                <th>AR</th>
+                                <th>IR</th>
+                                <th>Penalty</th>
+                                <th>SD</th>
+                                <th>TD</th>
+                                <th>Date</th>
+                                <th>Encoder</th>
+                            </tr>";
 
-
-                            echo "<td " . "style=" . "color:orange " . "bgcolor =" . "#151515" . ">" . number_format($totalAmountS,'2','.',',') . "</td>";
-                            echo "<td " . "style=" . "color:blue " . "bgcolor =" . "#151515" . ">" . number_format($totalTradingF,'2','.',',') . "</td>";
-                            echo "<td " . "style=" . "color:#21e5d6 " . "bgcolor =" . "#151515" . ">" . number_format($totalLendingF,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalInterestF,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountBL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountCLL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalamountCML,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountEDL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountRL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountPL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountCL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountCKL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountEML,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountSL,'2','.',',') . "</td>";
-
-                            //RENTAL
-                            echo "<td>" . number_format($totalPenaltyLoan,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalRentalIncome,'2','.',',') . "</td>";
-
-                            echo "<td>" . number_format($totalMembership,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalMiscellaneous,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalTransferFee,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalInsurance,'2','.',',') . "</td>";
-
-                            echo "<td>" . number_format($totalAmountOI,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountSC,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountFD,'2','.',',') . "</td>";
-
-                            //TRADING
-                            echo "<td>" . number_format($totalAmountRCL,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalRCLI,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountRCC,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalRCCI,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalPenaltyRice,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountSD,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalAmountTD,'2','.',',') . "</td>";
-                            
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                        echo "</tr>";
-
-                        echo "</table>";
-
-
-                        //Withdrawal
-                        echo "<table>
-                        <tr>'&nbsp'</tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>WITHDRAW</th>
-                        </tr>
-
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>Transaction #</th>
-                            <th>ID #</th>
-                            <th>MEMBER NAME</th>
-                            <th>SLIP #</th>
-                            <th>Withdraw</th>
-                            <th>Savings</th>
-                            <th>Time Deposit</th>
-                            <th>Fixed Deposit</th>
-                            <th>SC</th>
-                            <th>Date</th>
-                            <th>Encoder</th>
-                        </tr>";
-
-                        $counterh = 0;
-                        $totalWithdraw = 0;
-                        $totalSDW = 0;
-                        $totalTDW = 0;
-                        $totalFDW = 0;
-                        $totalSCW = 0;
-
-                        while($counterh < $numRowWithdraw) {
                             echo "<tr>";
-                                echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$orNumberW[$counterh]" . " " . "name=" . "clearORW". ">"  . "CLEAR" . " </button> </td>";
-                                echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$orNumberW[$counterh]" . " " . "name=" . "cancelORW" . ">"  . "CANCEL" . " </button> </td>";
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "". "</td>";
+                                echo "<td>" . "". "</td>";
+                                echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
+                                echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
+                                echo "<td>" . "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" . "</td>";
 
-                                echo "<td>" . $transactionNumberW[$counterh] . "</td>";
-                                echo "<td>" . $idNumberW[$counterh] . "</td>";
-                                echo "<td>" . $lastNameW[$counterh] . ", " . $firstNameW[$counterh] . " " . $middleNameW[$counterh] . "</td>";
-                                echo "<td>" . $orNumberW[$counterh] . "</td>";
-                                
-                                $totalWithdraw = $totalWithdraw + $totalAmountW[$counterh];
+                                $totalLTGT = $totalTradingF + $totalLendingF;
+                                $totalGT = $totalAmountS;
 
-                                if($typePaymentW[$counterh] == 1){
-                                    $totalCheckWithdraw =  $totalCheckWithdraw + $totalAmountW[$counterh];
+                                $totalLTGTF = number_format($totalLTGT,'2','.','');
+                                $totalGTF = number_format($totalGT,'2','.','');
 
-                                    $chequeIDNumber[$checkCounter] = $idNumberW[$counterh];
-                                    $chequelastName[$checkCounter] = $firstNameW[$counterh];
-                                    $chequefirstName[$checkCounter] = $lastNameW[$counterh];
-                                    $chequemiddleName[$checkCounter] = $middleNameW[$counterh];
-                                    $chequeAmount[$checkCounter] = $totalAmountW[$counterh];
-                                    $chequeReferenceN[$checkCounter] = $orNumberW[$counterh];
-
-                                    $checkCounter++;
+                                $diff = $totalGTF - $totalLTGTF;
+                                if($diff == "0"){
+                                    echo "<td " . "style=" . "color:#42FF33" . ">" . "|||" . "</td>";
+                                }else{
+                                    echo "<td " . "style=" . "color:#FF3333" . ">" . "__" . "</td>";
                                 }
 
-                                echo "<td>" . number_format($totalAmountW[$counterh],'2','.',',') . "</td>";
-                                $totalSDW = $totalSDW + $sdValueW[$counterh];
-                                echo "<td>" . number_format($sdValueW[$counterh],'2','.',',') . "</td>";
-                                $totalTDW = $totalTDW + $tdValueW[$counterh];
-                                echo "<td>" . number_format($tdValueW[$counterh],'2','.',',') . "</td>";
-                                $totalFDW = $totalFDW + $fdValueW[$counterh];
-                                echo "<td>" . number_format($fdValueW[$counterh],'2','.',',') . "</td>";
-                                $totalSCW = $totalSCW + $scValueW[$counterh];
-                                echo "<td>" . number_format($scValueW[$counterh],'2','.',',') . "</td>";
 
-                                echo "<td>" . $dateTransactionW[$counterh] . "</td>";
-                                echo "<td>" . $encodedByW[$counterh] . "</td>";
+
+                                echo "<td " . "style=" . "color:orange " . "bgcolor =" . "#151515" . ">" . number_format($totalAmountS,'2','.',',') . "</td>";
+                                echo "<td " . "style=" . "color:blue " . "bgcolor =" . "#151515" . ">" . number_format($totalTradingF,'2','.',',') . "</td>";
+                                echo "<td " . "style=" . "color:#21e5d6 " . "bgcolor =" . "#151515" . ">" . number_format($totalLendingF,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalInterestF,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountBL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountCLL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalamountCML,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountEDL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountRL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountPL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountCL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountCKL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountEML,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountSL,'2','.',',') . "</td>";
+
+                                //RENTAL
+                                echo "<td>" . number_format($totalPenaltyLoan,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalRentalIncome,'2','.',',') . "</td>";
+
+                                echo "<td>" . number_format($totalMembership,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalMiscellaneous,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalTransferFee,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalInsurance,'2','.',',') . "</td>";
+
+                                echo "<td>" . number_format($totalAmountOI,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountSC,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountFD,'2','.',',') . "</td>";
+
+                                //TRADING
+                                echo "<td>" . number_format($totalAmountRCL,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalRCLI,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountRCC,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalRCCI,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalPenaltyRice,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountSD,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalAmountTD,'2','.',',') . "</td>";
+                                
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "" . "</td>";
                             echo "</tr>";
-                            $counterh ++;
-                        }
 
-                        echo "<tr>";
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "TOTAL WITHDRAW" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                            
-                            echo "<td>" . number_format($totalWithdraw,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalSDW,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalTDW,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalFDW,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalSCW,'2','.',',') . "</td>";
+                            echo "</table>";
 
-                            echo "<td>" . "" . "</td>";
-                            echo "<td>" . "" . "</td>";
-                        echo "</tr>";
-                        echo "</table>";
 
-                        //Checque
-                        echo "<table>
-                        <tr>'&nbsp'</tr>
-                        <tr>
-                            <th>CHECQUE COLLECTION</th>
-                        </tr>
+                            //Withdrawal
+                            echo "<table>
+                            <tr>'&nbsp'</tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>WITHDRAW</th>
+                            </tr>
 
-                        <tr>
-                            <th>ID #</th>
-                            <th>MEMBER NAME</th>
-                            <th>OR / SLIP #</th>
-                            <th>Amount</th>
-                        </tr>";
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Transaction #</th>
+                                <th>ID #</th>
+                                <th>MEMBER NAME</th>
+                                <th>SLIP #</th>
+                                <th>Withdraw</th>
+                                <th>Savings</th>
+                                <th>Time Deposit</th>
+                                <th>Fixed Deposit</th>
+                                <th>SC</th>
+                                <th>Date</th>
+                                <th>Encoder</th>
+                            </tr>";
 
-                        $counterC = 0;
-                        while($counterC < $checkCounter) {
+                            $counterh = 0;
+                            $totalWithdraw = 0;
+                            $totalSDW = 0;
+                            $totalTDW = 0;
+                            $totalFDW = 0;
+                            $totalSCW = 0;
+
+                            while($counterh < $numRowWithdraw) {
+                                echo "<tr>";
+                                    echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$orNumberW[$counterh]" . " " . "name=" . "clearORW". ">"  . "CLEAR" . " </button> </td>";
+                                    echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$orNumberW[$counterh]" . " " . "name=" . "cancelORW" . ">"  . "CANCEL" . " </button> </td>";
+
+                                    echo "<td>" . $transactionNumberW[$counterh] . "</td>";
+                                    echo "<td>" . $idNumberW[$counterh] . "</td>";
+                                    echo "<td>" . $lastNameW[$counterh] . ", " . $firstNameW[$counterh] . " " . $middleNameW[$counterh] . "</td>";
+                                    echo "<td>" . $orNumberW[$counterh] . "</td>";
+                                    
+                                    $totalWithdraw = $totalWithdraw + $totalAmountW[$counterh];
+
+                                    if($typePaymentW[$counterh] == 1){
+                                        $totalCheckWithdraw =  $totalCheckWithdraw + $totalAmountW[$counterh];
+
+                                        $chequeIDNumber[$checkCounter] = $idNumberW[$counterh];
+                                        $chequelastName[$checkCounter] = $firstNameW[$counterh];
+                                        $chequefirstName[$checkCounter] = $lastNameW[$counterh];
+                                        $chequemiddleName[$checkCounter] = $middleNameW[$counterh];
+                                        $chequeAmount[$checkCounter] = $totalAmountW[$counterh];
+                                        $chequeReferenceN[$checkCounter] = $orNumberW[$counterh];
+
+                                        $checkCounter++;
+                                    }
+
+                                    echo "<td>" . number_format($totalAmountW[$counterh],'2','.',',') . "</td>";
+                                    $totalSDW = $totalSDW + $sdValueW[$counterh];
+                                    echo "<td>" . number_format($sdValueW[$counterh],'2','.',',') . "</td>";
+                                    $totalTDW = $totalTDW + $tdValueW[$counterh];
+                                    echo "<td>" . number_format($tdValueW[$counterh],'2','.',',') . "</td>";
+                                    $totalFDW = $totalFDW + $fdValueW[$counterh];
+                                    echo "<td>" . number_format($fdValueW[$counterh],'2','.',',') . "</td>";
+                                    $totalSCW = $totalSCW + $scValueW[$counterh];
+                                    echo "<td>" . number_format($scValueW[$counterh],'2','.',',') . "</td>";
+
+                                    echo "<td>" . $dateTransactionW[$counterh] . "</td>";
+                                    echo "<td>" . $encodedByW[$counterh] . "</td>";
+                                echo "</tr>";
+                                $counterh ++;
+                            }
+
                             echo "<tr>";
-                                echo "<td>" . $chequeIDNumber[$counterC] . "</td>";
-                                echo "<td>" . $chequelastName[$counterC] . ", " . $chequefirstName[$counterC] . " " . $chequemiddleName[$counterC] . "</td>";
-                                echo "<td>" . $chequeReferenceN[$counterC] . "</td>";
-                                echo "<td>" . number_format($chequeAmount[$counterC],'2','.',',') . "</td>";
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "TOTAL WITHDRAW" . "</td>";
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "" . "</td>";
+                                
+                                echo "<td>" . number_format($totalWithdraw,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalSDW,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalTDW,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalFDW,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalSCW,'2','.',',') . "</td>";
+
+                                echo "<td>" . "" . "</td>";
+                                echo "<td>" . "" . "</td>";
                             echo "</tr>";
-                            $counterC ++;
-                        }
+                            echo "</table>";
 
-                        //Summary
-                        echo "<table>
-                        <tr>'&nbsp'</tr>
-                        <tr>
-                            <th>COLLECTION</th>
-                        </tr>
+                            //Checque
+                            echo "<table>
+                            <tr>'&nbsp'</tr>
+                            <tr>
+                                <th>CHECQUE COLLECTION</th>
+                            </tr>
 
-                        <tr>
-                            <th>TOTAL COLLECTION</th>
-                            <th>TOTAL WITHDRAW</th>
-                            <th>TOTAL CHECK COLLECTION</th>
-                            <th>TOTAL CHECK WITHDRAW</th>
-                            <th>ACTUAL COLLECTION</th>
-                        </tr>";
+                            <tr>
+                                <th>ID #</th>
+                                <th>MEMBER NAME</th>
+                                <th>OR / SLIP #</th>
+                                <th>Amount</th>
+                            </tr>";
 
-                        $actualCollection = $totalAmountS - $totalWithdraw - $totalCheck;
-                        echo "<tr>";
-                            echo "<td>" . number_format($totalAmountS,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalWithdraw,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalCheck,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($totalCheckWithdraw,'2','.',',') . "</td>";
-                            echo "<td>" . number_format($actualCollection,'2','.',',') . "</td>";
-                        echo "</tr>";
-                        echo "</table>";
-                    ?>
+                            $counterC = 0;
+                            while($counterC < $checkCounter) {
+                                echo "<tr>";
+                                    echo "<td>" . $chequeIDNumber[$counterC] . "</td>";
+                                    echo "<td>" . $chequelastName[$counterC] . ", " . $chequefirstName[$counterC] . " " . $chequemiddleName[$counterC] . "</td>";
+                                    echo "<td>" . $chequeReferenceN[$counterC] . "</td>";
+                                    echo "<td>" . number_format($chequeAmount[$counterC],'2','.',',') . "</td>";
+                                echo "</tr>";
+                                $counterC ++;
+                            }
+
+                            //Summary
+                            echo "<table>
+                            <tr>'&nbsp'</tr>
+                            <tr>
+                                <th>COLLECTION</th>
+                            </tr>
+
+                            <tr>
+                                <th>TOTAL COLLECTION</th>
+                                <th>TOTAL WITHDRAW</th>
+                                <th>TOTAL CHECK COLLECTION</th>
+                                <th>TOTAL CHECK WITHDRAW</th>
+                                <th>ACTUAL COLLECTION</th>
+                            </tr>";
+
+                            $actualCollection = $totalAmountS - $totalWithdraw - $totalCheck;
+                            echo "<tr>";
+                                echo "<td>" . number_format($totalAmountS,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalWithdraw,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalCheck,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($totalCheckWithdraw,'2','.',',') . "</td>";
+                                echo "<td>" . number_format($actualCollection,'2','.',',') . "</td>";
+                            echo "</tr>";
+                            echo "</table>";
+                        ?>
+                    </div>
                 </div>
+
                 <div class="table table-bordered">
                     <?php
                         if($displayPropertyAM != "none"){
