@@ -65,6 +65,8 @@ function getLoanPrincipalTableName($typeloan){
         $loantable = "bl_loan_payment_table";
     }else if($typeloan == "CLL"){
         $loantable = "cll_loan_payment_table";
+    }else if($typeloan == "CML"){
+        $loantable = "cml_loan_payment_table";
     }else if($typeloan == "RL"){
         $loantable = "rl_loan_payment_table";
     }else if($typeloan == "EDL"){
@@ -93,6 +95,8 @@ function getLoanInterestTableName($typeloan){
         $loantable = "bl_credit_revenue_table";
     }else if($typeloan == "CLL"){
         $loantable = "cll_credit_revenue_table";
+    }else if($typeloan == "CML"){
+        $loantable = "cml_credit_revenue_table";
     }else if($typeloan == "RL"){
         $loantable = "rl_credit_revenue_table";
     }else if($typeloan == "EDL"){

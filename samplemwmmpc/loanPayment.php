@@ -1378,15 +1378,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $iarrlcount=count($iarrl);
                         
                         if($iarrlcount>0){
-                            while($iarrlcounter<$iarrlcount){
+                            $counterI=0;
+                            while($counterI<$iarrlcount){
                                 $iarr=$iarrl[$iarrlcounter];
                                 if($iarr[12] != 0){
                                     $lastInterest[$iarrlcounter] = $iarr[12];
                                     $iarrlcounter++;
-                                }else{
-                                    $lastInterest[$iarrlcounter] = 0;
-                                    $iarrlcounter++;
                                 }
+                                $lastInterest[$iarrlcounter]=0;
+                                $counterI++;
                             }
                         }else{
                             $lastInterest[$iarrlcounter] = 0;
@@ -1414,9 +1414,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $paymentTerm = $aiarr[1];
                         $currentBalance = $loanAmountP - $currentBalance;
                         
-                        
+                        if($iarrlcounter>0){
+                            $li = $lastInterest[$iarrlcounter-1];
+                        }else{
+                            $li=0;
+                        }
                         //Compute Interest
-                        $currentInterest = interestpaid($iarrlcounter, $lastInterest[$iarrlcounter-1], $currentBalance, $loanInterestP, $paymentTerm);
+                        $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm);
                         $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
 
                         //Compute Principal
@@ -1460,6 +1464,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                 }
                 $ldcounter++;
             }
+
+            $plLA = "Previous Loan:";
+            $rlLA = "Regular Loan:";
+            $edlLA = "Education Loan:";
+            $blLA = "Business Loan:";
+            $cllLA = "Calamity Loan:";
+            $cmlLA = "Chattel Loan:";
+            $blPayment=0;$cllPayment=0;$cmlPayment=0;$edlPayment=0;$rlPayment=0;$plPayment=0;$pliPayment=0;
 
             //CKL 
             if(substr("$chklLA",0,3) == "CKL" and $chklPayment != 0){
