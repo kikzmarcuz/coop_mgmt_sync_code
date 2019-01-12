@@ -1,7 +1,6 @@
 <?php  
 
 //TABLE
-//TRIAL
 function getTableName($typepayment){
   $tablename = "";
   if($typepayment == "OI"){
@@ -135,7 +134,7 @@ function getDepositTable($type){
 }
 
 //TRANSACTION
-function getLoanTransactionCode($arr){
+function getLoanTransactionCodeD($arr){
   $tc=[];
 
   if($arr[0] != 0){
@@ -177,6 +176,35 @@ function getLoanTransactionCode($arr){
   return($tc);
 }
 
+function getLoanTransactionCodeF($arr){
+  $tc=[];
+
+  if($arr[0] != 0){
+    $tc[0] = "CKL";
+  }else{
+    $tc[0] = "";
+  }
+
+  if($arr[1] != 0){
+    $tc[1] = "CL";
+  }else{
+    $tc[1] = "";
+  }
+
+  if($arr[2] != 0){
+    $tc[2] = "EML";
+  }else{
+    $tc[2] = "";
+  }
+
+  if($arr[3] != 0){
+    $tc[3] = "SL";
+  }else{
+    $tc[3] = "";
+  }
+  
+  return($tc);
+}
 
 
 function getDepositTransactionCode($arr){
@@ -245,7 +273,6 @@ function checkLoanTransaction($string){
   }
 
   return($code);
-
 }
 
 //DB FUNCTION
@@ -495,6 +522,20 @@ function postLoanPayment($pnametable, $inametable, $arr , $arr2 ,$conn){
     return(true);
   }else { 
     echo "Error: " . $sql1  . $sql2 . "<br>" . $conn->error;
+    return(false);
+  }
+}
+
+function postLoanPaymentF($pnametable, $arr ,$conn){
+  $sql1 = "INSERT INTO ";
+  $sql1 .= $pnametable;
+  $sql1 .= "(id_number, reference_number, loan_application_number, amount , date_payment, encoded_by) 
+         VALUES ('$arr[0]', '$arr[1]', '$arr[2]', '$arr[3]', '$arr[4]', '$arr[5]')";
+
+  if ($conn->query($sql1) === TRUE) {
+    return(true);
+  }else { 
+    echo "Error: " . $sql1 . "<br>" . $conn->error;
     return(false);
   }
 }
@@ -1093,6 +1134,10 @@ function getLI($table, $referencenumber, $idnumber,  $apnumber, $seaarhobj, $con
           $arr[11] = $row['invoice_number'];
         }
 
+        if($table == "pl_loan_table"){
+          $arr[12] = $row['counter_payment'];
+        }
+
         array_push($retarr, $arr);
 
     }
@@ -1194,7 +1239,11 @@ function getLoanInfoI($table, $referencenumber, $id, $apnumber, $seaarhobj, $con
       $arr[11] = $row['insurance_fee'];
       $arr[12] = $row['interest_revenue'];
 
-      $arr[13] = $row['amount_release'];
+      if($table != "pl_credit_revenue_table"){
+        $arr[13] = $row['amount_release'];
+      }else{
+         $arr[13] = "";
+      }
 
       $arr[14] = $row['voucher_i'];
       $arr[15] = $row['loanb_i'];

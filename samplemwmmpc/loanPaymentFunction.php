@@ -56,7 +56,6 @@ function interestpaid($ci, $li, $cb, $lp, $pt){
 
     //Comute Interest
     if( ($checkInterestP == 0 and $pt == 2) or ($checkInterestPI != 1 and $ci!=0 and $pt == 30) ){
-        echo "string";
         $cir = $li;
     }else{
         $cir = ($cb * $lp)/$pt;

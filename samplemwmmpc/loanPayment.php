@@ -1333,7 +1333,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $lcodestr=[];
             $lcodestrcounter=0;
 
-            $lcodestr = getLoanTransactionCode($tarr);
+            $lcodestr = getLoanTransactionCodeD($tarr);
             while($ldcounter<count($lcodestr)){
                 $lcode=$lcodestr[$ldcounter];
                 if($lcode!=""){
@@ -1400,13 +1400,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $loanInterestP = $larr[6];
                         $paymentTermP =  $larr[7];
 
-                        
+                        $loanCounter=0;
+                        if($lcode=="PL"){
+                            $loanCounter = $larr[12];
+                            $iarrlcounter = $loanCounter + $iarrlcounter;
+                        }
 
                         $loanInterestP = actualinterest($loanInterestP);
                         $currentPrincipal = 0;
                         $currentInterest = 0;
-
-
 
                         $aiarr=[];
                         $aiarr=actualpterm($loanTermP, $paymentTermP);
@@ -1415,12 +1417,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $currentBalance = $loanAmountP - $currentBalance;
                         
                         if($iarrlcounter>0){
+                            if($lcode=="PL"){
+                                $iarrlcounter = $iarrlcounter - $loanCounter;
+                            }
                             $li = $lastInterest[$iarrlcounter-1];
                         }else{
                             $li=0;
                         }
                         //Compute Interest
-                        $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm);
+                        $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm, $loanCounter);
                         $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
 
                         //Compute Principal
@@ -1473,350 +1478,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $cmlLA = "Chattel Loan:";
             $blPayment=0;$cllPayment=0;$cmlPayment=0;$edlPayment=0;$rlPayment=0;$plPayment=0;$pliPayment=0;
 
-            //CKL 
-            if(substr("$chklLA",0,3) == "CKL" and $chklPayment != 0){
-                $ckl = 1;
-                $sqlLP = "SELECT * FROM  ckl_loan_table WHERE loan_application_number = '$chklLA' ";
-                    $resultLP = $conn->query($sqlLP);
+            //FL
+            $farr=[];
+            $fanarr=[];
+            $cl=0;$ckl=0;$eml=0;$sl=0;
+            if(substr("$chklLA",0,2) == "CKL" and $chklPayment != 0){$ckl=1;array_push($farr, $chklPayment);array_push($fanarr, $chklLA);}else{array_push($farr, 0);array_push($fanarr, "");}
+            if(substr("$clLA",0,2) == "CL" and $clPayment != 0){$cl=1;array_push($farr, $clPayment);array_push($fanarr, $clLA);}else{array_push($farr, 0);array_push($fanarr, "");}
+            if(substr("$emlLA",0,2) == "EML" and $emlPayment != 0){$eml=1;array_push($farr, $emlPayment);array_push($fanarr, $emlLA);}else{array_push($farr, 0);array_push($fanarr, "");}
+            if(substr("$slLA",0,2) == "SL" and $slPayment != 0){$sl=1;array_push($farr, $slPayment);array_push($fanarr, $slLA);}else{array_push($farr, 0);array_push($fanarr, "");}
 
-                $totalPSL = 0;
+            $fcodestr = getLoanTransactionCodeF($farr);
+            $fcodestrcounter=0;
+            while ($fcodestrcounter<count($fcodestr)) { 
+                $fcode=$fcodestr[$fcodestrcounter];
+                if($fcode!=""){
+                    $apnumber=$fanarr[$fcodestrcounter];
+                    $tpayment=$farr[$fcodestrcounter];
 
-                if($resultLP->num_rows > 0){
-                    while ($row = mysqli_fetch_array($resultLP)) {
-                        $totalPSL = $row['loan_amount'];
+                    echo "$apnumber";
+                    echo "$tpayment";
+
+                    $ptable = getLoanPrincipalTableName($fcode);
+                    $ltable = getLoanTableName($fcode);
+
+                    echo "$ptable";
+                    $fpayment=[];
+                    $fpayment[0]=$idNumber;
+                    $fpayment[1]=$referencenumber;
+                    $fpayment[2]=$apnumber;
+                    $fpayment[3]=$tpayment;
+                    $fpayment[4]=$datePayment;
+                    $fpayment[5]=$encodedBy;
+
+                    postLoanPaymentF($ptable, $fpayment ,$conn);
+
+                    if(getLoanPaymentStatus($ptable, $tpayment, $apnumber, $conn) == "Paid"){
+                        updateLoanStatus($apnumber, $ltable, "Paid", $conn);
                     }
                 }
-
-                $sqlFLP = "SELECT * FROM  ckl_loan_payment_table WHERE loan_application_number = '$chklLA' ";
-                $resultFLP = $conn->query($sqlFLP);
-
-                $totalPP = 0;
-                $totalAPP = 0;
-
-                if($resultFLP->num_rows > 0){
-                    while ($rowF = mysqli_fetch_array($resultFLP)) {
-                        $totalPP = $rowF['amount'];
-                        $totalAPP = $totalAPP + $totalPP;
-                    }
-                }
-
-                $paymentdiff = 0;
-                $paymentdiff = $totalPSL - ($chklPayment + $totalAPP);
-                
-                if($paymentdiff <= 0){
-                    $sql = "UPDATE ckl_loan_table SET
-                    loan_status = 'Paid',
-                    last_payment = '$datePayment',
-                    date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$chklLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                       $infomessage = "Record updated successfully";
-
-                        $sqlDP = "UPDATE loan_date_table SET
-                        date_paid = '$datePayment'
-                        WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                        if ($conn->query($sqlDP) === TRUE) {
-                           $infomessage = "Loan Paid";
-                        } 
-                        else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }else{
-                    $sql = "UPDATE ckl_loan_table SET
-                    last_payment = '$datePayment' 
-                    WHERE id_number = '$idNumber' and loan_application_number = '$chklLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $infomessage = "Record updated successfully";
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-                $sql = "INSERT INTO ckl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by) 
-                    VALUES ('$idNumber','$referencenumber','$chklLA','$chklPayment','$datePayment', '$encodedBy')";
-                if ($conn->query($sql) === TRUE){
-                    $informessage = "New record created successfully";
-                    $clPayment = 0;
-                    $clLA = "Cash Loan";
-
-                }else{
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
+                $fcodestrcounter++;
             }
 
-            //CL
-            if(substr("$clLA",0,2) == "CL" and $clPayment != 0){
-                $cl = 1;
-
-                $sqlLP = "SELECT * FROM  cl_loan_table WHERE loan_application_number = '$clLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                $totalPSL = 0;
-
-                if($resultLP->num_rows > 0){
-                    while ($row = mysqli_fetch_array($resultLP)) {
-                        $totalPSL = $row['loan_amount'];
-                    }
-                }
-
-                $sqlFLP = "SELECT * FROM  cl_loan_payment_table WHERE loan_application_number = '$clLA' ";
-                $resultFLP = $conn->query($sqlFLP);
-
-                $totalPP = 0;
-                $totalAPP = 0;
-
-                if($resultFLP->num_rows > 0){
-                    while ($rowF = mysqli_fetch_array($resultFLP)) {
-                        $totalPP = $rowF['amount'];
-                        $totalAPP = $totalAPP + $totalPP;
-                    }
-                }
-
-                $paymentdiff = 0;
-
-                $paymentdiff = $totalPSL - ($clPayment + $totalAPP);
-                
-                if($paymentdiff <= 0){
-                    $sql = "UPDATE cl_loan_table SET
-                    loan_status = 'Paid',
-                    last_payment = '$datePayment',
-                    date_paid = '$datePayment' 
-                    WHERE id_number = '$idNumber' and loan_application_number = '$clLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                       $infomessage = "Record updated successfully";
-
-                        $sqlDP = "UPDATE loan_date_table SET
-                        date_paid = '$datePayment'
-                        WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                        if ($conn->query($sqlDP) === TRUE) {
-                           $infomessage = "Loan Paid";
-                        } 
-                        else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }else{
-                    $sql = "UPDATE cl_loan_table SET
-                    last_payment = '$datePayment' 
-                    WHERE id_number = '$idNumber' and loan_application_number = '$clLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $infomessage = "Record updated successfully";
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-                $sql = "INSERT INTO cl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by) 
-                    VALUES ('$idNumber','$referencenumber','$clLA','$clPayment','$datePayment', '$encodedBy')";
-                if ($conn->query($sql) === TRUE){
-                    $informessage = "New record created successfully";
-                    $clPayment = 0;
-                    $clLA = "Cash Loan";
-
-                }else{
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
-
-            //EML
-            if(substr("$emlLA",0,3) == "EML" and $emlPayment != 0){
-                $eml = 1;
-
-                //get initial credit
-                $sqlLP = "SELECT * FROM  eml_loan_table WHERE loan_application_number = '$emlLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                $totalPSL = 0;
-
-                if($resultLP->num_rows > 0){
-                    while ($row = mysqli_fetch_array($resultLP)) {
-                        $totalPSL = $row['loan_amount'];
-                    }
-                }
-
-                $sqlFLP = "SELECT * FROM  eml_loan_payment_table WHERE loan_application_number = '$emlLA' ";
-                $resultFLP = $conn->query($sqlFLP);
-
-                $totalPP = 0;
-                $totalAPP = 0;
-
-                if($resultFLP->num_rows > 0){
-                    while ($rowF = mysqli_fetch_array($resultFLP)) {
-                        $totalPP = $rowF['amount'];
-                        $totalAPP = $totalAPP + $totalPP;
-                    }
-                }
-
-                $paymentdiff = 0;
-                $paymentdiff = $totalPSL - ($emlPayment + $totalAPP);
-                
-                if($paymentdiff <= 0){
-                    $sql = "UPDATE eml_loan_table SET
-                    last_payment = '$datePayment',
-                    date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$emlLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $infomessage = "Record updated successfully";
-
-                        $sqlDP = "UPDATE loan_date_table SET
-                        date_paid = '$datePayment'
-                        WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                        if ($conn->query($sqlDP) === TRUE) {
-                           $infomessage = "Loan Paid";
-                        } 
-                        else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-                if($paymentdiff <= 0){
-                    $sql = "UPDATE eml_loan_table SET
-                    loan_status = 'Paid',
-                    last_payment = '$datePayment',
-                    date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$emlLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                       $infomessage = "Record updated successfully";
-
-                        $sqlDP = "UPDATE loan_date_table SET
-                        date_paid = '$datePayment';
-                        WHERE id_number = '$idNumber' and loan_application_number =  '$loanApplicationNumberId' ";
-
-                        if ($conn->query($sqlDP) === TRUE) {
-                           $infomessage = "Loan Paid";
-                        } 
-                        else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }else{
-                    $sql = "UPDATE eml_loan_table SET
-                    last_payment = '$datePayment' 
-                    WHERE id_number = '$idNumber' and loan_application_number = '$emlLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $infomessage = "Record updated successfully";
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-                $sql = "INSERT INTO eml_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by) 
-                    VALUES ('$idNumber','$referencenumber','$emlLA','$emlPayment','$datePayment', '$encodedBy')";
-                if ($conn->query($sql) === TRUE){
-                    $informessage = "New record created successfully";
-                    $emlPayment = 0;
-                    $emlLA = "Emergency Loan";
-
-                }else{
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
-
-            //SL
-            if(substr("$slLA",0,2) == "SL" and $slPayment != 0){
-                $sl = 1;
-
-                //get initial credit
-                $sqlLP = "SELECT * FROM  sl_loan_table WHERE loan_application_number = '$slLA' ";
-                    $resultLP = $conn->query($sqlLP);
-
-                $totalPSL = 0;
-
-                if($resultLP->num_rows > 0){
-                    while ($row = mysqli_fetch_array($resultLP)) {
-                        $totalPSL = $row['loan_amount'];
-                    }
-                }
-
-                $sqlFLP = "SELECT * FROM  sl_loan_payment_table WHERE loan_application_number = '$slLA' ";
-                $resultFLP = $conn->query($sqlFLP);
-
-                $totalPP = 0;
-                $totalAPP = 0;
-
-                if($resultFLP->num_rows > 0){
-                    while ($rowF = mysqli_fetch_array($resultFLP)) {
-                        $totalPP = $rowF['amount'];
-                        $totalAPP = $totalAPP + $totalPP;
-                    }
-                }
-
-                $paymentdiff = 0;
-                $paymentdiff = $totalPSL - ($slPayment + $totalAPP);
-
-                if($paymentdiff <= 0){
-                    $sql = "UPDATE sl_loan_table SET
-                    loan_status = 'Paid',
-                    last_payment = '$datePayment',
-                    date_paid = '$datePayment' WHERE id_number = '$idNumber' and loan_application_number = '$slLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                       $infomessage = "Record updated successfully";
-
-                        $sqlDP = "UPDATE loan_date_table SET
-                        date_paid = '$datePayment'
-                        WHERE loan_application_number =  '$loanApplicationNumberId' ";
-
-                        if ($conn->query($sqlDP) === TRUE) {
-                           $infomessage = "Loan Paid";
-                        } 
-                        else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }else{
-                    $sql = "UPDATE sl_loan_table SET
-                    last_payment = '$datePayment' 
-                    WHERE id_number = '$idNumber' and loan_application_number = '$slLA' ";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $infomessage = "Record updated successfully";
-                    } 
-                    else { 
-                          echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-
-                $sql = "INSERT INTO sl_loan_payment_table(id_number, reference_number,loan_application_number, amount,date_payment, encoded_by) 
-                    VALUES ('$idNumber','$referencenumber','$slLA','$slPayment','$datePayment', '$encodedBy')";
-
-                if ($conn->query($sql) === TRUE){
-                    $informessage = "New record created successfully";
-                    $slPayment = 0;
-                    $slLA = "Special Loan";
-
-                }else{
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
+            $plLA = "Previous Loan:";
+            $rlLA = "Regular Loan:";
+            $edlLA = "Education Loan:";
+            $blLA = "Business Loan:";
+            $blPayment=0;$cllPayment=0;$cmlPayment=0;$edlPayment=0;$rlPayment=0;$plPayment=0;$pliPayment=0;
 
             //RCL LOAN
             if(substr("$rclLA",0,3) == "RCL" and ($rclPayment != 0 or $rclPPayment != 0)){
