@@ -14,5 +14,12 @@ $result = $conn->query($sql);
 echo "$result";
 */
 
+$sqlbi = "SELECT * FROM "; 
+$sqlbi .= $table;
+if($apnumber == ""){
+$sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
+}else{
+$sqlbi .= " WHERE loan_application_number = '$apnumber' ";
+}
 
 ?>

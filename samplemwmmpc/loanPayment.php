@@ -1519,11 +1519,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                 $fcodestrcounter++;
             }
 
-            $plLA = "Previous Loan:";
-            $rlLA = "Regular Loan:";
-            $edlLA = "Education Loan:";
-            $blLA = "Business Loan:";
-            $blPayment=0;$cllPayment=0;$cmlPayment=0;$edlPayment=0;$rlPayment=0;$plPayment=0;$pliPayment=0;
+            $chklLA = "Privilege Loan:";
+            $clLA = "Regular Loan:";
+            $emlLA = "Emergency Loan:";
+            $slLA = "Special Loan:";
+            $chklPayment=0;$clPayment=0;$emlPayment=0;$slPayment=0;
 
             //RCL LOAN
             if(substr("$rclLA",0,3) == "RCL" and ($rclPayment != 0 or $rclPPayment != 0)){

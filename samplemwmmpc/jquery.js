@@ -101,8 +101,6 @@
             $("#cnv").val(totatv);
         });
 
-
-
         $(".quantitym").keyup(function(){
 
             var totalC = 0;
@@ -165,4 +163,14 @@
 
             $("#rcia").val(riceIA);
         });
+
+        //NAVIGATION
+        $("#mr").on("click", function () {
+            $("#workarea").load("memberRegistration.php");
+        });
+
+        $("#ml").on("click", function () {
+            $("#workarea").load("update_member_info.php");
+        });
+
     });

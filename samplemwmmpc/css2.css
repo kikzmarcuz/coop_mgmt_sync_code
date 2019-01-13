@@ -67,4 +67,104 @@
 	    color: #000;
 	    text-decoration: none;
 	    cursor: pointer;
+	    position: relative;
+	    display: inline-block;
 	}
+
+	body {
+		margin: 0;
+	}
+
+	.headerbar{
+		overflow: hidden;
+		background-color: #333;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		height: 100px;
+	}
+
+	.main{
+		width: 100%;
+		height: 750px;
+		display: flex;
+		margin-top: 100px;
+	}
+
+	.navigationbar{
+		width: 15%;
+		height: 750px;
+		background: white;
+		top:50px;
+	}
+
+	.workareabar{
+		width: 85%;
+		height: 750px;
+		background: white;
+		overflow: scroll;
+		display: flex;
+	}
+
+	.pagenavbar{
+		overflow: hidden;
+		background-color: white;
+		position: fixed;
+		top: 50px;
+		width: 100%;
+		height: 150px;
+	}
+
+	.pagearea{
+		background-color: white;
+		top: 250px;
+		width: 100%;
+		height: 100%;
+	}
+
+	.navbut{
+		width: 200px;
+		height: 45px;
+		color: black;
+		text-align: left;
+		border:1px solid green ;
+		background: green;
+		margin: 1px;
+	}
+
+	.navbut:hover{
+		opacity: 0.8;
+	}
+
+	.lnavbut{
+		width: 200px;
+		height: 45px;
+		color: black;
+		text-align: left;
+		border: 1px solid white;
+		background: white;
+		margin:1px;
+		padding-left: 10px;
+		border-radius: 20px;
+	}
+
+	.lnavbut:hover{
+		opacity: 0.8;
+		background: gray;	
+	}
+
+	.navdropdown{
+		display: inline-block;
+		width: 100%;
+	}
+
+	.nav-content{
+		display: none;
+		width: 100%;
+	}
+
+	.navdropdown:hover .nav-content{
+		display: inline-block;
+	}
+
+

@@ -482,7 +482,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $middleName = "";
             $lastName = "";
             $totalPayment = 0;
-
         }
 
         $_SESSION["idSession"] = "";
