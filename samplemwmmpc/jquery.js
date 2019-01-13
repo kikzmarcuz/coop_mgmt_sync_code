@@ -170,7 +170,7 @@
         });
 
         $("#ml").on("click", function () {
-            $("#workarea").load("update_member_info.php");
+            $("#workarea").load("searchMember.php");
         });
 
     });

@@ -1635,7 +1635,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             }
 
 
-            //SAVINGS/ADD TIME DEP
+            //SAVINGS
             if($savingsDeposit != 0){
                 $sd = 1;
 
@@ -1819,6 +1819,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             }else{
                 $msfPayment = 0;
             }
+            
             //Penalty loan
             if($plfPayment != 0){
                 $oi = 1;

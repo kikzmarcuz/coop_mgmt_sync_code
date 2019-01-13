@@ -1,6 +1,8 @@
 <?php  
 require_once 'session.php';
 require ("function.php");
+
+
 ?>
 
 <html lang="en">
@@ -14,9 +16,9 @@ require ("function.php");
     <title>MWMMPC</title>
 
     <link href="public/bootstrap-4.0.0-dist/css/bootstrap.css" rel="stylesheet">
-    <link href="css2.css" rel="stylesheet">
+    <link href="css2.css?n=7" rel="stylesheet">
     <script src="public/js/jquery.min.js"></script>
-    <script src="javascript.js?n=1"></script>
+    <script src="javascript.js?n=2"></script>
     <script src="jquery.js?n=2"></script>
 
 </head>
@@ -33,7 +35,6 @@ require ("function.php");
 
 
         <div id="workarea" class="workareabar">
-
         </div>
     </div>
 	

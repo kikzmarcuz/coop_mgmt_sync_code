@@ -75,9 +75,25 @@
 		margin: 0;
 	}
 
+	input{
+		background: gray;
+		border: 2px solid black;
+	}
+
+	button{
+		background: gray;
+		border: 2px solid black;
+	}
+
+	select{
+		background: gray;
+		border: 2px solid black;
+	}
+
+
 	.headerbar{
 		overflow: hidden;
-		background-color: #333;
+		background-color: black;
 		position: fixed;
 		top: 0;
 		width: 100%;
@@ -86,44 +102,49 @@
 
 	.main{
 		width: 100%;
-		height: 750px;
+		height: 765px;
 		display: flex;
 		margin-top: 100px;
+		background: gray;
 	}
 
 	.navigationbar{
 		width: 15%;
-		height: 750px;
-		background: white;
+		height: 700px;
 		top:50px;
 	}
 
 	.workareabar{
 		width: 85%;
-		height: 750px;
-		background: white;
-		overflow: scroll;
-		display: flex;
+		height: 765px;
+		margin-left: 50px;
 	}
 
 	.pagenavbar{
 		overflow: hidden;
-		background-color: white;
 		position: fixed;
-		top: 50px;
+		top: 100px;
 		width: 100%;
-		height: 150px;
+		height: 50px;
+	}
+
+	.pagetoolbar{
+		position: fixed;
+		top: 150px;
+		width: 100%;
+		height: 100px;
 	}
 
 	.pagearea{
-		background-color: white;
-		top: 250px;
+		top: 150px;
 		width: 100%;
-		height: 100%;
+		height: 615px;
+		overflow: scroll;
+		position: relative;
 	}
 
 	.navbut{
-		width: 200px;
+		width: 100%;
 		height: 45px;
 		color: black;
 		text-align: left;
@@ -137,7 +158,7 @@
 	}
 
 	.lnavbut{
-		width: 200px;
+		width: 100%;
 		height: 45px;
 		color: black;
 		text-align: left;

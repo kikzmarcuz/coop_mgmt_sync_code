@@ -1791,7 +1791,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     if($rcc[$counter] == 1){
-                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' ";
+                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' and invoice_number = '$invoiceNumber[$counter]' ";
                         $resultLP1 = $conn->query($sqlLP1);
 
                         //Principal
@@ -2434,7 +2434,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     if($rcc[$counter] == 1){
-                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' ";
+                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' and invoice_number = '$invoiceNumber[$counter]' ";
                         $resultLP1 = $conn->query($sqlLP1);
 
                         //Principal
@@ -3065,7 +3065,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     if($rcc[$counter] == 1){
-                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' ";
+                        $sqlLP1 = "SELECT * FROM  rice_cash_revenue_table WHERE reference_number = '$orNumber[$counter]' and invoice_number = '$invoiceNumber[$counter]'";
                         $resultLP1 = $conn->query($sqlLP1);
 
                         //Principal

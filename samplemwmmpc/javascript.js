@@ -375,4 +375,43 @@
 	    }
 	}
 
+    //AJAX
+
+    /*loadDoc("memberlist.php?q=", getlistmember);
+
+    function loadDoc(url, cFunction) {
+      var xhttp;
+      xhttp=new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          cFunction(this);
+        }
+      };
+      
+      if(cFunction == "getlistmember"){
+        url= url + str;
+      }
+
+      xhttp.open("GET", url, true);
+      xhttp.send();
+    }*/
+
+    function getlistmember(str){ 
+      var xhttp; 
+      if (str == "Select") {
+        document.getElementById("pagearea").innerHTML = "NO RECORD FOUND";
+        return;
+      }
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("pagearea").innerHTML = this.responseText;
+        }
+      };
+      xhttp.open("GET", "memberlist.php?q="+str, true);
+      xhttp.send();
+    }
+
+
+
 	 
