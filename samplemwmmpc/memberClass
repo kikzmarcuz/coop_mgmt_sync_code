@@ -1,0 +1,7 @@
+<?php
+
+$sqlName = "SELECT * FROM  name_table";
+$sqlName.= " WHERE type_membership = '$q' and  member_status = 'Active'  ";
+$sqlName.= " order by last_name asc, first_name asc";
+
+?>

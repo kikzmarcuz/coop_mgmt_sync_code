@@ -368,7 +368,8 @@ if(($_SERVER["REQUEST_METHOD"])== "POST"){
                     $pdf->Cell(35,7,number_format($totalFC,'2','.',','),1);
                     $pdf->Cell(30,7,number_format($totalSCTemp,'2','.',','),1);
 
-
+                    //$defaultname = "loandoc.pdf";
+                    //$pdf->Output('D', $defaultname);
                     $pdf->Output();
                 }
             }

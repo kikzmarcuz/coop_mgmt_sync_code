@@ -174,8 +174,6 @@
         });
 
 
-
-
         //REPORT
         $("#atr").on("click", function () {
             $("#workarea").load("cashierDailyReport.php");
