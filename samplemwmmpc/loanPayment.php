@@ -1333,6 +1333,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $lcodestr=[];
             $lcodestrcounter=0;
 
+
+            $tpaymenttemp = 0;
+
             $lcodestr = getLoanTransactionCodeD($tarr);
             while($ldcounter<count($lcodestr)){
                 $lcode=$lcodestr[$ldcounter];
@@ -1428,6 +1431,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm, $loanCounter);
                         $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
 
+                        //GET total payment of loan if 
+                        $tpaymenttemp = $tpaymenttemp = $tpayment;
+
+
                         //Compute Principal
                         $currentPrincipal = $tpayment - $currentInterest;
                         $currentPrincipal = round($currentPrincipal,2,PHP_ROUND_HALF_ODD);
@@ -1495,13 +1502,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                     $apnumber=$fanarr[$fcodestrcounter];
                     $tpayment=$farr[$fcodestrcounter];
 
-                    echo "$apnumber";
-                    echo "$tpayment";
-
                     $ptable = getLoanPrincipalTableName($fcode);
                     $ltable = getLoanTableName($fcode);
 
-                    echo "$ptable";
                     $fpayment=[];
                     $fpayment[0]=$idNumber;
                     $fpayment[1]=$referencenumber;
@@ -1529,7 +1532,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             if(substr("$rclLA",0,3) == "RCL" and ($rclPayment != 0 or $rclPPayment != 0)){
 
                 $rcl = 1;
-
                 //get initial credit
                 $sqlLP = "SELECT * FROM  rice_loan_table WHERE loan_application_number = '$rclLA' ";
                     $resultLP = $conn->query($sqlLP);
@@ -2016,17 +2018,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                             echo "Error: " . $sql5 . "<br>" . $conn->error;
                         }
                     }else{
-                        $totalPayment = $totalPayment/$paymentCount;
+                        //$tpaymenttemp = $tpaymenttemp/$paymentCount;
                         $paymentCounterContainer = 1;
                         while($paymentCount >= 1){
                             $sql5 = "INSERT INTO cashier_report_table( id_number ,reference_number, invoice_number,total_amount, bl, cll, cml, edl, rl, pl, cl, ckl, eml, sl ,date_transaction, encoded_by, or_status, payment_type) 
-                                VALUES ('$idNumber', '$referencenumber', '$paymentCounterContainer' ,'$totalPayment', '$bl', '$cll','$cml','$edl','$rl','$pl','$cl','$ckl','$eml','$sl', '$datePayment', '$encodedBy', '1', '$typePaymentCCHK')";
+                                VALUES ('$idNumber', '$referencenumber', '$paymentCounterContainer' ,'$tpaymenttemp', '$bl', '$cll','$cml','$edl','$rl','$pl','$cl','$ckl','$eml','$sl', '$datePayment', '$encodedBy', '1', '$typePaymentCCHK')";
 
                             if ($conn->query($sql5) === TRUE) {
 
                                 if($paymentCount == 1){
                                     $infomessage = "Record updated successfully";
-                                    $totalPayment = 0;
+                                    //$totalPayment = 0;
 
                                     $bl = 0;
                                     $cll = 0;
@@ -2038,18 +2040,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                                     $ckl = 0;
                                     $eml = 0;
                                     $sl = 0;
-                                    $rcl = 0;
-                                    $rcc = 0;
-                                    $oi = 0;
-                                    $sc = 0;
-                                    $sd = 0;
-                                    $td = 0;
-                                    $fd = 0;
-                                    $totalPayment = 0;
+                                    //$rcl = 0;
+                                    //$rcc = 0;
+                                    //$oi = 0;
+                                    //$sc = 0;
+                                    //$sd = 0;
+                                    //$td = 0;
+                                    //$fd = 0;
+                                    //$totalPayment = 0;
 
                                     $invoiceNumber = "";
                                     $invoiceNumberP = "";
-                                    $paymentCounterContainer = "";
+                                    //$paymentCounterContainer = "";
                                     $paymentCount = 0;
                                 }
                             } 
@@ -2061,10 +2063,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
 
                             if($paymentCount < 0){
                                 $paymentCount = "";
-                                $paymentCounterContainer = "";
+                                //$paymentCounterContainer = "";
                             }
                         }
 
+
+                        //IF MULTIPLE WITH OTHER PAYMENT
+                        $totalPayment = ($totalPayment - ($tpaymenttemp * ($paymentCounterContainer-1)));
+                        
+                        if($totalPayment > 0){
+                            $sqlm = "INSERT INTO cashier_report_table( id_number ,reference_number, invoice_number,total_amount, rcl, rcc, oi, sc, sd, td, fd ,date_transaction, encoded_by, or_status, payment_type) 
+                                VALUES ('$idNumber', '$referencenumber', '$invoiceNumberContainer' ,'$totalPayment','$rcl','$rcc','$oi','$sc','$sd','$td','$fd','$datePayment','$encodedBy', '1', '$typePaymentCCHK')";
+
+                            if ($conn->query($sqlm) === TRUE) {
+                                $infomessage = "Record updated successfully";
+                                //$totalPayment = 0;
+
+                                $rcl = 0;
+                                $rcc = 0;
+                                $oi = 0;
+                                $sc = 0;
+                                $sd = 0;
+                                $td = 0;
+                                $fd = 0;
+                                $paymentCounterContainer = 0;
+                                //$totalPayment = 0;
+
+                                //$invoiceNumber = "";
+                                //$invoiceNumberP = "";
+                                //$invoiceNumberContainer = "";
+                                //$paymentCount = 0;
+                            } 
+                            else { 
+                                echo "Error: " . $sqlm . "<br>" . $conn->error;
+                            }
+                        }
                     }
                 }else{
                     $sql5 = "INSERT INTO cashier_withdraw_table( id_number ,reference_number, total_amount, sdw, tdw, fdw, cbuw,date_transaction, encoded_by, or_status,payment_type) 

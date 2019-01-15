@@ -173,4 +173,12 @@
             $("#workarea").load("searchMember.php");
         });
 
+
+
+
+        //REPORT
+        $("#atr").on("click", function () {
+            $("#workarea").load("cashierDailyReport.php");
+        });
+
     });

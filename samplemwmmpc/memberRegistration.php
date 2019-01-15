@@ -1,5 +1,57 @@
+<?php
+require_once 'session.php';
+
+$idNumber = "";
+$idNumberF = "";
+$accountNumber = "";
+
+$firstName = "";
+$middleName = "";
+$lastName = "";
+
+$firstNameT = "";
+$middleNameT = "";
+$lastNameT = "";
+
+$presentAddress = "";
+$permanentAddress = "";
+$provincialAddress = "";
+
+$birthPlace = "";
+$birthDate = "";
+$tinNumber = "";
+$sssNumber = "";
+$religion = "";
+$educationalAttainment = "";
+$brNumber = "";
+$occupation = "";
+$gender = "";
+$civilStatus = "";
+
+$mobileNumber = "";
+$emailAddress = "";
+$emergencyContactName = "";
+$emergencyContactNumber = "";
+
+$memberOrigin = "";
+$referalIdNumber = "";
+$membershipStatus = "";
+
+$infomessage = "";
+
+$identifier = "";
+$countErr = "";
+
+$searchMember = "";
+$submitApplication = "";
+$dateMembership = "";
+
+
+$exitB = "";
+?>
+
 <div class="pagenavbar">
-  <p>REGISTRATION FORM</p>
+  <h5 class="titlepage">Registration form</h5>
 </div>
   
 <div class="pagetoolbar">
@@ -10,12 +62,15 @@
 
 <!--member account info-->
 <div class="pagearea">
-    <div style="display: inline-block;">
+    <div class="fieldcontainer">
       <!--member personal info-->
       <div>
-        <input type="text"  placeholder="First Name" value = "<?php echo $firstName;?>" name = "firstName">
-        <input type="text"  placeholder="Middle Name" value = "<?php echo $middleName;?>" name = "middleName">
-        <input type="text"  placeholder="Last Name" value = "<?php echo $lastName;?>" name = "lastName">
+        <label>First Name</label>
+        <input type="text"  placeholder="First Name" value = "<?php echo $firstName;?>" name = "firstName"><br>
+        <label>First Name</label>
+        <input type="text"  placeholder="Middle Name" value = "<?php echo $middleName;?>" name = "middleName"><br>
+        <label>First Name</label>
+        <input type="text"  placeholder="Last Name" value = "<?php echo $lastName;?>" name = "lastName"><br>
       </div>
       <!--member address info-->
 

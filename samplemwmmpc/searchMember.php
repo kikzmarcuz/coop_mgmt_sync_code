@@ -5,7 +5,7 @@
 ?>
 
 <div class="pagenavbar">
-	<h5>Member Information</h5>
+	<h5 class="titlepage"> Search member</h5>
 </div>
 
 <div class="pagetoolbar">

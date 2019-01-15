@@ -3765,7 +3765,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div style="position: relative;">
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <?php //include 'topbar.php';?>
+        <?php include 'topbar.php';?>
 
         <div class="row">
             <?php include 'navigation.php';?>

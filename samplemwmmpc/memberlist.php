@@ -32,36 +32,40 @@ $resultName = $conn->query($sqlName);
 $numRow = mysqli_num_rows($resultName);
 $counter = 0;
 
+echo "<div class='reportheader'>";
+    echo "<table class='tableheader'>
+        <tr>
+            <th class='columnheader'></th>
+            <th>ID #</th>
+            <th>Name</th>
+            <th>Birth Place</th>
+            <th>Birth Date</th>
+            <th>TIN #</th>
+            <th>SSS #</th>
+            <th>Mobile #</th>
+            <th>Status</th>
+        </tr>
+    </table>";
+echo "</div>";
 
+echo "<div class='reportbody'>";
+    echo "<table class='tablebody'>";
+    if($resultName->num_rows > 0){
+        while ($row = mysqli_fetch_array($resultName)) {
+            echo "<tr>";
+                $number = $counter + 1;
+                echo "<td>" . $number . "</td>";
+                echo "<td>" . $row['id_number'] . "</td>";
+                echo "<td>" . $row['account_number'] . "</td>";
+                echo "<td>" . $row['first_name'] . "</td>";
+                echo "<td>" .  $row['middle_name'] . "</td>";
+            echo "</tr>";
 
-echo "<table>
-<tr>
-    <th></th>
-    <th>ID #</th>
-    <th>Name</th>
-    <th>Birth Place</th>
-    <th>Birth Date</th>
-    <th>TIN #</th>
-    <th>SSS #</th>
-    <th>Mobile #</th>
-    <th>Status</th>
-
-</tr>";
-
-if($resultName->num_rows > 0){
-    while ($row = mysqli_fetch_array($resultName)) {
-        echo "<tr>";
-            $number = $counter + 1;
-            echo "<td>" . $number . "</td>";
-            echo "<td>" . $row['id_number'] . "</td>";
-            echo "<td>" . $row['account_number'] . "</td>";
-            echo "<td>" . $row['first_name'] . "</td>";
-            echo "<td>" .  $row['middle_name'] . "</td>";
-        echo "</tr>";
-
-        $counter++;
+            $counter++;
+        }
     }
-}
+    echo "</table>";
+echo "</div>";
 
 
 

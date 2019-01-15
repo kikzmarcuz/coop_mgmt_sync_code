@@ -5,7 +5,7 @@
     <div class="navdropdown">
     	<button class = "navbut">MEMBER INFORMATION</button>
         <div class="nav-content">
-        	<button class = "lnavbut" id="mr"><?php echo "$mr";  ?></button><br>
+        	<button class = "lnavbut" id="mr"><?php echo "$mr";  ?></button>
         	<button class = "lnavbut" id="ml"><?php echo "$ml";  ?></button>
         </div>
     </div>

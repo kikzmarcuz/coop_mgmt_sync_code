@@ -3,6 +3,7 @@ require_once 'session.php';
 require ("function.php");
 
 
+
 ?>
 
 <html lang="en">
@@ -16,16 +17,17 @@ require ("function.php");
     <title>MWMMPC</title>
 
     <link href="public/bootstrap-4.0.0-dist/css/bootstrap.css" rel="stylesheet">
-    <link href="css2.css?n=7" rel="stylesheet">
+    <link href="css2.css?n=10" rel="stylesheet">
     <script src="public/js/jquery.min.js"></script>
-    <script src="javascript.js?n=2"></script>
-    <script src="jquery.js?n=2"></script>
+    <script src="javascript.js?n=3"></script>
+    <script src="jquery.js?n=3"></script>
 
 </head>
 
 <body>
 	<div id="headbar" class="headerbar">
-		<label>MAIN</label>
+        <h5 style="color: rgb(0,255,0);font-size: 50; font-weight: 700">CMS</h5>
+        <h5 style="color: rgb(0,255,0);font-size: 20; font-weight: 500">Maligaya Wet Market Multi-Purpose Cooperative</h5>
 	</div>
 
     <div class="main">

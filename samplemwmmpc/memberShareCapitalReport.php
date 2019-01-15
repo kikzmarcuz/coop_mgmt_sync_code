@@ -1125,6 +1125,7 @@ function test_input($data){
                     <div class="form-group">
                         <select class="form-control" id="tpres" name="searchType" value="<?php echo $searchType;?>">
                           <option value="" <?php if($searchType == "") echo "selected"; ?>>Select</option>
+                          <option value="SCF" <?php if($searchType == "SCF") echo "selected"; ?>>Subscribe Share Capital</option>
                           <option value="CBU" <?php if($searchType == "CBU") echo "selected"; ?>>CBU</option>
                           <option value="Recruit" <?php if($searchType == "Recruit") echo "selected"; ?>>Recruit</option>
                           <option value="Retention" <?php if($searchType == "Retention") echo "selected"; ?>>Retention</option>
@@ -1212,7 +1213,6 @@ function test_input($data){
                                             echo "<td>" . "" . "</td>";
                                         }
                                         $totalretentionTemp = $totalretentionTemp + $retentionContainer[$counterh];
-                                        $totalrecruitTemp = $totalrecruitTemp + $recruitContainer[$counterh];
                                         if($retentionContainer[$counterh] != 0){
                                             echo "<td " . "style=" . "color:blue" . ">" . number_format($retentionContainer[$counterh],'2','.',',') . "</td>";
                                         }else{

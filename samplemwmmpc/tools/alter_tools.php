@@ -14,12 +14,17 @@ $result = $conn->query($sql);
 echo "$result";
 */
 
-$sqlbi = "SELECT * FROM "; 
-$sqlbi .= $table;
-if($apnumber == ""){
-$sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-}else{
-$sqlbi .= " WHERE loan_application_number = '$apnumber' ";
+$infomessage="";
+
+$sql = "ALTER TABLE rice_loan_table
+CHANGE `last_oayment` last_payment DATE";
+
+if ($conn->query($sql) === TRUE) {
+    $infomessage = "SCRIPT RUN SUCCESS";
+} 
+else { 
+      echo "Error: " . $sql . "<br>" . $conn->error;
 }
+echo "$infomessage";
 
 ?>

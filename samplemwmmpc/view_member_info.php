@@ -1764,7 +1764,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
 
       
-
+      
       $sqlJE = "INSERT INTO journal_report_table(id_number, reference_number, journal_number_temp, sd, date_transaction, encoded_by) 
           VALUES ('$idNumber', '$journalNumber', '$journalTemp', '1', '$endDate', 'encodedBy')";
 

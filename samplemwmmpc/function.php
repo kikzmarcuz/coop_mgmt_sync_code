@@ -1104,10 +1104,12 @@ function getLI($table, $referencenumber, $idnumber,  $apnumber, $seaarhobj, $con
   
   $sqlbi = "SELECT * FROM "; 
   $sqlbi .= $table;
-  if($apnumber == ""){
+  if($idnumber != ""){
     $sqlbi .= " WHERE id_number = '$idnumber' and loan_status = 'Released' and loan_status != 'Paid' ";
-  }else{
+  }else if($apnumber != ""){
     $sqlbi .= " WHERE loan_application_number = '$apnumber' ";
+  }else{
+    $sqlbi .= " WHERE loan_status = 'Released' ";
   }
   
   $resultbi = $conn->query($sqlbi);
