@@ -1383,12 +1383,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         if($iarrlcount>0){
                             $counterI=0;
                             while($counterI<$iarrlcount){
-                                $iarr=$iarrl[$iarrlcounter];
+                                $iarr=$iarrl[$counterI];
                                 if($iarr[12] != 0){
                                     $lastInterest[$iarrlcounter] = $iarr[12];
                                     $iarrlcounter++;
                                 }
-                                $lastInterest[$iarrlcounter]=0;
+                                
+                                if($iarr[$iarrlcounter]==0){
+                                    $lastInterest[$iarrlcounter]=0;
+                                }
+                                
                                 $counterI++;
                             }
                         }else{
