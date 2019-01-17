@@ -17,9 +17,9 @@ require ("function.php");
     <title>MWMMPC</title>
 
     <link href="public/bootstrap-4.0.0-dist/css/bootstrap.css" rel="stylesheet">
-    <link href="css2.css?n=13" rel="stylesheet">
+    <link href="css2.css?n=1" rel="stylesheet">
     <script src="public/js/jquery.min.js"></script>
-    <script src="javascript.js?n=6"></script>
+    <script src="javascript.js?n=5"></script>
     <script src="jquery.js?n=4"></script>
 
 </head>

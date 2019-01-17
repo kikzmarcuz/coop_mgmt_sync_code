@@ -10,14 +10,14 @@
 
 <div class="pagetoolbar">
 
-	<select onchange="(getlistmember(this.options[this.selectedIndex].value))">
+	<select id="mt" onchange="getlistmember()">
       <option value="">Select member type</option>
       <option value="Regular">Regular</option>
       <option value="Associate">Associate</option>
       <option value="All">All</option>
     </select>
 
-    <select>   
+    <select id="ms" onchange="getlistmember()">   
       <option value="">Select member status</option>
       <option value="Active">Active</option>
       <option value="Inactive">Inactive</option>
@@ -26,7 +26,7 @@
       <option value="All">All</option>
     </select>
 
-	<button>PRINT</button>
+	<button onclick="printlistmember()">PRINT</button>
 
 </div>
 

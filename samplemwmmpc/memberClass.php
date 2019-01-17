@@ -5,14 +5,15 @@ function getMemberInfo($mt, $ms, $mid, $searchobj, $conn){
 	$arrinfo=[];
 	$arrlist=[];
 
-	if($ms==""){
-		$ms="Active";
+	$sqlName = "SELECT * FROM name_table";
+	if($mt != "All" and $ms != "All"){
+		$sqlName.= " WHERE type_membership = '$mt' and  member_status = '$ms'  ";
+	}else if($mt != "All" and $ms == "All"){
+		$sqlName.= " WHERE type_membership = '$mt' ";
+	}else if($mt == "All" and $ms != "All"){
+		$sqlName.= " WHERE member_status = '$ms' ";
 	}
 
-	$sqlName = "SELECT * FROM name_table";
-	if($mt != "All" and $ms != "ALL"){
-		$sqlName.= " WHERE type_membership = '$mt' and  member_status = '$ms'  ";
-	}
 	$sqlName.= " order by last_name asc, first_name asc";
 	
 	$resultName = $conn->query($sqlName);

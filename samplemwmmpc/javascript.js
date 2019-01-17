@@ -396,22 +396,59 @@
       xhttp.send();
     }*/
 
-    function getlistmember(str){ 
-      var xhttp; 
-      if (str == "Select") {
-        document.getElementById("pagearea").innerHTML = "NO RECORD FOUND";
-        return;
-      }
-      xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("pagearea").innerHTML = this.responseText;
-        }
-      };
-      xhttp.open("GET", "memberlist.php?q="+str, true);
-      xhttp.send();
+    function executeGet(para){
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("pagearea").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", para, true);
+        xhttp.send();
     }
 
+    function getlistmember(){
+      var tx = document.getElementById("mt").selectedIndex;
+      var ty = document.getElementById("mt").options;
+      var mtvalue =  ty[tx].value;
+
+      var sx = document.getElementById("ms").selectedIndex;
+      var sy = document.getElementById("ms").options;
+      var msvalue =  sy[sx].value;
+
+      var para = "memberlist.php?mt="+mtvalue
+      +"&ms=" + msvalue;
+
+      if (mtvalue == "" && msvalue == "") {
+        document.getElementById("pagearea").innerHTML = "NO RECORD FOUND";
+        return;
+      }else{
+        executeGet(para);
+      }
+    }
+
+    function printlistmember(){
+      var tx = document.getElementById("mt").selectedIndex;
+      var ty = document.getElementById("mt").options;
+      var mtvalue =  ty[tx].value;
+
+      var sx = document.getElementById("ms").selectedIndex;
+      var sy = document.getElementById("ms").options;
+      var msvalue =  sy[sx].value;
+
+      alert(mtvalue);
+
+      var para = "viewrep.php?mt="+mtvalue
+      +"&ms=" + msvalue;
+
+      if (mtvalue == "" && msvalue == "") {
+        document.getElementById("pagearea").innerHTML = "NO RECORD FOUND";
+        return;
+      }else{
+        executeGet(para);
+      }
+    }
 
 
 	 

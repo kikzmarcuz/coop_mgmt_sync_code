@@ -5,7 +5,8 @@ require('public/fpdf181/fpdf.php');
 require 'memberClass.php';
 
 
-$q = ($_GET['q']);
+$fpara = ($_GET['mt']);
+$spara = ($_GET['ms']);
 
 echo "<div class='reportheader'>";
     echo "<table id='memtbl'>
@@ -30,7 +31,7 @@ $mlistcounter=0;
 $minfo=[];
 $mc=0;
 
-$mlist=getMemberInfo($q, "", "", "l", $conn);
+$mlist=getMemberInfo($fpara, $spara, "", "l", $conn);
 $mlistcount = count($mlist);
 
 echo "<div class='reportbody'>";
@@ -54,7 +55,5 @@ echo "<div class='reportbody'>";
     }
     echo "</table>";
 echo "</div>";
-
-echo "<iframe src='D:/doc.pdf' style='width:600px; height:500px;' frameborder='0'></iframe>";
 
 ?>
