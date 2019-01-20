@@ -82,7 +82,7 @@
 		color: white;
 	}
 
-	.fieldcontainerchild input[type=text] , .fieldcontainerchild select{
+	.fieldcontainerchild input[type=text] , .fieldcontainerchild select, .fieldcontainerchild input[type=password]{
 		width: 70%;
 		padding: 10px;
 		margin:2px;
@@ -178,6 +178,7 @@
 		background: rgb(80,80,80);
 		border-right: 2px solid white;
 		color: white;
+		display: none;
 	}
 
 	.workareabar{
@@ -188,6 +189,7 @@
 		background: rgb(80,80,80);
 		top: 100px;
 		left: 15%;
+		display: none;
 	}
 
 	.pagenavbar{
@@ -382,6 +384,14 @@
 
 	.nameth {
 		width: 100px;
+	}
+
+	.loginbody {
+		position: fixed;
+		top:25%;
+		left:25%;
+		width: 35%;
+		display: block;
 	}
 
 	

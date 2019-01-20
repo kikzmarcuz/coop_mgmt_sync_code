@@ -1,5 +1,9 @@
 <?php
 
+//NO DB
+
+
+//DB
 function totalPPaid($table ,$apnumber, $conn){
 	$tt=0;
 	$sqllps = "SELECT * FROM ";
