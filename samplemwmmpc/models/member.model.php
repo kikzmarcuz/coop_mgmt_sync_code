@@ -9,11 +9,24 @@ function getMemberInfo($mt, $ms, $mid, $searchobj){
 
 	$sqlName = "SELECT * FROM name_table";
 	if($mt != "All" and $ms != "All"){
-		$sqlName.= " WHERE type_membership = '$mt' and  member_status = '$ms'  ";
+		$sqlName.= " WHERE (type_membership = '$mt' and  member_status = '$ms')";
+		if($mid != ""){
+			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
 	}else if($mt != "All" and $ms == "All"){
 		$sqlName.= " WHERE type_membership = '$mt' ";
+		if($mid != ""){
+			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
 	}else if($mt == "All" and $ms != "All"){
 		$sqlName.= " WHERE member_status = '$ms' ";
+		if($mid != ""){
+			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
+	}else if($mt == "All" and $ms == "All"){
+		if($mid != ""){
+			$sqlName.= " WHERE (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
 	}
 
 	$sqlName.= " order by last_name asc, first_name asc";

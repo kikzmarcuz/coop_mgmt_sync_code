@@ -26,8 +26,9 @@
       <option value="All">All</option>
     </select>
 
-	<button onclick="getlistmember('memberl')">PRINT</button>
+    <input id="mn" onkeyup="getlistmember('memberi')" type="search" id="search">
 
+	  <button onclick="getlistmember('memberl')">PRINT</button>
 </div>
 
 <div id="pagearea" class="pagearea">

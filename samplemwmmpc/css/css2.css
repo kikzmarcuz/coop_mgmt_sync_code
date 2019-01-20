@@ -8,6 +8,14 @@
 	    border: red;
 	}
 
+	.updatebutton{
+	    height: 20px;
+	    font-size: 10px;
+	    color: white;
+	    background: green;
+	    border: green;
+	}
+
 	.none{
 	    display: none;
 	}
@@ -21,7 +29,7 @@
 	    z-index: 1; /* Sit on top */
 	    padding-top: 10px; /* Location of the box */
 	    left: 0;
-	    top: 50px;
+	    top: 200px;
 	    width: 100%; /* Full width */
 	    height: 100%; /* Full height */
 	    overflow: auto; /* Enable scroll if needed */
@@ -206,6 +214,33 @@
 		top: 150px;
 		width: 100%;
 		height: 50px;
+	}
+
+	.pagetoolbar input[type="text"], .pagetoolbar select{
+		height: 40px;
+		padding: 5px;
+		margin:5px;
+		background: white;
+		width: 15%;
+		color:  rgb(50,50,50);
+	}
+
+	.pagetoolbar input[type="search"]{
+		height: 40px;
+		padding: 5px;
+		background: white;
+		color:  rgb(50,50,50);
+		width: 35%;
+		border-radius: 10px;
+	}
+
+	.pagetoolbar button{
+		height: 40px;
+		padding: 5px;
+		background: white;
+		color:  rgb(50,50,50);
+		width: 10%;
+		right: 0;
 	}
 
 	.pagearea{
