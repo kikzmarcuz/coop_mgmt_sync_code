@@ -27,16 +27,19 @@
 
                 var outmessage = this.responseText;
 
-                if(outmessage == "true"){
-                    var x = document.getElementById("logindiv");
-                    x.style.display = "none";
-                   
-                    var y = document.getElementById("navigationbar");
-                    y.style.display = "block";
+                if(divarea == "main"){
+                    if(outmessage == "true"){
+                        var x = document.getElementById("logindiv");
+                        x.style.display = "none";
+                       
+                        var y = document.getElementById("navigationbar");
+                        y.style.display = "block";
 
-                    var z = document.getElementById("workarea");
-                    z.style.display = "block";
-
+                        var z = document.getElementById("workarea");
+                        z.style.display = "block";
+                    }else{
+                        //document.getElementById(divarea).innerHTML = outmessage;
+                    }
                 }else{
                     document.getElementById(divarea).innerHTML = outmessage;
                 }

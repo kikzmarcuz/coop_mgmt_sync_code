@@ -17,7 +17,7 @@
     <script src="../public/js/jquery.min.js"></script>
 
     <link href="../css/css2.css?n=1" rel="stylesheet">
-    <script src="../js/javascript.js?n=1"></script>
+    <script src="../js/javascript.js?n=2"></script>
     <script src="../js/jquery.js?n=1"></script>
 
 </head>
