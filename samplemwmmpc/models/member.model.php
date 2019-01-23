@@ -8,7 +8,20 @@ function getMemberInfo($mt, $ms, $mid, $searchobj){
 	$arrlist=[];
 
 	$sqlName = "SELECT * FROM name_table";
-	if($mt != "All" and $ms != "All"){
+
+	if($mt == "" and $ms == "" and $mid != ""){
+		$sqlName.= " WHERE id_number = '$mid' ";
+	}else if($mt != "All" and $ms == ""){
+		$sqlName.= " WHERE type_membership = '$mt'";
+		if($mid != ""){
+			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
+	}else if($mt == "" and $ms != ""){
+		$sqlName.= " WHERE member_status = '$ms' ";
+		if($mid != ""){
+			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";
+		}
+	}else if($mt != "All" and $ms != "All"){
 		$sqlName.= " WHERE (type_membership = '$mt' and  member_status = '$ms')";
 		if($mid != ""){
 			$sqlName.= " and (CONCAT(first_name, ' ', last_name) LIKE '%$mid%' OR last_name LIKE '%$mid%' or  id_number = '$mid') ";

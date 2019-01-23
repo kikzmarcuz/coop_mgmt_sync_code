@@ -115,131 +115,141 @@ if ($function == "memberv"){
 	$hpara = ($_GET['mv']);
 	$minfo=[];
 	$minfo=getMemberInfo("", "", $hpara, "i");
+	$rinfo=[];
+	$rinfo=getMemberInfo("", "", $minfo[7], "i");
+
+	$para = "member.controller.php?method='hi' ";
 
 	echo "<div id='modalmi' class='modal'>
-		<div class='modal-content modal-content-common' >
-		    <div class='pagetitle'>
-		    <h1 class='frametext'><span class='frametitle'>Member information</span></h1>
-		    <div class='fieldcontainerparent'>
-		      <div class='fieldcontainerchild'>
-		        <form autocomplete='off'>
-		          <!--member personal info-->
-		          <div class='formcontainer'>
-		            <h1 class='frametext'><span class='frametitle'>Personal information</span></h1>
-		            <label>First Name</label>
-		            <input type='text'  placeholder='First name'  id='fname' required>
-		            <label>Middle Name</label>
-		            <input type='text'  placeholder='Middle name' id='mname'>
-		            <label>Last Name</label>
-		            <input type='text'  placeholder='Last name' id='lname' required>
-		            <label>Birth place</label>
-		            <input type='text' placeholder='Birth place' id='bplace' required>
-		            <label>Birth date</label>
-		            <input type='date' placeholder='Birth date' id='bdate' required>
-		            <div class='radiocontainer'>
-		              <h1 class='frametext'><span class='frametitle'>Gender</span></h1>
-		              <input type='radio' name='gender' value='Male'>  Male<br>
-		              <input type='radio' name='gender' value='Female'>  Female
-		            </div>
+	  <div class='modal-content modal-content-common' >
+	    <div class='pagetitle'>
+	      <span onclick=document.getElementById('modalmi').style.display='none' class='close'>&times;</span>
+	      <h1 class='frametext'><span class='frametitle'>Member information</span></h1>
+	      <div class='fieldcontainerparent'>
+	        <div class='fieldcontainerchild'>
+	            <div class='formcontainer'>
+	              <h1 class='frametext'><span class='frametitle'>Personal information</span></h1>
+	              <label >ID Number</label>
+	              <input type='text' id = 'idNumber' value=" . $hpara . " readonly>
+	              <label>First Name</label>
+	              <input type='text'  placeholder='First name'  id='fname' value=" . $minfo[2] . "  required>
+	              <label>Middle Name</label>
+	              <input type='text'  placeholder='Middle name' id='mname' value=" . $minfo[3] . " >
+	              <label>Last Name</label>
+	              <input type='text'  placeholder='Last name' id='lname' value=" . $minfo[4] . " required>
+	              <label>Birth place</label>
+	              <input type='text' placeholder='Birth place' id='bplace' value=" . $minfo[17] . " required>
+	              <label>Birth date</label>
+	              <input type='date' placeholder='Birth date' id='bdate' value=" . $minfo[18] . " required><br>
+	              <label>Gender</label>
+	              <select id='mgen'>
+	                <option value='' " . (($minfo[25]=='')?'selected="selected"':"") . ">Select</option>
+	                <option value='Male' " . (($minfo[25]=='Male')?'selected="selected"':"") . ">Male</option>
+	                <option value='Female' " . (($minfo[25]=='Female')?'selected="selected"':"") . ">Female</option>
+	              </select><br>
+	              <label>Civil Status</label>
+	              <select id='mcst'>
+	                <option value='' " . (($minfo[26]=='')?'selected="selected"':"") . ">Select</option>
+	                <option value='Single' " . (($minfo[26]=='Single')?'selected="selected"':"") . ">Single</option>
+	                <option value='Married' " . (($minfo[26]=='Married')?'selected="selected"':"") . ">Married</option>
+	              </select>
+	            </div>
 
-		            <div class='radiocontainer'>
-		              <h1 class='frametext'><span class='frametitle'>Civil status</span></h1>
-		              <input type='radio' name='civilStatus' value='Single'>  Single<br>
-		              <input type='radio' name='civilStatus' value='Married'>  Married
-		            </div>
-		          </div>
+	            <div class='formcontainer'>
+	              <h1 class='frametext'><span class='frametitle'>Address information</span></h1>
+	              <label>Present address</label>
+	              <input type='text' placeholder='Present address' id='psaddress' value=" . $minfo[14] . ">
+	              <label>Permanent address</label>
+	              <input type='text' placeholder='Permanent address' id='pmaddress' value=" . $minfo[15] . ">
+	              <label>Provincial address</label>
+	              <input type='text' placeholder='Provincial address' id='pvaddress' value=" . $minfo[16] . ">
+	            </div>
 
-		          <div class='formcontainer'>
-		            <h1 class='frametext'><span class='frametitle'>Address information</span></h1>
-		            <label>Present address</label>
-		            <input type='text' placeholder='Present address' id='psaddress'>
-		            <label>Permanent address</label>
-		            <input type='text' placeholder='Permanent address' id='pmaddress'>
-		            <label>Provincial address</label>
-		            <input type='text' placeholder='Provincial address' id='pvaddress'>
-		          </div>
+	            <div class='formcontainer'>
+	              <h1 class='frametext'><span class='frametitle'>Contact information</span></h1>
+	              <label>Mobile</label>
+	              <input type='number' placeholder='Mobile Number' id = 'mobileNumber' value=" . $minfo[10] . " ><br>
+	              <label>Email</label>
+	              <input type='text' placeholder='Email Address' id = 'emailAddress' value=" . $minfo[11] . ">
+	              <label>Emergency contact</label>
+	              <input type='text' placeholder='Emergency Contact Name' id = 'emergencyContactName' value=" . $minfo[12] . "><br>
+	              <label>Emergency contact #</label>
+	              <input type='number' placeholder='Emergency Contact Number' id = 'emergencyContactNumber' value=" . $minfo[13] . ">
+	            </div>
 
-		          <div class='formcontainer'>
-		            <h1 class='frametext'><span class='frametitle'>Contact information</span></h1>
-		            <label>Mobile</label>
-		            <input type='number' placeholder='Mobile Number' id = 'mobileNumber'><br>
-		            <label>Email</label>
-		            <input type='text' placeholder='Email Address' id = 'emailAddress'>
-		            <label>Emergency contact</label>
-		            <input type='text' placeholder='Emergency Contact Name' id = 'emergencyContactName'><br>
-		            <label>Emergency contact #</label>
-		            <input type='number' placeholder='Emergency Contact Number' id = 'emergencyContactNumber'>
-		          </div>
-
-		          <div class='formcontainer'>
-		            <h1 class='frametext'><span class='frametitle'>Ohter information</span></h1>
-		            <label>TIN #</label>
-		            <input type='number' placeholder='Tin #' id='tnum'><br>
-		            <label>SSS #</label>
-		            <input type='number' placeholder='SSS #' id='snum'><br>
-		            <label>Religion</label>
-		            <input type='text' placeholder='Religion' id='rnum'>
-		            <label>Educational attainment</label>
-		            <select id='tpres'>
-		              <option value=''>Select</option>
-		              <option value='College'>College</option>
-		              <option value='Undergraduate'>Undergraduate</option>
-		              <option value='Secondary'>Secondary</option>
-		              <option value='Primary'>Primary</option>
-		            </select>
-		            <label>Occupation</label>
-		            <input type='text' placeholder='Occupation' id='moccup'>
-		            <label>BR #</label>
-		            <input type='number' placeholder='BR Number' id='mbrnum'><br>
-		            <label>Date membership</label>
-		            <input type='date' id = 'dateMembership'><br>
-		            <label>Membership status</label>
-		            <select id='membershipStatus' name='membershipStatus' value=''>
-		              <option value=''>Select</option>
-		              <option value='Active'>Active</option>
-		              <option value='Inactive'>Inactive</option>
-		              <option value='Diseased'>Diseased</option>
-		              <option value='Resigned'>Resigned</option>
-		            </select>
-		            <div class='radiocontainer'>
-		              <h1 class='frametext'><span class='frametitle'>Membership type</span></h1>
-		              <input type='radio' name='typeMembership' value='Regular'>  Regular<br>
-		              <input type='radio' name='typeMembership' value='Associate'>  Associate
-		            </div>
-		          </div>
+	            <div class='formcontainer'>
+	              <h1 class='frametext'><span class='frametitle'>Ohter information</span></h1>
+	              <label>TIN #</label>
+	              <input type='number' placeholder='Tin #' id='tnum' value=" . $minfo[19] . "><br>
+	              <label>SSS #</label>
+	              <input type='number' placeholder='SSS #' id='snum' value=" . $minfo[20] . "><br>
+	              <label>Religion</label>
+	              <input type='text' placeholder='Religion' id='rnum' value=" . $minfo[21] . ">
+	              <label>Educational attainment</label>
+	              <select id='tpres'>
+	                <option value='' " . (($minfo[22]=='')?'selected="selected"':"") . ">Select</option>
+	                <option value='College' " . (($minfo[22]=='College')?'selected="selected"':"") . ">College</option>
+	                <option value='Undergraduate' " . (($minfo[22]=='Undergraduate')?'selected="selected"':"") . ">Undergraduate</option>
+	                <option value='Secondary' " . (($minfo[22]=='Secondary')?'selected="selected"':"") . ">Secondary</option>
+	                <option value='Primary' " . (($minfo[22]=='Primary')?'selected="selected"':"") . ">Primary</option>
+	              </select>
+	              <label>Occupation</label>
+	              <input type='text' placeholder='Occupation' id='moccup' value=" . $minfo[23] . ">
+	              <label>BR #</label>
+	              <input type='number' placeholder='BR Number' id='mbrnum' value=" . $minfo[24] . "><br>
+	              <label>Date membership</label>
+	              <input type='date' id = 'dateMembership' value=" . $minfo[25] . "><br>
+	              <label>Member status</label>
+	              <select id='membershipStatus' name='membershipStatus' value=''>
+	                <option value='' " . (($minfo[6]=='')?'selected="selected"':"") . ">Select</option>
+	                <option value='Active' " . (($minfo[6]=='Active')?'selected="selected"':"") . ">Active</option>
+	                <option value='Inactive' " . (($minfo[6]=='Inactive')?'selected="selected"':"") . ">Inactive</option>
+	                <option value='Diseased' " . (($minfo[6]=='Diseased')?'selected="selected"':"") . ">Diseased</option>
+	                <option value='Resigned' " . (($minfo[6]=='Resigned')?'selected="selected"':"") . ">Resigned</option>
+	              </select><br>
+	              <label>Member type</label>
+	              <select id='mtms'>
+	                <option value='' " . (($minfo[5]=='')?'selected="selected"':"") . ">Select</option>
+	                <option value='Associate' " . (($minfo[5]=='Associate')?'selected="selected"':"") . ">Associate</option>
+	                <option value='Regular' " . (($minfo[5]=='Regular')?'selected="selected"':"") . ">Regular</option>
+	              </select>
+	            </div>
 
 
-		          <div class='formcontainer'>
-		            <h1 class='frametext'><span class='frametitle'>Referral information</span></h1>
-		            <label>Membership type</label>
-		            <select name='memberOrigin' value=''>
-		              <option value=''>Select</option>
-		              <option value='Refferal'>Refferal</option>
-		              <option value='Walk-in'>Walk-in</option>
-		            </select>
-		            <label>ID number</label>
-		            <input type='text' id = 'identifier'>
-		            <label></label>
-		            <button id = 'searchMember' class='searchbut'>SEARCH</button>
-		            <label>ID number</label>
-		            <input type='text'  placeholder='ID NUMBER' readonly id = 'referalIdNumber'>
-		            <label>First name</label>
-		            <input type='text' placeholder='First Name' readonly id = 'firstNameT'>
-		            <label>Middle name</label>
-		            <input type='text' placeholder='Middle Name' readonly id = 'middleNameT'>
-		            <label>Last name</label>
-		            <input type='text' placeholder='Last Name' readonly id = 'lastNameT'>
-		          </div>
+	            <div class='formcontainer'>
+	              <h1 class='frametext'><span class='frametitle'>Referral information</span></h1>
+	              <label>Membership type</label>
+	              <select name='memberOrigin' value=''>
+	                <option value='' " . (($minfo[7]=='##')?'selected="selected"':"") . ">Select</option>
+	                <option value='Refferal' " . (($minfo[7]!='')?'selected="selected"':"") . ">Refferal</option>
+	                <option value='Walk-in'  " . (($minfo[7]=='')?'selected="selected"':"") . ">Walk-in</option>
+	              </select>
+	              <label>ID number</label>
+	              <input type='text' id = 'identifier' value=" . $minfo[7] . ">
+	              <label></label>
+	              <button id = 'searchMember' class='searchbut'>SEARCH</button>
+	              <label>ID number</label>
+	              <input type='text'  placeholder='ID NUMBER' readonly id = 'referalIdNumber' value=" . $rinfo[2] . ">
+	              <label>First name</label>
+	              <input type='text' placeholder='First Name' readonly id = 'firstNameT'>
+	              <label>Middle name</label>
+	              <input type='text' placeholder='Middle Name' readonly id = 'middleNameT' value=" . $rinfo[3] . ">
+	              <label>Last name</label>
+	              <input type='text' placeholder='Last Name' readonly id = 'lastNameT' value=" . $rinfo[4] . ">
+	            </div>
 
-		          
+	            <button 
+	            	id = 'submitApplication'  
+	            	class='submitbut' onclick=memberupdate(" .
+	            	"'member.controller.php?method=memberv&memid=document.getElementById('idNumber').value'"
+	            	. ")
+	            	>UPDATE
+	            </button>
 
-		          <button id = 'submitApplication' type='submit' class='submitbut'>SUBMIT</button>
-		          <button id = 'submitApplication' type='submit' class='submitbut'>RESET</button>
-		        </form>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
 	</div>";
 }
 

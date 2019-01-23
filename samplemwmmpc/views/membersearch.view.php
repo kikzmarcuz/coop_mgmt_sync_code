@@ -33,3 +33,6 @@
 
 <div id="pagearea" class="pagearea">
 </div>
+
+<div id="modalarea">
+</div>

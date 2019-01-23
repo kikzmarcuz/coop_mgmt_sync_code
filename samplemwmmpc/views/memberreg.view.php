@@ -5,7 +5,6 @@
 <div class="pagetoolbar">
     <label >ID Number</label>
     <input type="text"  value = "<?php echo $idNumberF;?>" name = "idNumberF" readonly>
-    <input type="text"  value = "<?php echo $accountNumber;?>" readonly="" name = "accountNumber">
 </div>
 
 <!--member account info-->
@@ -27,18 +26,19 @@
               <label>Birth place</label>
               <input type="text" placeholder="Birth place" id="bplace" required>
               <label>Birth date</label>
-              <input type="date" placeholder="Birth date" id="bdate" required>
-              <div class="radiocontainer">
-                <h1 class="frametext"><span class="frametitle">Gender</span></h1>
-                <input type="radio" name="gender" value="Male">  Male<br>
-                <input type="radio" name="gender" value="Female">  Female
-              </div>
-
-              <div class="radiocontainer">
-                <h1 class="frametext"><span class="frametitle">Civil status</span></h1>
-                <input type="radio" name="civilStatus" value="Single">  Single<br>
-                <input type="radio" name="civilStatus" value="Married">  Married
-              </div>
+              <input type="date" placeholder="Birth date" id="bdate" required><br>
+              <label>Gender</label>
+              <select id='mgen'>
+                  <option value=''>Select</option>
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                </select><br>
+                <label>Civil Status</label>
+                <select id='mcst'>
+                  <option value=''>Select</option>
+                  <option value='Single'>Single</option>
+                  <option value='Married'>Married</option>
+                </select>
             </div>
 
             <div class="formcontainer">
@@ -85,19 +85,20 @@
               <input type="number" placeholder="BR Number" id="mbrnum"><br>
               <label>Date membership</label>
               <input type="date" id = "dateMembership"><br>
-              <label>Membership status</label>
+              <label>Member status</label>
               <select id="membershipStatus" name="membershipStatus" value="">
                 <option value="">Select</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
                 <option value="Diseased">Diseased</option>
                 <option value="Resigned">Resigned</option>
-              </select>
-              <div class="radiocontainer">
-                <h1 class="frametext"><span class="frametitle">Membership type</span></h1>
-                <input type="radio" name="typeMembership" value="Regular">  Regular<br>
-                <input type="radio" name="typeMembership" value="Associate">  Associate
-              </div>
+              </select><br>
+              <label>Member type</label>
+              <select id='mtms'>
+                  <option value=''>Select</option>
+                  <option value='Associate'>Associate</option>
+                  <option value='Regular'>Regular</option>
+                </select>
             </div>
 
 
