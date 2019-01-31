@@ -1382,6 +1382,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         
                         if($iarrlcount>0){
                             $counterI=0;
+                            echo "$iarrlcount";
                             while($counterI<$iarrlcount){
                                 $iarr=$iarrl[$counterI];
                                 if($iarr[12] != 0){
@@ -1407,10 +1408,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $loanInterestP = $larr[6];
                         $paymentTermP =  $larr[7];
 
-                        $loanCounter=0;
+                        $plloanCounter=0;
                         if($lcode=="PL"){
-                            $loanCounter = $larr[12];
-                            $iarrlcounter = $loanCounter + $iarrlcounter;
+                            $plloanCounter = $larr[12];
+                            $iarrlcounter = $plloanCounter + $iarrlcounter;
                         }
 
                         $loanInterestP = actualinterest($loanInterestP);
@@ -1424,15 +1425,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $currentBalance = $loanAmountP - $currentBalance;
                         
                         if($iarrlcounter>0){
-                            if($lcode=="PL"){
-                                $iarrlcounter = $iarrlcounter - $loanCounter;
+                            if($plloanCounter == 1){
+                                $li = $lastInterest[$iarrlcounter-2];
+                            }else{
+                                $li = $lastInterest[$iarrlcounter-1];
                             }
-                            $li = $lastInterest[$iarrlcounter-1];
                         }else{
                             $li=0;
                         }
                         //Compute Interest
-                        $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm, $loanCounter);
+                        $currentInterest = interestpaid($iarrlcounter, $li, $currentBalance, $loanInterestP, $paymentTerm);
                         $currentInterest = round($currentInterest,2,PHP_ROUND_HALF_ODD);
 
                         //GET total payment of loan if 
