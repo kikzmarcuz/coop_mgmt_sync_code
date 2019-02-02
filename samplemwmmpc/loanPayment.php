@@ -2139,6 +2139,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                 $totalPayment = 0;
             }
 
+            $idNumber = "";
+            $firstName = "";
+            $middleName = "";
+            $lastName = "";
+
             $sqlOR = "SELECT * FROM `cashier_report_table` WHERE reference_number=(SELECT MAX(reference_number) FROM `cashier_report_table`)";
             $resultOR = $conn->query($sqlOR);
 

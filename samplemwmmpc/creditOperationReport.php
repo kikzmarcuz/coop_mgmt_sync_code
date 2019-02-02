@@ -1720,7 +1720,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<table>
                     <tr>
                         <th></th>
-                        <th></th>
                         <th>ID Number | Chart_of_Account_Code</th>
                         <th>Name | Chart_of_Account_Title_______________</th>
                         <th>Description | Remarks</th>
@@ -1748,7 +1747,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     while($counterh < $numRow) {
                         echo "<tr>";
                             echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]_$tn[$counterh]_$loanApplicationNumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
-                            echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$tn[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
                             echo "<td>" . $idNumber[$counterh] . "</td>";
                             echo "<td>" . $fullNameD[$counterh] . "</td>";
                             echo "<td>" . $loanApplicationNumber[$counterh] . "</td>";
