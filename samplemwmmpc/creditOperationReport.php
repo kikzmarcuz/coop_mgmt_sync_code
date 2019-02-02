@@ -74,6 +74,7 @@ $countErr = 0;
 
 $fullNameD[] = "";
 $clearOR = "";
+$cancelOR = "";
 require('public/fpdf181/fpdf.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -92,6 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($_POST["clearOR"])) {
         $clearOR = test_input($_POST["clearOR"]);
+    }
+
+    if (!empty($_POST["cancelOR"])) {
+        $cancelOR = test_input($_POST["cancelOR"]);
     }
 
     if (empty($_POST["startDate"])) {
@@ -362,154 +367,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }*/
 
     if($clearOR != ""){
+        $tnl = explode("_", $clearOR);
 
+        $tcode = checkLoanTransaction($tnl[2]);
+        $ltable = getLoanTableName($tcode);
+        $itable = getLoanInterestTableName($tcode);
+        $dtable = getTableName("CD");
+
+        deleteLoanAppliation($ltable, $tnl[2] , $conn);
+        deleteTransaction($itable, $tnl[0] , $conn);
+        deleteTransaction($dtable, $tnl[1] , $conn);
+    }
+
+    if($cancelOR != ""){
+        echo "$cancelOR";
         echo "$clearOR";
-        
-        $cdlist=[];
-        $cdinfo=[];
-        $rtable=getTableName("CD");
-        $delid=getID($rtable,$clearOR,$conn);
-        $refid=getRN($rtable,$clearOR,$conn);
-        $cdlist=getCDInfo($refid, $delid, $conn);
-        $cdcount=count($cdlist);
-        $cdcounter=0;
-
-        echo "$delid";
-        echo "$refid";
-
-        while($cdcounter<$cdcount){
-            $cdinfo=$cdlist[$cdcounter];
-            if($cdinfo[5]==1){
-                $actable=getTableName("AC");
-                deleteOtherPayment($actable, $refid, $delid, $conn);
-            }
-
-            if($cdinfo[6]==1){
-                $code="BL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="CLL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="CML";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="RL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="EDL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="CL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="SL";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-
-                $code="EML";
-                $ltable = getLoanTableName($code);
-                $ptable = getLoanPrincipalTableName($code);
-                $itable = getLoanInterestTableName($code);
-                $apnumber = getApplicationNumberP($refid, $ptable, $conn);
-                if(getLoanStatus($apnumber, $ltable , $conn)   == "Paid"){
-                    updateLoanStatus($apnumber, $ltable , $conn);
-                }
-                deleteOtherPayment($itable, $refid, $delid ,$conn);
-            }
-
-            //Loan Balance
-            if($cdinfo[7]==1){
-
-            }
-
-            if($cdinfo[8]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $refid,  $delid, $conn);
-            }
-
-            if($cdinfo[9]==1){
-                $oitable=getTableName("OI");
-                deleteOtherPayment($oitable, $refid,  $delid, $conn);
-            }
-
-            //Rice Balance
-            if($cdinfo[10]==1){
-
-            }
-
-            if($cdinfo[11]==1){
-                $sctable=getTableName("SC");
-                deleteOtherPayment($sctable, $refid,  $delid, $conn);
-            }
-
-            if($cdinfo[12]==1){
-                $deptable=getDepositTable("SD");
-                deleteOtherPayment($deptable, $refid,  $delid, $conn);
-            }
-
-            if($cdinfo[13]==1){
-                $deptable=getDepositTable("TD");
-                deleteOtherPayment($deptable, $refid,  $delid, $conn);
-            }
-
-            if($cdinfo[14]==1){
-                $deptable=getDepositTable("FD");
-                deleteOtherPayment($deptable, $refid,  $delid, $conn);
-            }
-
-            $cdtable=getTableName("CD");
-            deleteOtherPayment($cdtable, $refid,  $delid, $conn);
-            $cdcounter++;
-        }
     }
 
     if($searchReport == "searchReport" or $printReport == "printReport"){
@@ -531,12 +403,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $counterD = 0;
 
+        $tn=[];
+
         $sqlNameD = "SELECT * FROM  disbursement_table WHERE date_transaction >='$startDate' and date_transaction <='$endDate' order by reference_number  asc";
         $resultNameD = $conn->query($sqlNameD);
         $numRow = mysqli_num_rows($resultNameD);
 
         if($resultNameD->num_rows > 0){
             while ($row = mysqli_fetch_array($resultNameD)) {
+                $tn[$counterD] = $row['transaction_number'];
                 $exp[$counterD] = $row['ac'];
                 $cl[$counterD] = $row['cl'];
                 $lb[$counterD] = $row['lb'];
@@ -660,106 +535,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     //RL
                     $sqlName = "SELECT * FROM  rl_credit_revenue_table WHERE voucher_number ='$voucherNumberD[$counterD]' and id_number = '$idNumberD[$counterD]' ";
-                    $resultName = $conn->query($sqlName);
-                    //$numRow = $numRow + mysqli_num_rows($resultName);
-                    //$counter = 0;
-
-                    if($resultName->num_rows > 0){
-                        while ($row = mysqli_fetch_array($resultName)) {
-                            # code...
-                            //$releaseDate = $row['date_transaction'];
-                            $transactionnumber[$counter] = $row['transaction_number'];
-                            $idNumber[$counter] = $row['id_number'];
-                            $loanApplicationNumber[$counter] = $row['loan_application_number'];
-                            $voucherNumber[$counter] = $row['voucher_number'];
-                            $serviceFee[$counter] = $row['service_fee'];
-                            $fillingFee[$counter] = $row['filling_fee'];
-                            $notarialFee[$counter] = $row['notarial_fee'];
-                            $insuranceFee[$counter] = $row['insurance_fee'];
-                            $interestRevenue[$counter] = $row['interest_revenue'];
-                            $loanBalance[$counter] = $row['loanb_v'];
-                            $loanRelease[$counter] = $row['amount_release'];
-
-                            $dateTransaction[$counter] = $row['date_transaction'];
-                            $expenses[$counter] = 0;
-                            $cr_dr[$counter] = "";
-                            $accountExpense[$counter] = "";
-
-
-                            if($cbur[$counterD] == 1){
-                                $sqlName = "SELECT * FROM  share_capital_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
-                                $resultName = $conn->query($sqlName);
-
-                                if($resultName->num_rows > 0){
-                                    while ($row = mysqli_fetch_array($resultName)) {
-                                        $scAmount[$counter] = $row['amount'];
-                                    }
-                                }
-                            }else{
-                                $scAmount[$counter] = 0;
-                            }
-
-                            if($sdr[$counterD] == 1){
-                                $sqlName = "SELECT * FROM  savings_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
-                                $resultName = $conn->query($sqlName);
-
-                                if($resultName->num_rows > 0){
-                                    while ($row = mysqli_fetch_array($resultName)) {
-                                        $sdAmount[$counter] = $row['amount'];
-                                    }
-                                }
-                            }else{
-                                $sdAmount[$counter] = 0;
-                            }
-
-                            if($pnl[$counterD] == 1){
-                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'pnti' and id_number = '$idNumberD[$counterD]' ";
-                                $resultName = $conn->query($sqlName);
-
-                                if($resultName->num_rows > 0){
-                                    while ($row = mysqli_fetch_array($resultName)) {
-                                        $ricePenalty[$counter] = $row['amount'];
-                                    }
-                                }
-                            }else{
-                                $ricePenalty[$counter] = 0;
-                            }
-
-                            if($pnr[$counterD] == 1){
-                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'plti' and id_number = '$idNumberD[$counterD]' ";
-                                $resultName = $conn->query($sqlName);
-
-                                if($resultName->num_rows > 0){
-                                    while ($row = mysqli_fetch_array($resultName)) {
-                                        $loanPenalty[$counter] = $row['amount'];
-                                    }
-                                }
-                            }else{
-                                $loanPenalty[$counter] = 0;
-                            }
-
-                            if($rcln[$counterD] == 1){
-                                $sqlName = "SELECT * FROM  disbursement_table WHERE reference_number = '$voucherNumber[$counter]' and id_number = '$idNumber[$counter]' ";
-                                $resultName = $conn->query($sqlName);
-
-                                if($resultName->num_rows > 0){
-
-                                    while ($row = mysqli_fetch_array($resultName)) {
-                                        $riceLoan[$counter] = $row['rcln_value'];
-                                    }
-                                }
-                            }else{
-                                $riceLoan[$counter] = 0;
-                            }
-
-                            $loanAmount[$counter] = $loanRelease[$counter] + $serviceFee[$counter] + $fillingFee[$counter] + $notarialFee[$counter] + $insuranceFee[$counter] + $interestRevenue[$counter] + $loanBalance[$counter] + $riceLoan[$counter] + $loanPenalty[$counter] + $ricePenalty[$counter] + $sdAmount[$counter] + $scAmount[$counter];
-                        }
-                    }else{
-                        //$numRow--;
-                    }
-
-                    //CL
-                    $sqlName = "SELECT * FROM  cl_credit_revenue_table WHERE voucher_number ='$voucherNumberD[$counterD]' and id_number = '$idNumberD[$counterD]' ";
                     $resultName = $conn->query($sqlName);
                     //$numRow = $numRow + mysqli_num_rows($resultName);
                     //$counter = 0;
@@ -1059,6 +834,207 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }else{
                         //$numRow--;
                     }
+
+                     //CKL
+                    $sqlName = "SELECT * FROM  ckl_credit_revenue_table WHERE voucher_number ='$voucherNumberD[$counterD]' and id_number = '$idNumberD[$counterD]' ";
+                    $resultName = $conn->query($sqlName);
+                    //$numRow = $numRow + mysqli_num_rows($resultName);
+                    //$counter = 0;
+
+                    if($resultName->num_rows > 0){
+                        while ($row = mysqli_fetch_array($resultName)) {
+                            # code...
+                            //$releaseDate = $row['date_transaction'];
+                            $transactionnumber[$counter] = $row['transaction_number'];
+                            $idNumber[$counter] = $row['id_number'];
+                            $loanApplicationNumber[$counter] = $row['loan_application_number'];
+                            $voucherNumber[$counter] = $row['voucher_number'];
+                            $serviceFee[$counter] = $row['service_fee'];
+                            $fillingFee[$counter] = $row['filling_fee'];
+                            $notarialFee[$counter] = $row['notarial_fee'];
+                            $insuranceFee[$counter] = $row['insurance_fee'];
+                            $interestRevenue[$counter] = $row['interest_revenue'];
+                            $loanBalance[$counter] = $row['loanb_v'];
+                            $loanRelease[$counter] = $row['amount_release'];
+
+                            $dateTransaction[$counter] = $row['date_transaction'];
+                            $expenses[$counter] = 0;
+                            $cr_dr[$counter] = "";
+                            $accountExpense[$counter] = "";
+
+
+                            if($cbur[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  share_capital_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $scAmount[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $scAmount[$counter] = 0;
+                            }
+
+                            if($sdr[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  savings_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $sdAmount[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $sdAmount[$counter] = 0;
+                            }
+
+                            if($pnl[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'pnti' and id_number = '$idNumberD[$counterD]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $ricePenalty[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $ricePenalty[$counter] = 0;
+                            }
+
+                            if($pnr[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'plti' and id_number = '$idNumberD[$counterD]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $loanPenalty[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $loanPenalty[$counter] = 0;
+                            }
+
+                            if($rcln[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  disbursement_table WHERE reference_number = '$voucherNumber[$counter]' and id_number = '$idNumber[$counter]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $riceLoan[$counter] = $row['rcln_value'];
+                                    }
+                                }
+                            }else{
+                                $riceLoan[$counter] = 0;
+                            }
+
+                            $loanAmount[$counter] = $loanRelease[$counter] + $serviceFee[$counter] + $fillingFee[$counter] + $notarialFee[$counter] + $insuranceFee[$counter] + $interestRevenue[$counter] + $loanBalance[$counter] + $riceLoan[$counter] + $loanPenalty[$counter] + $ricePenalty[$counter] + $sdAmount[$counter] + $scAmount[$counter];
+                        }
+                    }else{
+                        //$numRow--;
+                    }
+
+                    //CL
+                    $sqlName = "SELECT * FROM  cl_credit_revenue_table WHERE voucher_number ='$voucherNumberD[$counterD]' and id_number = '$idNumberD[$counterD]' ";
+                    $resultName = $conn->query($sqlName);
+                    //$numRow = $numRow + mysqli_num_rows($resultName);
+                    //$counter = 0;
+
+                    if($resultName->num_rows > 0){
+                        while ($row = mysqli_fetch_array($resultName)) {
+                            # code...
+                            //$releaseDate = $row['date_transaction'];
+                            $transactionnumber[$counter] = $row['transaction_number'];
+                            $idNumber[$counter] = $row['id_number'];
+                            $loanApplicationNumber[$counter] = $row['loan_application_number'];
+                            $voucherNumber[$counter] = $row['voucher_number'];
+                            $serviceFee[$counter] = $row['service_fee'];
+                            $fillingFee[$counter] = $row['filling_fee'];
+                            $notarialFee[$counter] = $row['notarial_fee'];
+                            $insuranceFee[$counter] = $row['insurance_fee'];
+                            $interestRevenue[$counter] = $row['interest_revenue'];
+                            $loanBalance[$counter] = $row['loanb_v'];
+                            $loanRelease[$counter] = $row['amount_release'];
+
+                            $dateTransaction[$counter] = $row['date_transaction'];
+                            $expenses[$counter] = 0;
+                            $cr_dr[$counter] = "";
+                            $accountExpense[$counter] = "";
+
+
+                            if($cbur[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  share_capital_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $scAmount[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $scAmount[$counter] = 0;
+                            }
+
+                            if($sdr[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  savings_table WHERE voucher_number = '$voucherNumber[$counter]' and id_number = '$idNumberD[$counterD]'";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $sdAmount[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $sdAmount[$counter] = 0;
+                            }
+
+                            if($pnl[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'pnti' and id_number = '$idNumberD[$counterD]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $ricePenalty[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $ricePenalty[$counter] = 0;
+                            }
+
+                            if($pnr[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  other_income_table WHERE reference_number = '$voucherNumber[$counter]' and income_code = 'plti' and id_number = '$idNumberD[$counterD]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $loanPenalty[$counter] = $row['amount'];
+                                    }
+                                }
+                            }else{
+                                $loanPenalty[$counter] = 0;
+                            }
+
+                            if($rcln[$counterD] == 1){
+                                $sqlName = "SELECT * FROM  disbursement_table WHERE reference_number = '$voucherNumber[$counter]' and id_number = '$idNumber[$counter]' ";
+                                $resultName = $conn->query($sqlName);
+
+                                if($resultName->num_rows > 0){
+
+                                    while ($row = mysqli_fetch_array($resultName)) {
+                                        $riceLoan[$counter] = $row['rcln_value'];
+                                    }
+                                }
+                            }else{
+                                $riceLoan[$counter] = 0;
+                            }
+
+                            $loanAmount[$counter] = $loanRelease[$counter] + $serviceFee[$counter] + $fillingFee[$counter] + $notarialFee[$counter] + $insuranceFee[$counter] + $interestRevenue[$counter] + $loanBalance[$counter] + $riceLoan[$counter] + $loanPenalty[$counter] + $ricePenalty[$counter] + $sdAmount[$counter] + $scAmount[$counter];
+                        }
+                    }else{
+                        //$numRow--;
+                    }
+
 
                     //EML
                     $sqlName = "SELECT * FROM  eml_credit_revenue_table WHERE voucher_number ='$voucherNumberD[$counterD]' and id_number = '$idNumberD[$counterD]' ";
@@ -1745,7 +1721,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <tr>
                         <th></th>
                         <th></th>
-                        
+                        <th></th>
+                        <th></th>
                         <th>ID Number | Chart_of_Account_Code</th>
                         <th>Name | Chart_of_Account_Title_______________</th>
                         <th>Description | Remarks</th>
@@ -1772,10 +1749,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $counterh = 0;
                     while($counterh < $numRow) {
                         echo "<tr>";
-                            echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
-                            echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
+                            echo "<td>  <button class =". "deletebutton". " "  . "type =" . "submit" . " " . " " ."value=". "$transactionnumber[$counterh]_$tn[$counterh]_$loanApplicationNumber[$counterh]" . " " . "name=" . "clearOR". ">"  . "CLEAR" . " </button> </td>";
+                            echo "<td> <button class =". "deletebutton". " " . "type =" . "submit" . " " . " " ."value=". "$tn[$counterh]" . " " . "name=" . "cancelOR" . ">"  . "CANCEL" . " </button> </td>";
 
-                            //echo "<td>" . $transactionnumber[$counterh] . "</td>";
+                             echo "<td>" . $tn[$counterh] . "</td>";
+                            echo "<td>" . $transactionnumber[$counterh] . "</td>";
                             echo "<td>" . $idNumber[$counterh] . "</td>";
                             echo "<td>" . $fullNameD[$counterh] . "</td>";
                             echo "<td>" . $loanApplicationNumber[$counterh] . "</td>";

@@ -29,7 +29,6 @@ function getTableName($typepayment){
 
 function getLoanTableName($typeloan){
 	$loantable = "";
-
 	if($typeloan == "BL"){
         $loantable = "bl_loan_table";
     }else if($typeloan == "CLL"){
@@ -343,6 +342,32 @@ function deleteOtherPayment($nametable, $referencenumber, $idnumber ,$conn){
   }
 }
 
+function deleteTransaction($table, $tn ,$conn){
+  $sqlLP1 = "DELETE FROM  ";
+  $sqlLP1 .= $table; 
+  $sqlLP1 .= " WHERE transaction_number = '$tn' ";
+  $resultLP1 = $conn->query($sqlLP1);
+
+  if ($conn->query($sqlLP1) === TRUE) {
+     $infomessage = "Record updated successfully";
+  }else { 
+        echo "Error: " . $sqlLP1 . "<br>" . $conn->error;
+  }
+}
+
+function deleteLoanAppliation($table, $apn ,$conn){
+  $sqlLP1 = "DELETE FROM  ";
+  $sqlLP1 .= $table; 
+  $sqlLP1 .= " WHERE loan_application_number = '$apn' ";
+  $resultLP1 = $conn->query($sqlLP1);
+
+  if ($conn->query($sqlLP1) === TRUE) {
+     $infomessage = "Record updated successfully";
+  }else { 
+        echo "Error: " . $sqlLP1 . "<br>" . $conn->error;
+  }
+}
+
 //SEARCH
 function seaarchAllMember($conn){
   $arr[] = "";
@@ -557,13 +582,34 @@ function getLoanPaymentStatus($table, $ppayment, $applicationnumber, $conn){
       $totalPrincipalPayment = $rowlps['amount'];
       $balance = $balance + $totalPrincipalPayment;
     }
-  }
 
-  $balance = $balance-$ppayment;
-  if($balance == 0){
-    $loanstatus = "Paid";
+    $balance = $balance-$ppayment;
+    if($balance == 0){
+      $loanstatus = "Paid";
+    }
+    return($loanstatus);
+  }else{
+    return("Released");
   }
-  return($loanstatus);
+}
+
+function getTotalLoanPaymentP($table, $ppayment, $applicationnumber, $conn){
+  $loanstatus="";
+  $balance=0;
+  $totalPrincipalPayment=0;
+
+  $sqllps = "SELECT * FROM ";
+  $sqllps.= $table;
+  $sqllps.= " WHERE loan_application_number = '$applicationnumber'  ";
+  $resultlps = $conn->query($sqllps);
+
+  if($resultlps->num_rows > 0){
+    while ($rowlps = mysqli_fetch_array($resultlps)) {
+      $totalPrincipalPayment = $rowlps['amount'];
+      $balance = $balance + $totalPrincipalPayment;
+    }
+  }
+  return($balance);
 }
 
 function getLoanStatus($applicationnumber, $loantable ,$conn){
@@ -573,7 +619,6 @@ function getLoanStatus($applicationnumber, $loantable ,$conn){
   $sqlName.= " WHERE loan_application_number = '$applicationnumber'  ";
 
   $resultName = $conn->query($sqlName);
-
   if($resultName->num_rows > 0){
       while ($row = mysqli_fetch_array($resultName)) {
           $loanstatus = $row['loan_status'];
@@ -674,7 +719,6 @@ function getLS($table, $lsid, $conn){
   }
 }
 
-
 function getDepositID($table, $id, $seaarhobj, $ts, $conn){
   $arr=[];
   $arrcontainer=[];
@@ -704,7 +748,6 @@ function getDepositID($table, $id, $seaarhobj, $ts, $conn){
     return($retarr);
   }
 }
-
 
 function getChartAccountInfo($table, $code, $seaarhobj, $conn){
   $arr = [];
@@ -814,7 +857,6 @@ function getSCInfo($table, $id, $referencenumber, $seaarhobj, $conn){
       }
     }
 }
-
 
 function getOIInfo($table, $id, $referencenumber, $oicode, $seaarhobj ,$conn){
   $arr=[];

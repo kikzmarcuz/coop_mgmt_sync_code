@@ -1424,11 +1424,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         
                         if($iarrlcounter>0){
                             if($plloanCounter == 1  and $paymentTerm == 2){
-                                $li = $lastInterest[$iarrlcounter-1];
+                                $li = $lastInterest[$iarrlcounter-2];
                             }else if($plloanCounter >= 1  and $paymentTerm == 30){
                                 $liindex=0;
                                 $liindex = $iarrlcounter - $plloanCounter;
-                                echo "$liindex";
                                 $li = $lastInterest[$liindex-2];
                             }else{
                                 $li = $lastInterest[$iarrlcounter-1];
@@ -1498,15 +1497,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
             $farr=[];
             $fanarr=[];
             $cl=0;$ckl=0;$eml=0;$sl=0;
-            if(substr("$chklLA",0,2) == "CKL" and $chklPayment != 0){$ckl=1;array_push($farr, $chklPayment);array_push($fanarr, $chklLA);}else{array_push($farr, 0);array_push($fanarr, "");}
+            if(substr("$chklLA",0,3) == "CKL" and $chklPayment != 0){$ckl=1;array_push($farr, $chklPayment);array_push($fanarr, $chklLA);}else{array_push($farr, 0);array_push($fanarr, "");}
             if(substr("$clLA",0,2) == "CL" and $clPayment != 0){$cl=1;array_push($farr, $clPayment);array_push($fanarr, $clLA);}else{array_push($farr, 0);array_push($fanarr, "");}
-            if(substr("$emlLA",0,2) == "EML" and $emlPayment != 0){$eml=1;array_push($farr, $emlPayment);array_push($fanarr, $emlLA);}else{array_push($farr, 0);array_push($fanarr, "");}
+            if(substr("$emlLA",0,3) == "EML" and $emlPayment != 0){$eml=1;array_push($farr, $emlPayment);array_push($fanarr, $emlLA);}else{array_push($farr, 0);array_push($fanarr, "");}
             if(substr("$slLA",0,2) == "SL" and $slPayment != 0){$sl=1;array_push($farr, $slPayment);array_push($fanarr, $slLA);}else{array_push($farr, 0);array_push($fanarr, "");}
 
             $fcodestr = getLoanTransactionCodeF($farr);
             $fcodestrcounter=0;
             while ($fcodestrcounter<count($fcodestr)) { 
                 $fcode=$fcodestr[$fcodestrcounter];
+                echo "$fcode";
                 if($fcode!=""){
                     $apnumber=$fanarr[$fcodestrcounter];
                     $tpayment=$farr[$fcodestrcounter];
@@ -1523,10 +1523,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                     $fpayment[5]=$encodedBy;
 
                     postLoanPaymentF($ptable, $fpayment ,$conn);
+                    //GET LI
+                    $flinfo=[];
+                    $flinfo = getli($ltable, "", "", $apnumber, "i", $conn);
+                    $balance=$flinfo[4];
 
-                    if(getLoanPaymentStatus($ptable, $tpayment, $apnumber, $conn) == "Paid"){
+                    if($balance == $tpayment){
                         updateLoanStatus($apnumber, $ltable, "Paid", $conn);
-                    }
+                    }else if($tpayment <= $balance){
+                        $totalpayment = getTotalLoanPaymentP($ptable, $tpayment, $apnumber, $conn);
+                        if($balance == $totalpayment){
+                            updateLoanStatus($apnumber, $ltable, "Paid", $conn);
+                        }
+                    }   
                 }
                 $fcodestrcounter++;
             }
