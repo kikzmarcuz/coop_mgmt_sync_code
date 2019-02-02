@@ -275,7 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sqlSearchName = "SELECT * FROM name_table WHERE CONCAT(first_name, ' ', last_name) LIKE '%$idNumberSearch%' OR last_name LIKE '%$idNumberSearch%' or  id_number = '$idNumberSearch' ";
     $resultSearchName = $conn->query($sqlSearchName);
 
-    if($resultSearchName->num_rows > 0){
+  if($resultSearchName->num_rows > 0){
         while($row = mysqli_fetch_array($resultSearchName)){
           $idNumber = $row['id_number'];
           $accountNumber = $row['account_number'];
@@ -287,7 +287,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $membershipStatus = $row['member_status'];
           $dateMembership = $row['date_membership'];
         }
-    }
+  }
 
     $sqlSearchAddress = "SELECT * FROM address_table WHERE id_number = '$idNumber'";
     $resultSearchAddress = $conn->query($sqlSearchAddress);

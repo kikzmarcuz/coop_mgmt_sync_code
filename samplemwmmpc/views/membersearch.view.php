@@ -1,15 +1,9 @@
-<?php
-
-
-
-?>
-
 <div class="pagenavbar">
 	<h5 class="titlepage"> Search member</h5>
 </div>
 
 <div class="pagetoolbar">
-
+  
 	<select id="mt" onchange="getlistmember('members')">
       <option value="">Select member type</option>
       <option value="Regular">Regular</option>
@@ -34,5 +28,3 @@
 <div id="pagearea" class="pagearea">
 </div>
 
-<div id="modalarea">
-</div>

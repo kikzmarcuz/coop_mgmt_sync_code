@@ -4,13 +4,11 @@ require '../models/member.model.php';
 
 
 $function = ($_GET['method']);
-if($function != "memberv"){
+
+if ($function == "members" or $function == "memberi"){
 	$fpara = ($_GET['mt']);
 	$spara = ($_GET['ms']);
 	$tpara = ($_GET['mn']);
-}
-
-if ($function == "members" or $function == "memberi"){
 	echo "<div class='reportheader'>";
 	    echo "<table id='memtbl'>
 	        <tr>
@@ -36,8 +34,8 @@ if ($function == "members" or $function == "memberi"){
 
 	$mlist=getMemberInfo($fpara, $spara, $tpara, "l");
 	$mlistcount = count($mlist);
-
-	echo "<div class='reportbody'>";
+	echo "<div class='reportbodyparent'>
+	<div class='reportbodychild'>";
 	    echo "<table id='memtbltb'>";
 	    while($mlistcounter<$mlistcount){
 	        $minfo=$mlist[$mlistcounter];
@@ -57,11 +55,16 @@ if ($function == "members" or $function == "memberi"){
 	        $mlistcounter++;
 	    }
 	    echo "</table>";
-	echo "</div>";
+	echo "</div>
+	</div";
 }
 
 if ($function == "memberl"){
 	//FOR PRINT VIEW
+	$fpara = ($_GET['mt']);
+	$spara = ($_GET['ms']);
+	$tpara = ($_GET['mn']);
+
 	$pdf = new FPDF();
 	$pdf->SetFont('Arial','B',9);
 	$pdf->AddPage('L','Legal', 0);
@@ -121,7 +124,7 @@ if ($function == "memberv"){
 	$para = "member.controller.php?method='hi' ";
 
 	echo "<div id='modalmi' class='modal'>
-	  <div class='modal-content modal-content-common' >
+	  <div class='modal-content modal-content-l' >
 	    <div class='pagetitle'>
 	      <span onclick=document.getElementById('modalmi').style.display='none' class='close'>&times;</span>
 	      <h1 class='frametext'><span class='frametitle'>Member information</span></h1>
@@ -153,6 +156,12 @@ if ($function == "memberv"){
 	                <option value='Single' " . (($minfo[26]=='Single')?'selected="selected"':"") . ">Single</option>
 	                <option value='Married' " . (($minfo[26]=='Married')?'selected="selected"':"") . ">Married</option>
 	              </select>
+	              <div id='mesuptpi' class='infomessage'></div>
+	              <button 
+	            	id = 'submitApplication'  
+	            	class='submitbut' onclick=memberupdatepi('memberpi','mesuptpi')
+	            	>UPDATE
+	              </button>
 	            </div>
 
 	            <div class='formcontainer'>
@@ -163,6 +172,12 @@ if ($function == "memberv"){
 	              <input type='text' placeholder='Permanent address' id='pmaddress' value=" . $minfo[15] . ">
 	              <label>Provincial address</label>
 	              <input type='text' placeholder='Provincial address' id='pvaddress' value=" . $minfo[16] . ">
+	              <div id='mesuptai'></div>
+	              <button 
+	            	id = 'submitApplication'  
+	            	class='submitbut' onclick=memberupdateai('memberai','mesuptai')
+	            	>UPDATE
+	              </button>
 	            </div>
 
 	            <div class='formcontainer'>
@@ -174,7 +189,12 @@ if ($function == "memberv"){
 	              <label>Emergency contact</label>
 	              <input type='text' placeholder='Emergency Contact Name' id = 'emergencyContactName' value=" . $minfo[12] . "><br>
 	              <label>Emergency contact #</label>
-	              <input type='number' placeholder='Emergency Contact Number' id = 'emergencyContactNumber' value=" . $minfo[13] . ">
+	              <input type='number' placeholder='Emergency Contact Number' id = 'emergencyContactNumber' value=" . $minfo[13] . "><br>
+	              <button 
+	            	id = 'submitApplication'  
+	            	class='submitbut' onclick=memberupdateci('memberci','mesuptci')
+	            	>UPDATE
+	              </button><div id='mesuptci' class='infomessage'></div>
 	            </div>
 
 	            <div class='formcontainer'>
@@ -213,6 +233,11 @@ if ($function == "memberv"){
 	                <option value='Associate' " . (($minfo[5]=='Associate')?'selected="selected"':"") . ">Associate</option>
 	                <option value='Regular' " . (($minfo[5]=='Regular')?'selected="selected"':"") . ">Regular</option>
 	              </select>
+	              <button 
+	            	id = 'submitApplication'  
+	            	class='submitbut' onclick=memberupdateoi('memberoi','mesuptoi')
+	            	>UPDATE
+	              </button><div id='mesuptoi'></div>
 	            </div>
 
 
@@ -236,21 +261,85 @@ if ($function == "memberv"){
 	              <input type='text' placeholder='Middle Name' readonly id = 'middleNameT' value=" . $rinfo[3] . ">
 	              <label>Last name</label>
 	              <input type='text' placeholder='Last Name' readonly id = 'lastNameT' value=" . $rinfo[4] . ">
-	            </div>
-
-	            <button 
+	              <button 
 	            	id = 'submitApplication'  
-	            	class='submitbut' onclick=memberupdate(" .
-	            	"'member.controller.php?method=memberv&memid=document.getElementById('idNumber').value'"
-	            	. ")
+	            	class='submitbut' onclick=memberupdateri('memberri','mesuptri')
 	            	>UPDATE
-	            </button>
-
+	              </button><div id='mesuptri'></div>
+	            </div>
 	        </div>
 	      </div>
 	    </div>
 	  </div>
 	</div>";
 }
+
+if ($function == "memberpi"){		
+	$function = ($_GET['method']);
+	$memid = ($_GET['memid']);
+	$memfn = ($_GET['memfn']);
+	$memmn = ($_GET['memmn']);
+	$memln = ($_GET['memln']);
+	$membp = ($_GET['membp']);
+	$memdb = ($_GET['memdb']);
+	$memmg = ($_GET['memmg']);
+	$memmc = ($_GET['memmc']);
+
+	//$resultpi="";
+	//$resultoi="";
+
+
+	$querypi = "UPDATE name_table SET 
+	first_name = '$memfn',
+	middle_name = '$memmn',
+	last_name = '$memln'
+	WHERE id_number = '$memid'
+	";
+	$resultpi=executedb($querypi);
+
+	$queryoi = "UPDATE other_info_table SET 
+	birth_place = '$membp',
+	birth_date = '$memdb',
+	gender = '$memmg',
+	civil_status = '$memmc'
+	WHERE id_number = '$memid'
+	";
+	$resultoi=executedb($queryoi);
+
+	if($resultpi === true and $resultoi === true ){
+		echo "Personal information has been updated";
+	}else{
+		echo "Updating personal information failed";
+	}
+}
+
+if ($function == "memberupdateai"){
+	$mempa = ($_GET['mempa']);
+	$memra = ($_GET['memra']);
+	$memva = ($_GET['memva']);
+}
+
+if ($function == "memberupdateci"){
+	$memmn = ($_GET['memmn']);
+	$memea = ($_GET['memea']);
+	$memen = ($_GET['memen']);
+	$memec = ($_GET['memec']);
+}
+
+if ($function == "memberupdateoi"){
+	$memtn = ($_GET['memtn']);
+	$memsn = ($_GET['memsn']);
+	$memrl = ($_GET['memrl']);
+	$memea = ($_GET['memea']);
+	$memop = ($_GET['memop']);
+	$membn = ($_GET['membn']);
+	$memdm = ($_GET['memdm']);
+	$memms = ($_GET['memms']);
+	$memmt = ($_GET['memmt']);
+}
+
+if ($function == "memberupdateri"){
+	$memmr = ($_GET['memmr']);
+}        
 
 ?>

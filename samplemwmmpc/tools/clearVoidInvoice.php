@@ -1,10 +1,17 @@
 <?php
 
 //COMENT
+require_once '../dbconnection.php';
 
-require_once 'session.php';
-require ("function.php");
+$sqlupdate = "UPDATE rice_loan_table SET
+invoice_number = ''
+WHERE invoice_number = 'Void' ";
 
+if($conn->query($sqlupdate) === true){
+	echo "Rice Loan Table has beed updated";
+}else{
+	echo "Update failed";
+}
 
 ?>
 

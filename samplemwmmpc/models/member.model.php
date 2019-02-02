@@ -103,6 +103,12 @@ function getMemberInfo($mt, $ms, $mid, $searchobj){
 	}
 }
 
+function executedb($query){
+	$conn = dbconnection();
+	$returnres = $conn->query($query);
+	return($returnres);
+}
+
 
 
 ?>

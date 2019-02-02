@@ -2,9 +2,8 @@
   <h5 class="titlepage">Registration form</h5>
 </div>
   
-<div class="pagetoolbar">
-    <label >ID Number</label>
-    <input type="text"  value = "<?php echo $idNumberF;?>" name = "idNumberF" readonly>
+<div id="pagetoolbar" class="pagetoolbar">
+    <button onclick="getlistmember('memberl')">SAVE</button>
 </div>
 
 <!--member account info-->
@@ -17,6 +16,8 @@
             <!--member personal info-->
             <div class="formcontainer">
               <h1 class="frametext"><span class="frametitle">Personal information</span></h1>
+              <label >ID Number</label>
+              <input type="text"  value = "<?php echo $idNumberF;?>" name = "idNumberF" readonly>
               <label>First Name</label>
               <input type="text"  placeholder="First name"  id="fname" required>
               <label>Middle Name</label>
@@ -110,10 +111,8 @@
                 <option value="Refferal">Refferal</option>
                 <option value="Walk-in">Walk-in</option>
               </select>
-              <label>ID number</label>
+              <label>Search</label>
               <input type="text" id = "identifier">
-              <label></label>
-              <button id = "searchMember" class="searchbut">SEARCH</button>
               <label>ID number</label>
               <input type="text"  placeholder="ID NUMBER" readonly id = "referalIdNumber">
               <label>First name</label>
@@ -123,11 +122,6 @@
               <label>Last name</label>
               <input type="text" placeholder="Last Name" readonly id = "lastNameT">
             </div>
-
-            
-
-            <button id = "submitApplication" type="submit" class="submitbut">SUBMIT</button>
-            <button id = "submitApplication" type="submit" class="submitbut">RESET</button>
           </form>
         </div>
       </div>
