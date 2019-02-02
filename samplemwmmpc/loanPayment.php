@@ -1382,15 +1382,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         
                         if($iarrlcount>0){
                             $counterI=0;
-                            echo "$iarrlcount";
                             while($counterI<$iarrlcount){
                                 $iarr=$iarrl[$counterI];
                                 if($iarr[12] != 0){
                                     $lastInterest[$iarrlcounter] = $iarr[12];
                                     $iarrlcounter++;
                                 }
-                                
-                                if($iarr[$iarrlcounter]==0){
+                                if($iarr[12]==0){
                                     $lastInterest[$iarrlcounter]=0;
                                 }
                                 
@@ -1425,8 +1423,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" or $idNumberS != "") {
                         $currentBalance = $loanAmountP - $currentBalance;
                         
                         if($iarrlcounter>0){
-                            if($plloanCounter == 1){
-                                $li = $lastInterest[$iarrlcounter-2];
+                            if($plloanCounter == 1  and $paymentTerm == 2){
+                                $li = $lastInterest[$iarrlcounter-1];
+                            }else if($plloanCounter >= 1  and $paymentTerm == 30){
+                                $liindex=0;
+                                $liindex = $iarrlcounter - $plloanCounter;
+                                echo "$liindex";
+                                $li = $lastInterest[$liindex-2];
                             }else{
                                 $li = $lastInterest[$iarrlcounter-1];
                             }
