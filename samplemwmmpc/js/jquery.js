@@ -9,6 +9,19 @@ $(document).ready(function(){
         $("#workarea").load("membersearch.view.php");
     });
 
+    //LEDGER
+    $("#scl").on("click", function () {
+        $("#modalarea").load("membersearchcommon.view.php");
+    });
+
+    /*$("#tl").change(function () {
+        alert("hi");
+        if(this.value == "sc" || this.value == "sd"){
+            alert("hi");
+            $("#startdate").show();
+            $("#enddate").show();
+        }
+    });*/
 
     //REPORT
     $("#atr").on("click", function () {
@@ -16,14 +29,8 @@ $(document).ready(function(){
     });
 
 
+
+
     //RADIO
-    $('input[name=gender]').is("checked", function () {
-    });
-
-    $('input[name=civilStatus]').is("checked", function () {
-    });
-
-    $('input[name=typeMembership]').is("checked", function () {
-    });
 
 });

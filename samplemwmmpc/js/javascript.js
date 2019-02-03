@@ -18,6 +18,8 @@
                         //document.getElementById(divarea).innerHTML = outmessage;
                     }
                 }else{
+                    //alert(outmessage);
+                    //alert(divarea);
                     document.getElementById(divarea).innerHTML = outmessage;
                     if(divarea=="modalarea"){
                         document.getElementById('modalmi').style.display='block';
@@ -47,7 +49,7 @@
       "&mt="+mtvalue+
       "&ms="+msvalue;
 
-      if (mtvalue == "" && msvalue == "") {
+      if (mtvalue == "" && msvalue == "" && mnvalue == "") {
         document.getElementById("pagearea").innerHTML = "NO RECORD FOUND";
         return;
       }else{
@@ -131,6 +133,27 @@
         }else{
             executeGet('GET',para,"main");
         }
+    }
+
+    function searchmember(func, div){
+        var method = func;
+        var para="/controllers/searchmember.controller.php?method="+func+
+        "&sm="+document.getElementById("sm").value;
+        executeGet('GET', para, div);
+    }
+
+    function displayledger(func, div){
+        var method = func;
+        var memberstr = document.getElementById("sm").value.split(" ");
+        var strdate = document.getElementById("startddate").value;
+        var enddate = document.getElementById("enddate").value;
+        var memberid = memberstr[0];
+
+        var para="/controllers/ledger.controller.php?method="+func+
+        "&sm="+memberid+
+        "&strdate="+strdate+
+        "&enddate="+enddate;
+        executeGet('GET', para, div);
     }
 
 

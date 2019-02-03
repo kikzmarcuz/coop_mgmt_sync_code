@@ -16,9 +16,10 @@
     <link href="../public/bootstrap-4.0.0-dist/css/bootstrap.css" rel="stylesheet">
     <script src="../public/js/jquery.min.js"></script>
 
-    <link href="../css/css2.css?n=13" rel="stylesheet">
-    <script src="../js/javascript.js?n=7"></script>
-    <script src="../js/jquery.js?n=3"></script>
+    <link href="../css/css2.css?n=1" rel="stylesheet">
+    <script src="../js/javascript.js?n=1"></script>
+    <script src="../js/action.js?n=1"></script>
+    <script src="../js/jquery.js?n=1"></script>
 
 </head>
 

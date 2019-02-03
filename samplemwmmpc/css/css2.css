@@ -42,6 +42,21 @@
 	    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 	}
 
+	.modalshow {
+	    /*display: block;  Hidden by default */
+	    position: fixed; /* Stay in place */
+	    z-index: 1; /* Sit on top */
+	    /*padding-top: 10px; /* Location of the box */
+	    left: 0;
+	    top: 100px;
+	    width: 100%; /* Full width */
+	    height: 740px; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+
 	/* Modal Content */
 	.modal-content {
 	    background-color: rgb(50,50,50);
@@ -52,7 +67,7 @@
 	}
 
 	.modal-content-xl{
-	    width: 100%;
+	    width: 80%;
 	}
 
 	.modal-content-l{
@@ -195,6 +210,10 @@
 		display: none;
 	}
 
+	.modalarea{
+		background: rgb(80,80,80);
+	}
+
 	.workareabar{
 		width: 85%;
 		height: 765px;
@@ -225,9 +244,10 @@
 	.pagetoolbar input[type="text"], .pagetoolbar select{
 		height: 40px;
 		padding: 5px;
-		background: rgb(40,40,40);
+		background: #4CAF50;
 		width: 15%;
 		color:  white;
+		border: 1px solid #4CAF50;
 	}
 
 	.pagetoolbar button{
@@ -242,12 +262,22 @@
 		font-size: 13px;
 	}
 
-	#mn{
+	.searchbig{
 		height: 40px;
 		padding: 5px;
 		background: rgb(40,40,40);
 		color: white;
 		width: 43%;
+		border: 1px solid #4CAF50;
+	}
+
+	.searchsmall{
+		height: 40px;
+		padding: 5px;
+		background: rgb(40,40,40);
+		color: white;
+		width: 200px;
+		border: 1px solid #4CAF50;
 	}
 
 	.pagearea{
@@ -349,7 +379,7 @@
 	}
 
 	.reportbodyparent {
-		top:250px;
+		padding-top:50px;
 		width: 100%;
 		height: 100%;
 		display: block;
@@ -422,6 +452,56 @@
 		/*color: rgb(0,0,0);*/ 
 		color: white;
 	}
+	
+	.pagenavbarmodal{
+		overflow: hidden;
+		/*position: fixed;*/
+		height: 40px;
+		width: 100%;
+	}
+
+	.searchbarmodal{
+		/*overflow: hidden;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 150px;*/
+
+		overflow: hidden;
+		/*position: fixed;*/
+		width: 100%;
+		height: 40px;
+		top:150px;
+	}
+
+	.pageareamodal{
+		width: 100%;
+		top: 200px;
+		height: 600px;
+		background: rgb(40, 40, 40);
+		/*position: absolute;*/
+	}
+
+	.titlepagemodal {
+		font-size: 15;
+		color: rgb(150,150,150);
+	}
+
+	.searchbarmodal input[type="text"] , .searchbarmodal input[type="search"], button{
+		background: rgb(40, 40, 40);
+		color: white;
+		height: 35px;
+		padding: 5px;
+		border: 1px solid #4CAF50;
+	}
+
+	.searchbarmodal button, .searchbarmodal select, .searchbarmodal input[type="date"]{
+		background: #4CAF50;
+		color: white;
+		height: 35px;
+		padding: 5px;
+		border: 1px solid #4CAF50;
+	} 
 
 	.nameth {
 		width: 100px;

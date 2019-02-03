@@ -3,7 +3,7 @@
 </div>
 
 <div class="pagetoolbar">
-  
+  <input id="mn" class="searchbig" onkeyup="getlistmember('memberi')" type="search"placeholder="Search.....">
 	<select id="mt" onchange="getlistmember('members')">
       <option value="">Select member type</option>
       <option value="Regular">Regular</option>
@@ -15,12 +15,9 @@
       <option value="">Select member status</option>
       <option value="Active">Active</option>
       <option value="Inactive">Inactive</option>
-      <option value="Resigned">Resigned</option>
       <option value="Diseased">Diseased</option>
       <option value="All">All</option>
     </select>
-
-    <input id="mn" onkeyup="getlistmember('memberi')" type="search" id="search">
 
 	  <button onclick="getlistmember('memberl')">PRINT</button>
 </div>
